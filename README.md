@@ -23,6 +23,9 @@ print(mime_type)  # "image/jpeg"
 # Reverse lookup: MIME type -> extensions
 extensions = content_types.get_extensions_for_content_type("image/jpeg")
 print(extensions) # [".jpg", ".jpeg"]
+
+# For very common files, you have shortcuts:
+print(f'Content-Type for webp is {content_types.webp}')
 ```
 
 ## CLI

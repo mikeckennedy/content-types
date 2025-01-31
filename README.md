@@ -1,7 +1,7 @@
 
 # content-types 🗃️🔎
 
-A Python library to map file extensions to MIME types (and vice versa). 
+A Python library to map file extensions to MIME types. 
 It also provides a CLI for quick lookups right from your terminal.
 If no known mapping is found, the tool returns `application/octet-stream`.
 
@@ -20,12 +20,8 @@ import content_types
 mime_type = content_types.get_content_type("example.jpg")
 print(mime_type)  # "image/jpeg"
 
-# Reverse lookup: MIME type -> extensions
-extensions = content_types.get_extensions_for_content_type("image/jpeg")
-print(extensions) # [".jpg", ".jpeg"]
-
 # For very common files, you have shortcuts:
-print(f'Content-Type for webp is {content_types.webp}')
+print(f'Content-Type for webp is {content_types.webp}') # 'image/webp'
 ```
 
 ## CLI

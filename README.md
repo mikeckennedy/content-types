@@ -27,7 +27,8 @@ mime_type = content_types.get_content_type("example.jpg")
 print(mime_type)  # "image/jpeg"
 
 # For very common files, you have shortcuts:
-print(f'Content-Type for webp is {content_types.webp}') # 'image/webp'
+print(f'Content-Type for webp is {content_types.webp}.') 
+# Content-Type for webp is image/webp.
 ```
 
 ## CLI

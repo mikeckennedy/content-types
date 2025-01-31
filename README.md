@@ -23,8 +23,8 @@ uv pip install content-types
 import content_types
 
 # Forward lookup: filename -> MIME type
-mime_type = content_types.get_content_type("example.jpg")
-print(mime_type)  # "image/jpeg"
+the_type = content_types.get_content_type("example.jpg")
+print(the_type)  # "image/jpeg"
 
 # For very common files, you have shortcuts:
 print(f'Content-Type for webp is {content_types.webp}.') 

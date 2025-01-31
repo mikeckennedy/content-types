@@ -150,11 +150,9 @@ def cli():
         contenttypes my_file.jpg
     """
     if len(sys.argv) < 2:
-        print("Usage: contenttypes [FILENAME_OR_EXTENSION]\nExample: contenttypes .jpg")
+        print('Usage: contenttypes [FILENAME_OR_EXTENSION]\nExample: contenttypes .jpg')
         sys.exit(1)
 
     filename = sys.argv[1]
     mime_type = get_content_type(filename)
     print(mime_type)
-
-

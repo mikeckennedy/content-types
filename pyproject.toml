@@ -9,7 +9,7 @@ description = "A library to map file extensions to content types and vice versa.
 readme = "README.md"
 license = "MIT"
 authors = [
-  {name = "Michael Kennedy", email = "MikeCKennedy@gmail.com"}
+    { name = "Michael Kennedy", email = "mikeckennedy@gmail.com" }
 ]
 requires-python = ">=3.10, <=3.14"
 keywords = ["mime", "content-type", "mapping", "file extensions"]
@@ -19,16 +19,16 @@ homepage = "https://github.com/mikeckennedy/content-types"
 dependencies = []
 
 classifiers = [
-  "License :: OSI Approved :: MIT License",
-  "Intended Audience :: Developers",
-  "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: 3.14",
-  "Topic :: Internet :: WWW/HTTP",
-  "Topic :: Software Development :: Libraries :: Python Modules"
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
 [project.scripts]

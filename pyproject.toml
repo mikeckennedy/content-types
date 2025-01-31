@@ -31,5 +31,10 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
+[project.urls]
+"Homepage" = "https://github.com/mikeckennedy/content-types"
+"Bug Reports" = "https://github.com/mikeckennedy/content-types/issues"
+"Source" = "https://github.com/mikeckennedy/content-types"
+
 [project.scripts]
 content-types = "content_types:cli"

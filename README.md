@@ -32,10 +32,16 @@ print(f'Content-Type for webp is {content_types.webp}') # 'image/webp'
 
 ## CLI
 
-After installing in a virtual environment or system-wide.
+To use the library as a CLI tool, just install it with **uv** or **pipx**. 
 
 ```bash
-contenttypes example.jpg
+uv tool install content-types
+```
+
+Now it will be available machine-wide.
+
+```bash
+content-types example.jpg
 
 # Outputs image/jpeg
 ```

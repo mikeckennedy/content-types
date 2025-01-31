@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from typing import Dict
 
-__VERSION__ = '0.2.0'
+__VERSION__ = '0.2.1'
 
 # This dictionary maps file extensions (no dot) to the most specific content type.
 EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {

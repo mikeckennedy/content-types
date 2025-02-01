@@ -11,7 +11,8 @@ which is valuable when you don't have access to the file directly.
 For example, you know the filename but it is stored in s3 and you don't want
 to download it just to fully inspect the file.
 
-Why not just use Python's built-in `mimetypes`? Or the excellent `python-magic` package? See below.
+Why not just use Python's built-in `mimetypes`? Or the excellent `python-magic` package? 
+[See below](#more-correct-than-pythons-mimetypes).
 
 ## Installation
 

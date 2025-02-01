@@ -31,13 +31,13 @@ def main():
 
     print(f'There are {len(in_mime_only):,} types in mimetypes that are not in content-types')
     for k, v in in_mime_only:
-        print(f'{k.ljust(6)}: {v}')
+        print(f'{k.ljust(5)}: {v}')
     print()
 
     print(f'There are {len(only_ct):,} types in content-types that are not in mimetypes')
     print('in_ct_only')
     for k, v in only_ct:
-        print(f'.{k.ljust(4)} -> {v}')
+        print(f'.{k.ljust(5)} -> {v}')
     print()
 
 

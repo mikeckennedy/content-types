@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "content-types"
-version = "0.2.2"  # You can manage version bumps manually or use a plugin for dynamic versioning
+version = "0.2.3"
 description = "A library to map file extensions to content types and vice versa."
 readme = "README.md"
 license = "MIT"

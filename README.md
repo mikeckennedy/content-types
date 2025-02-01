@@ -113,6 +113,11 @@ There are 31 types in content-types that are not in mimetypes
 .apk  -> application/vnd.android.package-archive
 ```
 
+## Works when python-magic package doesn't
+
+Why not the excellent python-magic package? That one works by reading the header bytes of
+binary files which requires access to the file data. The whole goal of this project is
+to avoid accessing or needing the file data. They are for different use-cases.
 
 ## Contributing
 

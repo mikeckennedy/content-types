@@ -16,9 +16,9 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'csv': 'text/csv',
     'tsv': 'text/tab-separated-values',
     # JavaScript
-    'js': 'application/javascript',  # commonly "application/javascript" nowadays
+    'js': 'text/javascript',
     # MJS for ES modules
-    'mjs': 'application/javascript',
+    'mjs': 'text/javascript',
     # JSON
     'json': 'application/json',
     'map': 'application/json',
@@ -33,7 +33,7 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'webp': 'image/webp',
     'avif': 'image/avif',
     # Some new ones:
-    'ico': 'image/x-icon',
+    'ico': 'image/vnd.microsoft.icon',
     'svg': 'image/svg+xml',
     'tif': 'image/tiff',
     'tiff': 'image/tiff',
@@ -58,6 +58,10 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'flac': 'audio/flac',
     'm4a': 'audio/mp4',
     'weba': 'audio/webm',
+    'ass': 'audio/aac',
+    'adts': 'audio/aac',
+    'rst': 'text/x-rst',
+    'loas': 'audio/aac',
     # New ones:
     'mp2': 'audio/mpeg',  # new
     'opus': 'audio/opus',  # new
@@ -84,10 +88,10 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'qt': 'video/quicktime',
     'movie': 'video/x-sgi-movie',
     # 3GP family (prefer official video/*):
-    '3gp': 'video/3gpp',
-    '3gpp': 'video/3gpp',
-    '3g2': 'video/3gpp2',
-    '3gpp2': 'video/3gpp2',
+    '3gp': 'audio/3gpp',
+    '3gpp': 'audio/3gpp',
+    '3g2': 'audio/3gpp2',
+    '3gpp2': 'audio/3gpp2',
     # Archives / Packages
     'pdf': 'application/pdf',
     'zip': 'application/zip',
@@ -216,6 +220,8 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'sgm': 'text/x-sgml',
     'sgml': 'text/x-sgml',
     'vcf': 'text/x-vcard',
+    # Books
+    'epub': 'application/epub+zip',
 }
 
 

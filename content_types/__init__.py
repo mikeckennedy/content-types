@@ -281,8 +281,9 @@ md: str = get_content_type('.md')
 def cli():
     """
     A simple CLI to look up the MIME type for a given filename or extension.
-    Usage example:
-        contenttypes my_file.jpg
+    Install via uv tool install content-types
+    Usage example :
+        content-types my_file.jpg
     """
     if len(sys.argv) < 2:
         print('Usage: contenttypes [FILENAME_OR_EXTENSION]\nExample: contenttypes .jpg')

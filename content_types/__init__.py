@@ -224,7 +224,8 @@ def get_content_type(filename_or_extension: str | Path, treat_as_binary: bool = 
     Given a filename (or just an extension), return the most specific,
     commonly accepted MIME type based on extension.
 
-    Falls back to 'application/octet-stream' if not found.
+    Falls back to 'application/octet-stream' if `treat_as_binary` is True or 'text/plain' if it is
+    False when the extension is not found.
 
     Example:
         >>> get_content_type("picture.jpg")
@@ -236,7 +237,7 @@ def get_content_type(filename_or_extension: str | Path, treat_as_binary: bool = 
         >>> get_content_type("unknown.xyz")
         'application/octet-stream'
         >>> get_content_type("unknown.xyz", treat_as_binary=False)
-        'application/octet-stream'
+        'text/plain'
     """
 
     if filename_or_extension is None:

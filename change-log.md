@@ -8,11 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Comprehensive test suite with 30 tests covering integration, spot tests, and negative conditions
-- Files: `tests/test_content_types.py`, `tests/__init__.py`, `pytest.ini`
+- Comprehensive test suite with 31 tests covering integration, spot tests, and negative conditions
+- URL support: `get_content_type()` now handles query strings and URL fragments
+- Files: `tests/test_content_types.py`, `tests/__init__.py`, `pytest.ini`, `content_types/__init__.py`
 
 ### Changed
-- 
+- Enhanced `get_content_type()` to strip query strings (`?`) and fragments (`#`) from URLs
+- Files: `content_types/__init__.py`
 
 ### Deprecated
 - 

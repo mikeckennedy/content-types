@@ -122,6 +122,21 @@ class TestGetContentType:
         assert content_types.get_content_type('.gitignore') == 'text/plain'
         assert content_types.get_content_type('.dockerignore') == 'text/plain'
 
+    def test_urls_with_and_without_querystring(self):
+        """Integration test: URLs with and without query strings."""
+        # URL with query string
+        url_with_qs = 'https://blobs.talkpython.fm/deploy-the-dream-talk-python.mp3?cache_id=678c2a'
+        assert content_types.get_content_type(url_with_qs) == 'audio/mpeg'
+
+        # URL without query string
+        url_without_qs = 'https://blobs.talkpython.fm/deploy-the-dream-talk-python.mp3'
+        assert content_types.get_content_type(url_without_qs) == 'audio/mpeg'
+
+        # More examples with different formats
+        assert content_types.get_content_type('https://example.com/video.mp4?v=123&token=abc') == 'video/mp4'
+        assert content_types.get_content_type('https://cdn.example.com/image.webp?w=800&h=600') == 'image/webp'
+        assert content_types.get_content_type('https://api.example.com/data.json?format=pretty') == 'application/json'
+
 
 class TestShortcutConstants:
     """Test the shortcut constants provided by the library."""

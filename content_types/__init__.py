@@ -448,6 +448,15 @@ def get_content_type(filename_or_extension: str | Path, treat_as_binary: bool = 
     if isinstance(filename_or_extension, Path):
         filename_or_extension = filename_or_extension.suffix
 
+    # Strip query strings and fragments (for URLs)
+    # e.g., "file.mp3?cache_id=123" => "file.mp3"
+    # e.g., "file.pdf#page=5" => "file.pdf"
+    if isinstance(filename_or_extension, str):
+        if '?' in filename_or_extension:
+            filename_or_extension = filename_or_extension.split('?')[0]
+        if '#' in filename_or_extension:
+            filename_or_extension = filename_or_extension.split('#')[0]
+
     if '.' not in filename_or_extension:
         filename_or_extension = f'.{filename_or_extension}'
 

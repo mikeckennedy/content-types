@@ -27,6 +27,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.3.0] - 2025-10-01
+
+### Added
+- 137 new file extensions across 17 categories, expanding format recognition capabilities
+- Comprehensive support for data-science MIME types (e.g., `application/vnd.pandas`, `application/x-ipynb+json`)
+- Project now supports 360+ file formats
+- Warp Project Summary / Index document for contributors and users
+- Files: `content_types/__init__.py`, `WARP.md`
+
+### Changed
+- Implemented alphabetical sorting of output listings for better navigation
+- Enhanced README to highlight 360+ supported file formats
+- Improved docstrings throughout codebase for clarity
+- Files: `content_types/__init__.py`, `README.md`
+
+### Fixed
+- Corrected CLI help text instructions for clearer usage guidance
+- Adjusted code indentation for better visual consistency
+- Files: `content_types/__init__.py`
+
+---
+
+## [0.2.3] - 2025-02-01
+
+### Changed
+- Changed `.js` back to `text/javascript`
+- Added a few new content types
+- Files: `content_types/__init__.py`
+
+### Added
+- Added comparison to builtin mimetypes
+- Files: `samples/compare_to_builtin.py`
+
+---
+
+## [0.2.2] - 2025-01-31
+
+### Added
+- Added `py.typed` file to suppress mypy typing warnings (Thanks @sanders41)
+- Files: `content_types/py.typed`
+
+### Changed
+- Now available on PyPI
+
+---
+
+## [0.2.1] - 2025-01-31
+
+### Added
+- Many more file extensions as known types
+- Files: `content_types/__init__.py`
+
+---
+
+## [0.2.0] - 2025-01-31
+
+### Added
+- Initial public release
+- Files: `content_types/__init__.py`, `pyproject.toml`, `README.md`
+
+---
+
 ## Template for Future Entries
 
 <!--

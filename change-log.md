@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- 
+- Comprehensive test suite with 30 tests covering integration, spot tests, and negative conditions
+- Files: `tests/test_content_types.py`, `tests/__init__.py`, `pytest.ini`
 
 ### Changed
 - 
@@ -23,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Security
-- 
+-
 
 ---
 

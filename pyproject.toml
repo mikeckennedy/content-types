@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "content-types"
-version = "0.2.3"
+version = "0.2.4"
 description = "A library to map file extensions to content types and vice versa."
 readme = "README.md"
 license = "MIT"
 authors = [
     { name = "Michael Kennedy", email = "mikeckennedy@gmail.com" }
 ]
-requires-python = ">=3.10, <=3.14"
+requires-python = ">=3.10"
 keywords = ["mime", "content-type", "mapping", "file extensions"]
 homepage = "https://github.com/mikeckennedy/content-types"
 

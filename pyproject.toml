@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "content-types"
-version = "0.2.4"
+version = "0.3.0"
 description = "A library to map file extensions to content types and vice versa."
 readme = "README.md"
 license = "MIT"

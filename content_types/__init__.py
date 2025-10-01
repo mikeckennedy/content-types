@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from typing import Dict
 
-__VERSION__ = '0.2.4'
+__VERSION__ = '0.3.0'
 
 # This dictionary maps file extensions (no dot) to the most specific content type.
 
@@ -222,6 +222,33 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'vcf': 'text/x-vcard',
     # Books
     'epub': 'application/epub+zip',
+    # Data Science / Scientific Data Formats
+    'parquet': 'application/vnd.apache.parquet',
+    'ipynb': 'application/x-ipynb+json',
+    'pkl': 'application/octet-stream',  # Python pickle
+    'pickle': 'application/octet-stream',  # Python pickle
+    'npy': 'application/octet-stream',  # NumPy array
+    'npz': 'application/zip',  # NumPy compressed arrays
+    'arrow': 'application/vnd.apache.arrow.file',
+    'feather': 'application/vnd.apache.arrow.file',  # Apache Arrow IPC format
+    'hdf5': 'application/x-hdf5',
+    'yaml': 'text/yaml',
+    'yml': 'text/yaml',
+    'toml': 'application/toml',
+    'proto': 'text/plain',  # Protocol Buffers definition
+    'pb': 'application/octet-stream',  # Protocol Buffers binary
+    'avro': 'application/avro',
+    'rda': 'application/octet-stream',  # R data
+    'rdata': 'application/octet-stream',  # R data
+    'rds': 'application/octet-stream',  # R serialized data
+    'dta': 'application/x-stata-dta',  # Stata data
+    'sas7bdat': 'application/x-sas-data',  # SAS data
+    'sav': 'application/x-spss-sav',  # SPSS data
+    'mat': 'application/x-matlab-data',  # MATLAB data
+    'sqlite': 'application/vnd.sqlite3',  # SQLite database
+    'sqlite3': 'application/vnd.sqlite3',
+    'db': 'application/vnd.sqlite3',  # Generic database file
+    'parq': 'application/vnd.apache.parquet',  # Alternative parquet extension
 }
 
 
@@ -277,6 +304,13 @@ zip: str = get_content_type('.zip')  # noqa == it's fine to overwrite zip() in t
 xml: str = get_content_type('.xml')
 csv: str = get_content_type('.csv')
 md: str = get_content_type('.md')
+# Data Science
+parquet: str = get_content_type('.parquet')
+ipynb: str = get_content_type('.ipynb')
+pkl: str = get_content_type('.pkl')
+yaml: str = get_content_type('.yaml')
+toml: str = get_content_type('.toml')
+sqlite: str = get_content_type('.sqlite')
 
 
 def cli():

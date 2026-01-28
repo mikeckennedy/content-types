@@ -1,10 +1,9 @@
 import sys
+from importlib.metadata import version
 from pathlib import Path
 from typing import Dict
 
-from importlib.metadata import version
-
-__version__ = version("content-types")
+__version__ = version('content-types')
 
 # This dictionary maps file extensions (no dot) to the most specific content type.
 

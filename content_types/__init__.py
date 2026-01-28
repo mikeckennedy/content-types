@@ -335,7 +335,9 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'rdata': 'application/octet-stream',  # R data
     'rds': 'application/octet-stream',  # R serialized data
     'dta': 'application/x-stata-dta',  # Stata data
+    'sas': 'text/x-sas',  # SAS source code
     'sas7bdat': 'application/x-sas-data',  # SAS data
+    'sql': 'application/sql',  # SQL (RFC 6922)
     'sav': 'application/x-spss-sav',  # SPSS data
     'mat': 'application/x-matlab-data',  # MATLAB data
     'sqlite': 'application/vnd.sqlite3',  # SQLite database

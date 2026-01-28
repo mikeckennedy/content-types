@@ -8,13 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Comprehensive test suite with 31 tests covering integration, spot tests, and negative conditions
-- URL support: `get_content_type()` now handles query strings and URL fragments
-- Files: `tests/test_content_types.py`, `tests/__init__.py`, `pytest.ini`, `content_types/__init__.py`
+- 
 
 ### Changed
-- Enhanced `get_content_type()` to strip query strings (`?`) and fragments (`#`) from URLs
-- Files: `content_types/__init__.py`
+- 
 
 ### Deprecated
 - 
@@ -27,6 +24,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 -
+
+---
+
+## [0.4.0] - 2026-01-28
+
+### Added
+- MIME types for `.sas` (`text/x-sas`) and `.sql` (`application/sql`) extensions (#5)
+- Comprehensive test suite with 31 tests covering integration, spot tests, and negative conditions
+- URL support: `get_content_type()` now handles query strings and URL fragments
+- Files: `tests/test_content_types.py`, `tests/__init__.py`, `pytest.ini`, `content_types/__init__.py`
+
+### Changed
+- Enhanced `get_content_type()` to strip query strings (`?`) and fragments (`#`) from URLs
+- Dynamic version metadata: package now pulls `__version__` from distribution metadata
+- Files: `content_types/__init__.py`
 
 ---
 

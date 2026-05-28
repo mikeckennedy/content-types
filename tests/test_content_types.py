@@ -103,6 +103,18 @@ class TestGetContentType:
         assert content_types.get_content_type('file.xyz123', treat_as_binary=False) == 'text/plain'
         assert content_types.get_content_type('unknown.foobar', treat_as_binary=False) == 'text/plain'
 
+    def test_fallback_override_string(self):
+        """Integration test: custom fallback string is returned for unknown extensions (issue #8)."""
+        assert content_types.get_content_type('file.xyz123', fallback='application/x-custom') == 'application/x-custom'
+        assert content_types.get_content_type('README', fallback='unknown/unknown') == 'unknown/unknown'
+        # Known extensions still resolve normally — fallback is only for unknowns.
+        assert content_types.get_content_type('photo.jpg', fallback='application/x-custom') == 'image/jpeg'
+
+    def test_fallback_takes_precedence_over_treat_as_binary(self):
+        """Integration test: an explicit fallback string overrides the treat_as_binary default."""
+        assert content_types.get_content_type('file.xyz', treat_as_binary=True, fallback='x/y') == 'x/y'
+        assert content_types.get_content_type('file.xyz', treat_as_binary=False, fallback='x/y') == 'x/y'
+
     def test_none_input_raises_exception(self):
         """Negative test: None input raises exception."""
         with pytest.raises(Exception, match='filename cannot be None'):

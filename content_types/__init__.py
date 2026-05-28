@@ -1,7 +1,7 @@
 import sys
 from importlib.metadata import version
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 __version__ = version('content-types')
 
@@ -424,7 +424,11 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
 }
 
 
-def get_content_type(filename_or_extension: str | Path, treat_as_binary: bool = True) -> str:
+def get_content_type(
+    filename_or_extension: str | Path,
+    treat_as_binary: bool = True,
+    fallback: Optional[str] = None,
+) -> str:
     """
     Given a filename (or just an extension), return the most specific,
     commonly accepted MIME type based on extension.
@@ -432,17 +436,22 @@ def get_content_type(filename_or_extension: str | Path, treat_as_binary: bool = 
     Falls back to 'application/octet-stream' if `treat_as_binary` is True (default) and 'text/plain' if it is
     False when the extension is not known.
 
+    To override the fallback, pass `fallback='application/x-custom'` (or any string you'd like returned for
+    unknown extensions). When `fallback` is provided, it takes precedence over `treat_as_binary`.
+
     Example:
         >>> get_content_type("picture.jpg")
         'image/jpeg'
         >>> get_content_type(".webp")
         'image/webp'
         >>> get_content_type("script.js")
-        'application/javascript'
+        'text/javascript'
         >>> get_content_type("unknown.xyz")
         'application/octet-stream'
         >>> get_content_type("unknown.xyz", treat_as_binary=False)
         'text/plain'
+        >>> get_content_type("unknown.xyz", fallback='application/x-custom')
+        'application/x-custom'
     """
 
     if filename_or_extension is None:
@@ -469,10 +478,13 @@ def get_content_type(filename_or_extension: str | Path, treat_as_binary: bool = 
     dot_parts = filename_or_extension.lower().split('.')
     ext = dot_parts[-1] if len(dot_parts) > 1 else ''
 
-    if treat_as_binary:
-        return EXTENSION_TO_CONTENT_TYPE.get(ext, 'application/octet-stream')
+    if ext in EXTENSION_TO_CONTENT_TYPE:
+        return EXTENSION_TO_CONTENT_TYPE[ext]
 
-    return EXTENSION_TO_CONTENT_TYPE.get(ext, 'text/plain')
+    if fallback is not None:
+        return fallback
+
+    return 'application/octet-stream' if treat_as_binary else 'text/plain'
 
 
 webp: str = get_content_type('.webp')

@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- 
+- `fallback` parameter on `get_content_type()` to override the default MIME type returned for unknown extensions — pass any string and it will be returned in place of `application/octet-stream` / `text/plain` (#8)
+- Files: `content_types/__init__.py`, `tests/test_content_types.py`
 
 ### Changed
 - 
@@ -20,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Fixed
-- 
+- Docstring example for `get_content_type("script.js")` now shows `'text/javascript'` (the actual return value) instead of the outdated `'application/javascript'`
+- Files: `content_types/__init__.py`
 
 ### Security
 -

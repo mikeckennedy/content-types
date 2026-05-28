@@ -1,6 +1,10 @@
 
 # content-types 🗃️🔎
 
+[![PyPI version](https://img.shields.io/pypi/v/content-types.svg)](https://pypi.org/project/content-types/)
+[![Python versions](https://img.shields.io/pypi/pyversions/content-types.svg)](https://pypi.org/project/content-types/)
+[![License: MIT](https://img.shields.io/pypi/l/content-types.svg)](https://github.com/mikeckennedy/content-types/blob/main/LICENSE)
+
 A comprehensive Python library to map file extensions to MIME types with **360+ supported formats**. 
 It also provides a CLI for quick lookups right from your terminal.
 If no known mapping is found, the tool returns `application/octet-stream`.
@@ -38,6 +42,8 @@ Why not just use Python's built-in `mimetypes`? Or the excellent `python-magic` 
 
 ## Installation
 
+Requires Python 3.10 or later.
+
 ```bash
 uv pip install content-types
 ```
@@ -65,13 +71,24 @@ print(f'Content-Type for webp is {content_types.webp}.')
 # Data science shortcuts
 print(content_types.parquet)  # "application/vnd.apache.parquet"
 print(content_types.ipynb)    # "application/x-ipynb+json"
+print(content_types.pkl)      # "application/octet-stream"
 print(content_types.yaml)     # "text/yaml"
 print(content_types.toml)     # "application/toml"
+print(content_types.sqlite)   # "application/vnd.sqlite3"
 
 # Works with Path objects too
 from pathlib import Path
 path = Path("document.pdf")
 print(content_types.get_content_type(path))  # "application/pdf"
+
+# URLs work too — query strings and fragments are stripped before lookup
+url = "https://cdn.example.com/song.mp3?cache_id=678c2a"
+print(content_types.get_content_type(url))  # "audio/mpeg"
+
+# Unknown extensions fall back to 'application/octet-stream' by default;
+# pass treat_as_binary=False to fall back to 'text/plain' instead.
+print(content_types.get_content_type("notes.unknownext"))  # "application/octet-stream"
+print(content_types.get_content_type("notes.unknownext", treat_as_binary=False))  # "text/plain"
 ```
 
 ## CLI
@@ -190,3 +207,16 @@ to avoid accessing or needing the file data. They are for different use-cases.
 
 Contributions are welcome! Check out [the GitHub repo](https://github.com/mikeckennedy/content-types) 
 for more details on how to get involved.
+
+### Development
+
+`pytest` and `ruff` aren't declared dependencies — `uv` provides them on the fly:
+
+```bash
+# Run the test suite (31 tests)
+uv run --with pytest pytest
+
+# Lint and format (config in ruff.toml)
+uvx ruff check .
+uvx ruff format .
+```

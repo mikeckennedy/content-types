@@ -140,6 +140,13 @@
     "text": "View on PyPI Bug Reports Source\n\n\n\nSkills llms.txt llms-full.txt\n\n\n\n\n\n\nMichael Kennedy\n\n\n\nAuthor\n\n\n\n\n\n\nFull license MIT\n\n\n\nRequires: Python &gt;=3.10 Provides-Extra: dev"
   },
   {
+    "objectID": "index.html#documentation",
+    "href": "index.html#documentation",
+    "title": "content-types 🗃️🔎",
+    "section": "📚 Documentation",
+    "text": "📚 Documentation\nFull documentation is hosted at mkennedy.codes/docs/content-types. There you’ll find a searchable API reference for get_content_type(), the complete extension-to-type mapping, and the shortcut constants. The quick examples below cover the essentials."
+  },
+  {
     "objectID": "index.html#extensive-format-support",
     "href": "index.html#extensive-format-support",
     "title": "content-types 🗃️🔎",
@@ -193,7 +200,7 @@
     "href": "index.html#contributing",
     "title": "content-types 🗃️🔎",
     "section": "Contributing",
-    "text": "Contributing\nContributions are welcome! Check out the GitHub repo for more details on how to get involved.\n\nDevelopment\npytest and ruff aren’t declared dependencies — uv provides them on the fly:\n## Run the test suite (31 tests)\nuv run --with pytest pytest\n\n## Lint and format (config in ruff.toml)\nuvx ruff check .\nuvx ruff format .\n\n\nDocumentation\nThe docs site is built with Great Docs and published at mkennedy.codes/docs/content-types. Great Docs imports the package for API introspection, so the toolchain lives in the dev extra and needs an editable install:\n## Install the docs toolchain into your virtualenv\nuv pip install -e \".[dev]\"\n\n## Build the site (mirrors great-docs/_site/ into the committed docs/ folder)\npython scripts/build_docs.py\n\n## Preview exactly as hosted, under the /docs/content-types subpath\npython scripts/serve_docs.py   # -&gt; http://127.0.0.1:8099/docs/content-types/"
+    "text": "Contributing\nContributions are welcome! Check out the GitHub repo for more details on how to get involved.\n\nDevelopment\npytest and ruff aren’t declared dependencies — uv provides them on the fly:\n## Run the test suite (31 tests)\nuv run --with pytest pytest\n\n## Lint and format (config in ruff.toml)\nuvx ruff check .\nuvx ruff format .\n\n\nBuilding the docs\nThe docs site is built with Great Docs and published at mkennedy.codes/docs/content-types. Great Docs imports the package for API introspection, so the toolchain lives in the dev extra and needs an editable install:\n## Install the docs toolchain into your virtualenv\nuv pip install -e \".[dev]\"\n\n## Build the site (mirrors great-docs/_site/ into the committed docs/ folder)\npython scripts/build_docs.py\n\n## Preview exactly as hosted, under the /docs/content-types subpath\npython scripts/serve_docs.py   # -&gt; http://127.0.0.1:8099/docs/content-types/"
   },
   {
     "objectID": "skill.html",

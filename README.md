@@ -4,6 +4,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/content-types.svg)](https://pypi.org/project/content-types/)
 [![Python versions](https://img.shields.io/pypi/pyversions/content-types.svg)](https://pypi.org/project/content-types/)
 [![License: MIT](https://img.shields.io/pypi/l/content-types.svg)](https://github.com/mikeckennedy/content-types/blob/main/LICENSE)
+[![Docs](https://img.shields.io/badge/docs-mkennedy.codes-2188ff.svg)](https://mkennedy.codes/docs/content-types/)
 
 A comprehensive Python library to map file extensions to MIME types with **360+ supported formats**. 
 It also provides a CLI for quick lookups right from your terminal.
@@ -14,6 +15,13 @@ or parse the bytes of the file or stream. It just looks at the extension
 which is valuable when you don't have access to the file directly.
 For example, you know the filename but it is stored in s3 and you don't want
 to download it just to fully inspect the file.
+
+## 📚 Documentation
+
+Full documentation is hosted at **[mkennedy.codes/docs/content-types](https://mkennedy.codes/docs/content-types/)**.
+There you'll find a searchable [API reference](https://mkennedy.codes/docs/content-types/reference/)
+for `get_content_type()`, the complete extension-to-type mapping, and the shortcut
+constants. The quick examples below cover the essentials.
 
 ## Extensive Format Support
 
@@ -221,7 +229,7 @@ uvx ruff check .
 uvx ruff format .
 ```
 
-### Documentation
+### Building the docs
 
 The docs site is built with [Great Docs](https://github.com/posit-dev/great-docs) and
 published at [mkennedy.codes/docs/content-types](https://mkennedy.codes/docs/content-types/).

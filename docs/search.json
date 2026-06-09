@@ -1,0 +1,341 @@
+[
+  {
+    "objectID": "reference/jpg.html",
+    "href": "reference/jpg.html",
+    "title": "jpg",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\njpg: str = get_content_type(\".jpg\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[jpg]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/png.html",
+    "href": "reference/png.html",
+    "title": "png",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\npng: str = get_content_type(\".png\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[png]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/parquet.html",
+    "href": "reference/parquet.html",
+    "title": "parquet",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nparquet: str = get_content_type(\".parquet\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[parquet]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/csv.html",
+    "href": "reference/csv.html",
+    "title": "csv",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\ncsv: str = get_content_type(\".csv\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[csv]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/toml.html",
+    "href": "reference/toml.html",
+    "title": "toml",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\ntoml: str = get_content_type(\".toml\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[toml]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/pdf.html",
+    "href": "reference/pdf.html",
+    "title": "pdf",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\npdf: str = get_content_type(\".pdf\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[pdf]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/get_content_type.html",
+    "href": "reference/get_content_type.html",
+    "title": "get_content_type()",
+    "section": "",
+    "text": "Given a filename (or just an extension), return the most specific,\n\n\nUsage\nSource\n\n\nget_content_type(filename_or_extension, treat_as_binary=True, fallback=None)\n\n\ncommonly accepted MIME type based on extension.\nFalls back to ‘application/octet-stream’ if treat_as_binary is True (default) and ‘text/plain’ if it is False when the extension is not known.\nTo override the fallback, pass fallback='application/x-custom' (or any string you’d like returned for unknown extensions). When fallback is provided, it takes precedence over treat_as_binary.\n\n\nExample\n\n\n\nget_content_type(“picture.jpg”) ‘image/jpeg’ get_content_type(“.webp”) ‘image/webp’ get_content_type(“script.js”) ‘text/javascript’ get_content_type(“unknown.xyz”) ‘application/octet-stream’ get_content_type(“unknown.xyz”, treat_as_binary=False) ‘text/plain’ get_content_type(“unknown.xyz”, fallback=‘application/x-custom’) ‘application/x-custom’",
+    "crumbs": [
+      "API Reference",
+      "Lookup",
+      "[get_content_type()]{.doc-object-name .doc-function .doc-label .doc-label-function}"
+    ]
+  },
+  {
+    "objectID": "reference/index.html",
+    "href": "reference/index.html",
+    "title": "API Reference",
+    "section": "",
+    "text": "content-types is intentionally tiny: a single lookup function, the mapping table behind it, and a handful of precomputed shortcut constants for the most common formats.\n\n\nLookup\n\nThe one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.\n\n\nget_content_type()\n\nGiven a filename (or just an extension), return the most specific,\n\n\n\n\nMapping data\n\nThe underlying extension -&gt; content-type table (364 entries; keys have no leading dot).\n\n\nEXTENSION_TO_CONTENT_TYPE\n\ndict() -&gt; new empty dictionary\n\n\n\n\nShortcut constants\n\nPrecomputed content types for very common formats, exposed as module-level attributes.\n\n\nwebp\n\nstr(object=’’) -&gt; str\n\npng\n\nstr(object=’’) -&gt; str\n\njpg\n\nstr(object=’’) -&gt; str\n\nmp3\n\nstr(object=’’) -&gt; str\n\njson\n\nstr(object=’’) -&gt; str\n\npdf\n\nstr(object=’’) -&gt; str\n\nzip\n\nstr(object=’’) -&gt; str\n\nxml\n\nstr(object=’’) -&gt; str\n\ncsv\n\nstr(object=’’) -&gt; str\n\nmd\n\nstr(object=’’) -&gt; str\n\nparquet\n\nstr(object=’’) -&gt; str\n\nipynb\n\nstr(object=’’) -&gt; str\n\npkl\n\nstr(object=’’) -&gt; str\n\nyaml\n\nstr(object=’’) -&gt; str\n\ntoml\n\nstr(object=’’) -&gt; str\n\nsqlite\n\nstr(object=’’) -&gt; str",
+    "crumbs": [
+      "API Reference",
+      "API Index"
+    ]
+  },
+  {
+    "objectID": "reference/zip.html",
+    "href": "reference/zip.html",
+    "title": "zip",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nzip: str = get_content_type(\".zip\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[zip]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/xml.html",
+    "href": "reference/xml.html",
+    "title": "xml",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nxml: str = get_content_type(\".xml\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[xml]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "skills.html",
+    "href": "skills.html",
+    "title": "Skills",
+    "section": "",
+    "text": "A skill is a package of structured files that teaches an AI coding agent how to work with a specific tool or framework. The skill below was generated by Great Docs from this project’s documentation. Install it in your agent and it will be able to run commands, edit configuration, write content, and troubleshoot problems without step-by-step guidance from you.\n\n  \n    ▶    Install this skill\n  \n  \n    \n      \nAny agent — install with npx:\nnpx skills add https://mkennedy.codes/docs/content-types/\nCodex / OpenCode\nTell the agent:Fetch the skill file at https://mkennedy.codes/docs/content-types/skill.md and follow the instructions.\nManual — download the skill file:\ncurl -O https://mkennedy.codes/docs/content-types/skill.md\nOr browse the SKILL.md file.\n      \n    \n  \n\n\nSKILL.md\n---\nname: content-types\ndescription: &gt;\n  A library to map file extensions to content types and vice versa. Use when writing Python code that uses the content_types package.\nlicense: MIT\ncompatibility: Requires Python &gt;=3.10.\n---\n\n# content-types\n\nA library to map file extensions to content types and vice versa.\n\n## Installation\n\n```bash\npip install content-types\n```\n\n## API overview\n\n### Lookup\n\nThe one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.\n\n- `get_content_type`: Given a filename (or just an extension), return the most specific,\n\n### Mapping data\n\nThe underlying extension -&gt; content-type table (364 entries; keys have no leading dot).\n\n- `EXTENSION_TO_CONTENT_TYPE`: dict() -&gt; new empty dictionary\n\n### Shortcut constants\n\nPrecomputed content types for very common formats, exposed as module-level attributes.\n\n- `webp`: str(object='') -&gt; str\n- `png`: str(object='') -&gt; str\n- `jpg`: str(object='') -&gt; str\n- `mp3`: str(object='') -&gt; str\n- `json`: str(object='') -&gt; str\n- `pdf`: str(object='') -&gt; str\n- `zip`: str(object='') -&gt; str\n- `xml`: str(object='') -&gt; str\n- `csv`: str(object='') -&gt; str\n- `md`: str(object='') -&gt; str\n- `parquet`: str(object='') -&gt; str\n- `ipynb`: str(object='') -&gt; str\n- `pkl`: str(object='') -&gt; str\n- `yaml`: str(object='') -&gt; str\n- `toml`: str(object='') -&gt; str\n- `sqlite`: str(object='') -&gt; str\n\n## Resources\n\n- [Full documentation](https://mkennedy.codes/docs/content-types/)\n- [llms.txt](llms.txt) — Indexed API reference for LLMs\n- [llms-full.txt](llms-full.txt) — Comprehensive documentation for LLMs\n- [Source code](https://github.com/mikeckennedy/content-types)"
+  },
+  {
+    "objectID": "changelog.html",
+    "href": "changelog.html",
+    "title": "Changelog",
+    "section": "",
+    "text": "This changelog is generated automatically from GitHub Releases.\n\nv0.3.0\n2025-10-01 · GitHub\n\nAdded\n\n137 new file extensions across 17 categories, expanding format recognition capabilities\nComprehensive support for data-science MIME types (e.g., application/vnd.pandas, application/x-ipynb+json)\nProject now supports 360+ file formats\nWarp Project Summary / Index document for contributors and users\nFiles: content_types/__init__.py, WARP.md\n\n\n\nChanged\n\nImplemented alphabetical sorting of output listings for better navigation\nEnhanced README to highlight 360+ supported file formats\nImproved docstrings throughout codebase for clarity\nFiles: content_types/__init__.py, README.md\n\n\n\nFixed\n\nCorrected CLI help text instructions for clearer usage guidance\nAdjusted code indentation for better visual consistency\nFiles: content_types/__init__.py\n\n\n\n\nv0.2.3\n2025-02-01 · GitHub\n\nChanges .js back to text/javascript\nAdds a few new types\nAdds comparison to builtin mimetypes\n\n\n\nv0.2.2\n2025-01-31 · GitHub\nAdded py.typed file to suppress mypy typing warnings. Thanks @sanders41 Available on PyPI now.\n\n\nv0.2.1\n2025-01-31 · GitHub\nAdds many more file extensions as known types.\n\n\nv0.2.0\n2025-01-31 · GitHub\nInitial public release."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "content-types 🗃️🔎",
+    "section": "",
+    "text": "View on PyPI Bug Reports Source\n\n\n\nSkills llms.txt llms-full.txt\n\n\n\n\n\n\nMichael Kennedy\n\n\n\nAuthor\n\n\n\n\n\n\nFull license MIT\n\n\n\nRequires: Python &gt;=3.10 Provides-Extra: dev"
+  },
+  {
+    "objectID": "index.html#extensive-format-support",
+    "href": "index.html#extensive-format-support",
+    "title": "content-types 🗃️🔎",
+    "section": "Extensive Format Support",
+    "text": "Extensive Format Support\nWith 360+ file extensions mapped, content-types covers:\n\n🎨 Images - Standard formats plus RAW camera files (Canon, Nikon, Sony, Adobe DNG, etc.)\n🎵 Audio - MP3, FLAC, AAC, MIDI, WMA, ALAC, DSD, and more\n🎬 Video - MP4, MKV, WebM, FLV, and modern codecs\n📦 Archives - ZIP, TAR, 7Z, RAR, plus modern formats (bz2, xz, zstd, brotli)\n📄 Documents - PDF, Office formats (DOCX, XLSX, PPTX), OpenDocument\n💻 Programming - Python, JavaScript, TypeScript, Rust, Go, Java, C++, Swift, Kotlin, and 25+ languages\n🔬 Data Science - Parquet, Jupyter notebooks, HDF5, Arrow, Pickle, NumPy, R, Stata, SAS, SPSS\n⚙️ Configuration - YAML, TOML, JSON, INI, ENV, dotfiles\n🐳 DevOps - Dockerfiles, Terraform, Kubernetes configs, Nomad\n🎨 Creative Suite - Adobe (PSD, InDesign, Premiere, After Effects), CAD files (AutoCAD, SketchUp, Blender)\n🎮 Game Development - Unity, Unreal Engine, PAK files\n🔬 Scientific - FITS, DICOM, NIfTI, PDB (protein data)\n⛓️ Blockchain - Solidity, Vyper smart contracts\n🗄️ Databases - SQLite, Access, MySQL files\n📝 Documentation - Markdown, AsciiDoc, Org-mode, BibTeX\n\n…and much more!\nWhy not just use Python’s built-in mimetypes? Or the excellent python-magic package? See below."
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "content-types 🗃️🔎",
+    "section": "Installation",
+    "text": "Installation\nRequires Python 3.10 or later.\nuv pip install content-types"
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "content-types 🗃️🔎",
+    "section": "Usage",
+    "text": "Usage\nimport content_types\n\n## Forward lookup: filename -&gt; MIME type\nthe_type = content_types.get_content_type(\"example.jpg\")\nprint(the_type)  # \"image/jpeg\"\n\n## Works with any supported extension\nprint(content_types.get_content_type(\"data.parquet\"))  # \"application/vnd.apache.parquet\"\nprint(content_types.get_content_type(\"notebook.ipynb\"))  # \"application/x-ipynb+json\"\nprint(content_types.get_content_type(\"photo.cr2\"))  # \"image/x-canon-cr2\"\nprint(content_types.get_content_type(\"model.blend\"))  # \"application/x-blender\"\nprint(content_types.get_content_type(\"contract.sol\"))  # \"text/x-solidity\"\n\n## For very common files, you have shortcuts:\nprint(f'Content-Type for webp is {content_types.webp}.') \n## Content-Type for webp is image/webp.\n\n## Data science shortcuts\nprint(content_types.parquet)  # \"application/vnd.apache.parquet\"\nprint(content_types.ipynb)    # \"application/x-ipynb+json\"\nprint(content_types.pkl)      # \"application/octet-stream\"\nprint(content_types.yaml)     # \"text/yaml\"\nprint(content_types.toml)     # \"application/toml\"\nprint(content_types.sqlite)   # \"application/vnd.sqlite3\"\n\n## Works with Path objects too\nfrom pathlib import Path\npath = Path(\"document.pdf\")\nprint(content_types.get_content_type(path))  # \"application/pdf\"\n\n## URLs work too — query strings and fragments are stripped before lookup\nurl = \"https://cdn.example.com/song.mp3?cache_id=678c2a\"\nprint(content_types.get_content_type(url))  # \"audio/mpeg\"\n\n## Unknown extensions fall back to 'application/octet-stream' by default;\n## pass treat_as_binary=False to fall back to 'text/plain' instead.\nprint(content_types.get_content_type(\"notes.unknownext\"))  # \"application/octet-stream\"\nprint(content_types.get_content_type(\"notes.unknownext\", treat_as_binary=False))  # \"text/plain\""
+  },
+  {
+    "objectID": "index.html#cli",
+    "href": "index.html#cli",
+    "title": "content-types 🗃️🔎",
+    "section": "CLI",
+    "text": "CLI\nTo use the library as a CLI tool, just install it with uv or pipx.\nuv tool install content-types\nNow it will be available machine-wide.\ncontent-types example.jpg\n## Outputs: image/jpeg\n\ncontent-types data.parquet\n## Outputs: application/vnd.apache.parquet\n\ncontent-types notebook.ipynb\n## Outputs: application/x-ipynb+json\n\ncontent-types photo.cr2\n## Outputs: image/x-canon-cr2"
+  },
+  {
+    "objectID": "index.html#more-correct-than-pythons-mimetypes",
+    "href": "index.html#more-correct-than-pythons-mimetypes",
+    "title": "content-types 🗃️🔎",
+    "section": "More correct than Python’s mimetypes",
+    "text": "More correct than Python’s mimetypes\nWhen I first learned about Python’s mimetypes module, I thought it was exactly what I need. However, it doesn’t have all the MIME types. And, it recommends deprecated, out-of-date answers for very obvious types.\nFor example, mimetypes has .xml as text/xml where it should be application/xml (see MDN).\nAnd mimetypes is missing important types such as:\n\n.m4v -&gt; video/mp4\n.tgz -&gt; application/gzip\n.flac -&gt; audio/flac\n.epub -&gt; application/epub+zip\n.parquet -&gt; application/vnd.apache.parquet\n.ipynb -&gt; application/x-ipynb+json\n.mkv -&gt; video/x-matroska\n.toml -&gt; application/toml\n.yaml -&gt; text/yaml\n.rs -&gt; text/x-rust\n.go -&gt; text/x-go\n.tsx -&gt; text/tsx\n.psd -&gt; image/vnd.adobe.photoshop\n.dwg -&gt; application/acad\n… and 300+ more\n\nWith this library, you get 360+ file extensions properly mapped, compared to Python’s mimetypes which only has around 100 and includes outdated MIME types."
+  },
+  {
+    "objectID": "index.html#popular-format-examples",
+    "href": "index.html#popular-format-examples",
+    "title": "content-types 🗃️🔎",
+    "section": "Popular Format Examples",
+    "text": "Popular Format Examples\nHere are some commonly used formats by category:\nData Science & Analytics: - .parquet - Apache Parquet columnar storage - .ipynb - Jupyter Notebooks - .pkl, .pickle - Python pickle files - .npy, .npz - NumPy arrays - .arrow, .feather - Apache Arrow - .hdf5, .h5 - HDF5 scientific data - .mat - MATLAB data files - .dta - Stata data files - .sav - SPSS data files\nModern Programming Languages: - .rs - Rust - .go - Go/Golang - .ts, .tsx - TypeScript/React - .jsx - React JavaScript - .vue - Vue.js components - .swift - Swift - .kt, .kts - Kotlin - .dart - Dart - .sol - Solidity (smart contracts)\nConfiguration & Infrastructure: - .yaml, .yml - YAML configs - .toml - TOML configs - .env - Environment variables - .dockerfile - Docker files - .tf, .tfvars - Terraform - .ini, .conf, .cfg - Configuration files\nCreative & Design: - .psd, .psb - Adobe Photoshop - .indd - Adobe InDesign - .aep - Adobe After Effects - .dwg, .dxf - AutoCAD - .skp - SketchUp - .blend - Blender - .cr2, .cr3 - Canon RAW - .nef - Nikon RAW - .dng - Adobe DNG RAW\nModern Media: - .mkv - Matroska video - .webp - WebP images - .avif - AVIF images - .opus - Opus audio - .flac - FLAC audio - .midi, .mid - MIDI"
+  },
+  {
+    "objectID": "index.html#works-when-python-magic-package-doesnt",
+    "href": "index.html#works-when-python-magic-package-doesnt",
+    "title": "content-types 🗃️🔎",
+    "section": "Works when python-magic package doesn’t",
+    "text": "Works when python-magic package doesn’t\nWhy not the excellent python-magic package? That one works by reading the header bytes of binary files which requires access to the file data. The whole goal of this project is to avoid accessing or needing the file data. They are for different use-cases."
+  },
+  {
+    "objectID": "index.html#contributing",
+    "href": "index.html#contributing",
+    "title": "content-types 🗃️🔎",
+    "section": "Contributing",
+    "text": "Contributing\nContributions are welcome! Check out the GitHub repo for more details on how to get involved.\n\nDevelopment\npytest and ruff aren’t declared dependencies — uv provides them on the fly:\n## Run the test suite (31 tests)\nuv run --with pytest pytest\n\n## Lint and format (config in ruff.toml)\nuvx ruff check .\nuvx ruff format .\n\n\nDocumentation\nThe docs site is built with Great Docs and published at mkennedy.codes/docs/content-types. Great Docs imports the package for API introspection, so the toolchain lives in the dev extra and needs an editable install:\n## Install the docs toolchain into your virtualenv\nuv pip install -e \".[dev]\"\n\n## Build the site (mirrors great-docs/_site/ into the committed docs/ folder)\npython scripts/build_docs.py\n\n## Preview exactly as hosted, under the /docs/content-types subpath\npython scripts/serve_docs.py   # -&gt; http://127.0.0.1:8099/docs/content-types/"
+  },
+  {
+    "objectID": "skill.html",
+    "href": "skill.html",
+    "title": "content-types",
+    "section": "",
+    "text": "A library to map file extensions to content types and vice versa."
+  },
+  {
+    "objectID": "skill.html#lookup",
+    "href": "skill.html#lookup",
+    "title": "content-types",
+    "section": "Lookup",
+    "text": "Lookup\nThe one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.\n\nget_content_type: Given a filename (or just an extension), return the most specific,"
+  },
+  {
+    "objectID": "skill.html#mapping-data",
+    "href": "skill.html#mapping-data",
+    "title": "content-types",
+    "section": "Mapping data",
+    "text": "Mapping data\nThe underlying extension -&gt; content-type table (364 entries; keys have no leading dot).\n\nEXTENSION_TO_CONTENT_TYPE: dict() -&gt; new empty dictionary"
+  },
+  {
+    "objectID": "skill.html#shortcut-constants",
+    "href": "skill.html#shortcut-constants",
+    "title": "content-types",
+    "section": "Shortcut constants",
+    "text": "Shortcut constants\nPrecomputed content types for very common formats, exposed as module-level attributes.\n\nwebp: str(object=’’) -&gt; str\npng: str(object=’’) -&gt; str\njpg: str(object=’’) -&gt; str\nmp3: str(object=’’) -&gt; str\njson: str(object=’’) -&gt; str\npdf: str(object=’’) -&gt; str\nzip: str(object=’’) -&gt; str\nxml: str(object=’’) -&gt; str\ncsv: str(object=’’) -&gt; str\nmd: str(object=’’) -&gt; str\nparquet: str(object=’’) -&gt; str\nipynb: str(object=’’) -&gt; str\npkl: str(object=’’) -&gt; str\nyaml: str(object=’’) -&gt; str\ntoml: str(object=’’) -&gt; str\nsqlite: str(object=’’) -&gt; str"
+  },
+  {
+    "objectID": "license.html",
+    "href": "license.html",
+    "title": "License",
+    "section": "",
+    "text": "▶\n    License features — MIT License\n\n\n\n\n\nPermissions\n\nCommercial use\nModification\nDistribution\nPrivate use\n\n\nConditions\n\nLicense and copyright notice\n\n\nLimitations\n\nLiability\nWarranty\n\n\n\n\nMIT License\n\nCopyright (c) 2025 Michael Kennedy\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE."
+  },
+  {
+    "objectID": "reference/md.html",
+    "href": "reference/md.html",
+    "title": "md",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nmd: str = get_content_type(\".md\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[md]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/json.html",
+    "href": "reference/json.html",
+    "title": "json",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\njson: str = get_content_type(\".json\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[json]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/ipynb.html",
+    "href": "reference/ipynb.html",
+    "title": "ipynb",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nipynb: str = get_content_type(\".ipynb\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[ipynb]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/EXTENSION_TO_CONTENT_TYPE.html",
+    "href": "reference/EXTENSION_TO_CONTENT_TYPE.html",
+    "title": "EXTENSION_TO_CONTENT_TYPE",
+    "section": "",
+    "text": "dict() -&gt; new empty dictionary\n\n\nEXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {    \"txt\": \"text/plain\",    \"htm\": \"text/html\",    \"html\": \"text/html\",    \"css\": \"text/css\",    \"csv\": \"text/csv\",    \"tsv\": \"text/tab-separated-values\",    \"js\": \"text/javascript\",    \"mjs\": \"text/javascript\",    \"json\": \"application/json\",    \"map\": \"application/json\",    \"xml\": \"application/xml\",    \"jpg\": \"image/jpeg\",    \"jpeg\": \"image/jpeg\",    \"png\": \"image/png\",    \"gif\": \"image/gif\",    \"bmp\": \"image/bmp\",    \"webp\": \"image/webp\",    \"avif\": \"image/avif\",    \"ico\": \"image/vnd.microsoft.icon\",    \"svg\": \"image/svg+xml\",    \"tif\": \"image/tiff\",    \"tiff\": \"image/tiff\",    \"heic\": \"image/heic\",    \"heif\": \"image/heif\",    \"jpe\": \"image/jpeg\",    \"ief\": \"image/ief\",    \"ras\": \"image/x-cmu-raster\",    \"pnm\": \"image/x-portable-anymap\",    \"pbm\": \"image/x-portable-bitmap\",    \"pgm\": \"image/x-portable-graymap\",    \"ppm\": \"image/x-portable-pixmap\",    \"rgb\": \"image/x-rgb\",    \"xbm\": \"image/x-xbitmap\",    \"xpm\": \"image/x-xpixmap\",    \"xwd\": \"image/x-xwindowdump\",    \"cr2\": \"image/x-canon-cr2\",    \"cr3\": \"image/x-canon-cr3\",    \"nef\": \"image/x-nikon-nef\",    \"nrw\": \"image/x-nikon-nrw\",    \"arw\": \"image/x-sony-arw\",    \"srf\": \"image/x-sony-srf\",    \"sr2\": \"image/x-sony-sr2\",    \"dng\": \"image/x-adobe-dng\",    \"orf\": \"image/x-olympus-orf\",    \"rw2\": \"image/x-panasonic-rw2\",    \"pef\": \"image/x-pentax-pef\",    \"raf\": \"image/x-fuji-raf\",    \"raw\": \"image/x-raw\",    \"mp3\": \"audio/mpeg\",    \"ogg\": \"audio/ogg\",    \"wav\": \"audio/wav\",    \"aac\": \"audio/aac\",    \"flac\": \"audio/flac\",    \"m4a\": \"audio/mp4\",    \"weba\": \"audio/webm\",    \"ass\": \"audio/aac\",    \"adts\": \"audio/aac\",    \"rst\": \"text/x-rst\",    \"loas\": \"audio/aac\",    \"mp2\": \"audio/mpeg\",    \"opus\": \"audio/opus\",    \"aif\": \"audio/x-aiff\",    \"aifc\": \"audio/x-aiff\",    \"aiff\": \"audio/x-aiff\",    \"au\": \"audio/basic\",    \"snd\": \"audio/basic\",    \"ra\": \"audio/x-pn-realaudio\",    \"midi\": \"audio/midi\",    \"mid\": \"audio/midi\",    \"ape\": \"audio/x-ape\",    \"wma\": \"audio/x-ms-wma\",    \"alac\": \"audio/x-alac\",    \"dsd\": \"audio/dsd\",    \"dsf\": \"audio/x-dsf\",    \"mp4\": \"video/mp4\",    \"m4v\": \"video/mp4\",    \"mov\": \"video/quicktime\",    \"avi\": \"video/x-msvideo\",    \"wmv\": \"video/x-ms-wmv\",    \"mpg\": \"video/mpeg\",    \"mpeg\": \"video/mpeg\",    \"ogv\": \"video/ogg\",    \"webm\": \"video/webm\",    \"m1v\": \"video/mpeg\",    \"mpa\": \"video/mpeg\",    \"mpe\": \"video/mpeg\",    \"qt\": \"video/quicktime\",    \"movie\": \"video/x-sgi-movie\",    \"mkv\": \"video/x-matroska\",    \"flv\": \"video/x-flv\",    \"m2ts\": \"video/mp2t\",    \"mts\": \"video/mp2t\",    \"vob\": \"video/mpeg\",    \"f4v\": \"video/x-f4v\",    \"3gp\": \"audio/3gpp\",    \"3gpp\": \"audio/3gpp\",    \"3g2\": \"audio/3gpp2\",    \"3gpp2\": \"audio/3gpp2\",    \"pdf\": \"application/pdf\",    \"zip\": \"application/zip\",    \"gz\": \"application/gzip\",    \"tgz\": \"application/gzip\",    \"tar\": \"application/x-tar\",    \"7z\": \"application/x-7z-compressed\",    \"rar\": \"application/vnd.rar\",    \"bz2\": \"application/x-bzip2\",    \"tbz\": \"application/x-bzip2\",    \"tbz2\": \"application/x-bzip2\",    \"xz\": \"application/x-xz\",    \"txz\": \"application/x-xz\",    \"lz\": \"application/x-lzip\",    \"lzma\": \"application/x-lzma\",    \"zst\": \"application/zstd\",    \"zstd\": \"application/zstd\",    \"br\": \"application/x-br\",    \"iso\": \"application/x-iso9660-image\",    \"dmg\": \"application/x-apple-diskimage\",    \"img\": \"application/x-raw-disk-image\",    \"cab\": \"application/vnd.ms-cab-compressed\",    \"msi\": \"application/x-msi\",    \"bin\": \"application/octet-stream\",    \"a\": \"application/octet-stream\",    \"so\": \"application/octet-stream\",    \"o\": \"application/octet-stream\",    \"obj\": \"model/obj\",    \"dll\": \"application/x-msdownload\",    \"exe\": \"application/x-msdownload\",    \"bcpio\": \"application/x-bcpio\",    \"cpio\": \"application/x-cpio\",    \"shar\": \"application/x-shar\",    \"sv4cpio\": \"application/x-sv4cpio\",    \"sv4crc\": \"application/x-sv4crc\",    \"ustar\": \"application/x-ustar\",    \"src\": \"application/x-wais-source\",    \"doc\": \"application/msword\",    \"xls\": \"application/vnd.ms-excel\",    \"ppt\": \"application/vnd.ms-powerpoint\",    \"docx\": \"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",    \"xlsx\": \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",    \"pptx\": \"application/vnd.openxmlformats-officedocument.presentationml.presentation\",    \"dot\": \"application/msword\",    \"wiz\": \"application/msword\",    \"xlb\": \"application/vnd.ms-excel\",    \"pot\": \"application/vnd.ms-powerpoint\",    \"ppa\": \"application/vnd.ms-powerpoint\",    \"pps\": \"application/vnd.ms-powerpoint\",    \"pwz\": \"application/vnd.ms-powerpoint\",    \"webmanifest\": \"application/manifest+json\",    \"nq\": \"application/n-quads\",    \"nt\": \"application/n-triples\",    \"oda\": \"application/oda\",    \"p7c\": \"application/pkcs7-mime\",    \"ps\": \"application/postscript\",    \"ai\": \"application/postscript\",    \"eps\": \"application/postscript\",    \"trig\": \"application/trig\",    \"m3u\": \"application/vnd.apple.mpegurl\",    \"m3u8\": \"application/vnd.apple.mpegurl\",    \"wasm\": \"application/wasm\",    \"csh\": \"application/x-csh\",    \"dvi\": \"application/x-dvi\",    \"gtar\": \"application/x-gtar\",    \"hdf\": \"application/x-hdf\",    \"h5\": \"application/x-hdf5\",    \"latex\": \"application/x-latex\",    \"mif\": \"application/x-mif\",    \"cdf\": \"application/x-netcdf\",    \"nc\": \"application/x-netcdf\",    \"p12\": \"application/x-pkcs12\",    \"pfx\": \"application/x-pkcs12\",    \"ram\": \"application/x-pn-realaudio\",    \"pyc\": \"application/x-python-code\",    \"pyo\": \"application/x-python-code\",    \"swf\": \"application/x-shockwave-flash\",    \"tcl\": \"application/x-tcl\",    \"tex\": \"application/x-tex\",    \"texi\": \"application/x-texinfo\",    \"texinfo\": \"application/x-texinfo\",    \"roff\": \"application/x-troff\",    \"t\": \"application/x-troff\",    \"tr\": \"application/x-troff\",    \"man\": \"application/x-troff-man\",    \"me\": \"application/x-troff-me\",    \"ms\": \"application/x-troff-ms\",    \"xsl\": \"application/xml\",    \"rdf\": \"application/xml\",    \"wsdl\": \"application/xml\",    \"xpdl\": \"application/xml\",    \"odt\": \"application/vnd.oasis.opendocument.text\",    \"ods\": \"application/vnd.oasis.opendocument.spreadsheet\",    \"odp\": \"application/vnd.oasis.opendocument.presentation\",    \"odg\": \"application/vnd.oasis.opendocument.graphics\",    \"otf\": \"font/otf\",    \"ttf\": \"font/ttf\",    \"woff\": \"font/woff\",    \"woff2\": \"font/woff2\",    \"gltf\": \"model/gltf+json\",    \"glb\": \"model/gltf-binary\",    \"stl\": \"model/stl\",    \"sh\": \"application/x-sh\",    \"php\": \"application/x-httpd-php\",    \"py\": \"text/x-python\",    \"c\": \"text/plain\",    \"h\": \"text/plain\",    \"ksh\": \"text/plain\",    \"pl\": \"text/plain\",    \"bat\": \"text/plain\",    \"rs\": \"text/x-rust\",    \"go\": \"text/x-go\",    \"swift\": \"text/x-swift\",    \"kt\": \"text/x-kotlin\",    \"kts\": \"text/x-kotlin\",    \"java\": \"text/x-java-source\",    \"scala\": \"text/x-scala\",    \"rb\": \"text/x-ruby\",    \"ts\": \"text/typescript\",    \"tsx\": \"text/tsx\",    \"jsx\": \"text/jsx\",    \"vue\": \"text/x-vue\",    \"dart\": \"text/x-dart\",    \"lua\": \"text/x-lua\",    \"r\": \"text/x-r\",    \"jl\": \"text/x-julia\",    \"f90\": \"text/x-fortran\",    \"f95\": \"text/x-fortran\",    \"f03\": \"text/x-fortran\",    \"m\": \"text/x-objcsrc\",    \"cs\": \"text/x-csharp\",    \"cpp\": \"text/x-c++src\",    \"cxx\": \"text/x-c++src\",    \"cc\": \"text/x-c++src\",    \"hpp\": \"text/x-c++hdr\",    \"hxx\": \"text/x-c++hdr\",    \"hh\": \"text/x-c++hdr\",    \"asm\": \"text/x-asm\",    \"s\": \"text/x-asm\",    \"apk\": \"application/vnd.android.package-archive\",    \"deb\": \"application/x-debian-package\",    \"rpm\": \"application/x-rpm\",    \"eml\": \"message/rfc822\",    \"mht\": \"message/rfc822\",    \"mhtml\": \"message/rfc822\",    \"nws\": \"message/rfc822\",    \"md\": \"text/markdown\",    \"markdown\": \"text/markdown\",    \"n3\": \"text/n3\",    \"rtx\": \"text/richtext\",    \"rtf\": \"text/rtf\",    \"srt\": \"text/plain\",    \"vtt\": \"text/vtt\",    \"etx\": \"text/x-setext\",    \"sgm\": \"text/x-sgml\",    \"sgml\": \"text/x-sgml\",    \"vcf\": \"text/x-vcard\",    \"epub\": \"application/epub+zip\",    \"ini\": \"text/plain\",    \"conf\": \"text/plain\",    \"cfg\": \"text/plain\",    \"config\": \"text/plain\",    \"properties\": \"text/plain\",    \"env\": \"text/plain\",    \"editorconfig\": \"text/plain\",    \"gitignore\": \"text/plain\",    \"gitattributes\": \"text/plain\",    \"dockerignore\": \"text/plain\",    \"npmrc\": \"text/plain\",    \"yarnrc\": \"text/plain\",    \"babelrc\": \"application/json\",    \"eslintrc\": \"application/json\",    \"prettierrc\": \"application/json\",    \"parquet\": \"application/vnd.apache.parquet\",    \"ipynb\": \"application/x-ipynb+json\",    \"pkl\": \"application/octet-stream\",    \"pickle\": \"application/octet-stream\",    \"npy\": \"application/octet-stream\",    \"npz\": \"application/zip\",    \"arrow\": \"application/vnd.apache.arrow.file\",    \"feather\": \"application/vnd.apache.arrow.file\",    \"hdf5\": \"application/x-hdf5\",    \"yaml\": \"text/yaml\",    \"yml\": \"text/yaml\",    \"toml\": \"application/toml\",    \"proto\": \"text/plain\",    \"pb\": \"application/octet-stream\",    \"avro\": \"application/avro\",    \"rda\": \"application/octet-stream\",    \"rdata\": \"application/octet-stream\",    \"rds\": \"application/octet-stream\",    \"dta\": \"application/x-stata-dta\",    \"sas\": \"text/x-sas\",    \"sas7bdat\": \"application/x-sas-data\",    \"sql\": \"application/sql\",    \"sav\": \"application/x-spss-sav\",    \"mat\": \"application/x-matlab-data\",    \"sqlite\": \"application/vnd.sqlite3\",    \"sqlite3\": \"application/vnd.sqlite3\",    \"db\": \"application/vnd.sqlite3\",    \"parq\": \"application/vnd.apache.parquet\",    \"dockerfile\": \"text/plain\",    \"tf\": \"text/plain\",    \"tfvars\": \"text/plain\",    \"nomad\": \"text/plain\",    \"hcl\": \"text/plain\",    \"kubeconfig\": \"text/yaml\",    \"gradle\": \"text/plain\",    \"nuspec\": \"application/xml\",    \"gemspec\": \"text/x-ruby\",    \"podspec\": \"text/x-ruby\",    \"whl\": \"application/zip\",    \"egg\": \"application/zip\",    \"adoc\": \"text/asciidoc\",    \"asciidoc\": \"text/asciidoc\",    \"org\": \"text/org\",    \"bib\": \"text/x-bibtex\",    \"wiki\": \"text/plain\",    \"sol\": \"text/x-solidity\",    \"vy\": \"text/x-vyper\",    \"psd\": \"image/vnd.adobe.photoshop\",    \"psb\": \"image/vnd.adobe.photoshop\",    \"indd\": \"application/x-indesign\",    \"idml\": \"application/x-indesign\",    \"prproj\": \"application/x-premiere\",    \"aep\": \"application/x-aftereffects\",    \"xd\": \"application/x-xd\",    \"dwg\": \"application/acad\",    \"dxf\": \"application/dxf\",    \"skp\": \"application/vnd.sketchup.skp\",    \"blend\": \"application/x-blender\",    \"fbx\": \"application/octet-stream\",    \"step\": \"application/step\",    \"stp\": \"application/step\",    \"iges\": \"application/iges\",    \"igs\": \"application/iges\",    \"3ds\": \"application/x-3ds\",    \"max\": \"application/x-3dsmax\",    \"c4d\": \"application/x-cinema4d\",    \"accdb\": \"application/msaccess\",    \"mdb\": \"application/msaccess\",    \"odb\": \"application/vnd.oasis.opendocument.database\",    \"frm\": \"application/octet-stream\",    \"myd\": \"application/octet-stream\",    \"myi\": \"application/octet-stream\",    \"ibd\": \"application/octet-stream\",    \"unity\": \"text/plain\",    \"unitypackage\": \"application/gzip\",    \"uasset\": \"application/octet-stream\",    \"pak\": \"application/octet-stream\",    \"bsp\": \"application/octet-stream\",    \"log\": \"text/plain\",    \"out\": \"text/plain\",    \"tmp\": \"application/octet-stream\",    \"bak\": \"application/octet-stream\",    \"backup\": \"application/octet-stream\",    \"cache\": \"application/octet-stream\",    \"pid\": \"text/plain\",    \"lock\": \"text/plain\",    \"fits\": \"application/fits\",    \"fit\": \"application/fits\",    \"nii\": \"application/x-nifti\",    \"dcm\": \"application/dicom\",    \"pdb\": \"chemical/x-pdb\",    \"ssa\": \"text/x-ssa\",    \"sub\": \"text/x-microdvd\",    \"idx\": \"application/octet-stream\",}\n\n\ndict(mapping) -&gt; new dictionary initialized from a mapping object’s (key, value) pairs dict(iterable) -&gt; new dictionary initialized as if via: d = {} for k, v in iterable: d[k] = v dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs in the keyword argument list. For example: dict(one=1, two=2)",
+    "crumbs": [
+      "API Reference",
+      "Mapping data",
+      "[EXTENSION_TO_CONTENT_TYPE]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/mp3.html",
+    "href": "reference/mp3.html",
+    "title": "mp3",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nmp3: str = get_content_type(\".mp3\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[mp3]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/pkl.html",
+    "href": "reference/pkl.html",
+    "title": "pkl",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\npkl: str = get_content_type(\".pkl\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[pkl]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/sqlite.html",
+    "href": "reference/sqlite.html",
+    "title": "sqlite",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nsqlite: str = get_content_type(\".sqlite\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[sqlite]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/webp.html",
+    "href": "reference/webp.html",
+    "title": "webp",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nwebp: str = get_content_type(\".webp\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[webp]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/yaml.html",
+    "href": "reference/yaml.html",
+    "title": "yaml",
+    "section": "",
+    "text": "str(object=’’) -&gt; str\n\n\nyaml: str = get_content_type(\".yaml\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "crumbs": [
+      "API Reference",
+      "Shortcut constants",
+      "[yaml]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  }
+]

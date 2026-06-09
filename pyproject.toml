@@ -32,8 +32,16 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
+[project.optional-dependencies]
+# Docs toolchain. great-docs requires Python >= 3.11; the marker keeps `[dev]`
+# installable on 3.10 (the package's minimum) by simply skipping it there.
+dev = [
+    "great-docs; python_version >= '3.11'",
+]
+
 [project.urls]
 "Homepage" = "https://github.com/mikeckennedy/content-types"
+"Documentation" = "https://mkennedy.codes/docs/content-types/"
 "Bug Reports" = "https://github.com/mikeckennedy/content-types/issues"
 "Source" = "https://github.com/mikeckennedy/content-types"
 

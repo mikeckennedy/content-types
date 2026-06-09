@@ -146,6 +146,11 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# Great Docs ephemeral build directory (regenerated on every build).
+# The published, committed site lives in the repo-root docs/ folder instead,
+# produced by scripts/build_docs.py.
+/great-docs/
+
 # mypy
 .mypy_cache/
 .dmypy.json

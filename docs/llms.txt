@@ -1,0 +1,37 @@
+# content_types
+
+> A library to map file extensions to content types and vice versa.
+
+## Docs
+
+### API Reference
+
+#### Lookup
+> The one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.
+
+- [get_content_type](https://mkennedy.codes/docs/content-types/reference/get_content_type.html): Given a filename (or just an extension), return the most specific,
+
+#### Mapping data
+> The underlying extension -> content-type table (364 entries; keys have no leading dot).
+
+- [EXTENSION_TO_CONTENT_TYPE](https://mkennedy.codes/docs/content-types/reference/EXTENSION_TO_CONTENT_TYPE.html): dict() -> new empty dictionary
+
+#### Shortcut constants
+> Precomputed content types for very common formats, exposed as module-level attributes.
+
+- [webp](https://mkennedy.codes/docs/content-types/reference/webp.html): str(object='') -> str
+- [png](https://mkennedy.codes/docs/content-types/reference/png.html): str(object='') -> str
+- [jpg](https://mkennedy.codes/docs/content-types/reference/jpg.html): str(object='') -> str
+- [mp3](https://mkennedy.codes/docs/content-types/reference/mp3.html): str(object='') -> str
+- [json](https://mkennedy.codes/docs/content-types/reference/json.html): str(object='') -> str
+- [pdf](https://mkennedy.codes/docs/content-types/reference/pdf.html): str(object='') -> str
+- [zip](https://mkennedy.codes/docs/content-types/reference/zip.html): str(object='') -> str
+- [xml](https://mkennedy.codes/docs/content-types/reference/xml.html): str(object='') -> str
+- [csv](https://mkennedy.codes/docs/content-types/reference/csv.html): str(object='') -> str
+- [md](https://mkennedy.codes/docs/content-types/reference/md.html): str(object='') -> str
+- [parquet](https://mkennedy.codes/docs/content-types/reference/parquet.html): str(object='') -> str
+- [ipynb](https://mkennedy.codes/docs/content-types/reference/ipynb.html): str(object='') -> str
+- [pkl](https://mkennedy.codes/docs/content-types/reference/pkl.html): str(object='') -> str
+- [yaml](https://mkennedy.codes/docs/content-types/reference/yaml.html): str(object='') -> str
+- [toml](https://mkennedy.codes/docs/content-types/reference/toml.html): str(object='') -> str
+- [sqlite](https://mkennedy.codes/docs/content-types/reference/sqlite.html): str(object='') -> str

@@ -220,3 +220,21 @@ uv run --with pytest pytest
 uvx ruff check .
 uvx ruff format .
 ```
+
+### Documentation
+
+The docs site is built with [Great Docs](https://github.com/posit-dev/great-docs) and
+published at [mkennedy.codes/docs/content-types](https://mkennedy.codes/docs/content-types/).
+Great Docs imports the package for API introspection, so the toolchain lives in the `dev`
+extra and needs an editable install:
+
+```bash
+# Install the docs toolchain into your virtualenv
+uv pip install -e ".[dev]"
+
+# Build the site (mirrors great-docs/_site/ into the committed docs/ folder)
+python scripts/build_docs.py
+
+# Preview exactly as hosted, under the /docs/content-types subpath
+python scripts/serve_docs.py   # -> http://127.0.0.1:8099/docs/content-types/
+```

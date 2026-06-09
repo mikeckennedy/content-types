@@ -1,0 +1,11 @@
+{
+  "skills": [
+    {
+      "name": "content-types",
+      "description": "A library to map file extensions to content types and vice versa. Use when writing Python code that uses the content_types package.",
+      "files": [
+        "SKILL.md"
+      ]
+    }
+  ]
+}

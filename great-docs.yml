@@ -1,0 +1,88 @@
+# Great Docs configuration for content-types
+# Schema: https://posit-dev.github.io/great-docs/user-guide/configuration.html
+
+# The importable module name (content_types) differs from the distribution name
+# (content-types), so pin it explicitly. (Playbook G9: avoids griffe's
+# import-by-distribution-name fallback and the cosmetic ImportError warnings.)
+module: content_types
+display_name: content-types
+
+# Docstrings use Google-style section headers (e.g. `Example:`). Pin the parser
+# rather than relying on auto-detect — `init` guessed numpy, which is wrong here.
+parser: google
+
+# Import the package at build time for accurate introspection (verified working).
+dynamic: true
+
+# Subpath hosting: drives Quarto's base path so CSS/JS/nav resolve correctly when
+# the site is served under /docs/content-types/. Keep the trailing slash.
+site_url: "https://mkennedy.codes/docs/content-types/"
+
+# GitHub integration. PKG_DIR == git root here, so source ("view source") links
+# resolve without the G6 pre-render rewrite.
+repo: https://github.com/mikeckennedy/content-types
+github_style: widget
+source:
+  enabled: true
+  branch: main
+  placement: usage
+
+# Link to the PyPI project page from the navbar.
+pypi: true
+
+# G5: mcp.enabled defaults to true and would render an empty "MCP" reference tab.
+# This project ships no MCP server, so disable it.
+mcp:
+  enabled: false
+
+# G7: the sitemap/robots/canonical base URL is auto-detected from the GitHub repo
+# (-> owner.github.io/repo) unless set. Pin it to the real hosting domain so the
+# sitemap and canonical tags point at mkennedy.codes, not github.io.
+seo:
+  canonical:
+    base_url: "https://mkennedy.codes/docs/content-types/"
+
+# Jupyter kernel for any executable code cells (none today, but set for safety).
+jupyter: python3
+
+authors:
+  - name: Michael Kennedy
+    role: Author
+    email: mikeckennedy@gmail.com
+
+# API reference layout. Names come from `great-docs scan` (bare, unqualified).
+# The leaked `sys` module import is intentionally omitted so it is not documented.
+reference:
+  title: "API Reference"
+  desc: >-
+    content-types is intentionally tiny: a single lookup function, the mapping
+    table behind it, and a handful of precomputed shortcut constants for the
+    most common formats.
+  sections:
+    - title: Lookup
+      desc: "The one entry point — map a filename, bare extension, Path, or URL to its MIME / content type."
+      contents:
+        - get_content_type
+    - title: Mapping data
+      desc: "The underlying extension -> content-type table (364 entries; keys have no leading dot)."
+      contents:
+        - EXTENSION_TO_CONTENT_TYPE
+    - title: Shortcut constants
+      desc: "Precomputed content types for very common formats, exposed as module-level attributes."
+      contents:
+        - webp
+        - png
+        - jpg
+        - mp3
+        - json
+        - pdf
+        - zip
+        - xml
+        - csv
+        - md
+        - parquet
+        - ipynb
+        - pkl
+        - yaml
+        - toml
+        - sqlite

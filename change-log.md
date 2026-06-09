@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `fallback` parameter on `get_content_type()` to override the default MIME type returned for unknown extensions — pass any string and it will be returned in place of `application/octet-stream` / `text/plain` (#8)
-- Files: `content_types/__init__.py`, `tests/test_content_types.py`
+- Documentation site built with [Great Docs](https://github.com/posit-dev/great-docs) and published at <https://mkennedy.codes/docs/content-types/> — auto-generated API reference plus a README-driven landing page. Built locally with `scripts/build_docs.py` and served from the committed `docs/` folder (`scripts/serve_docs.py` previews it under the production subpath).
+- Files: `content_types/__init__.py`, `tests/test_content_types.py`, `great-docs.yml`, `scripts/build_docs.py`, `scripts/serve_docs.py`, `pyproject.toml`, `docs/`
 
 ### Changed
 - 

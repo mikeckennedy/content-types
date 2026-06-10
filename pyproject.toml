@@ -17,7 +17,18 @@ authors = [
     { name = "Michael Kennedy", email = "mikeckennedy@gmail.com" }
 ]
 requires-python = ">=3.10"
-keywords = ["mime", "content-type", "mapping", "file extensions"]
+keywords = [
+    "mime",
+    "mimetype",
+    "mimetypes",
+    "mime-type",
+    "content-type",
+    "media-type",
+    "file-extension",
+    "extension",
+    "filename",
+    "s3",
+]
 
 # If you have no runtime dependencies, this can be an empty array or omitted
 dependencies = []
@@ -33,7 +44,8 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3.15",
     "Topic :: Internet :: WWW/HTTP",
-    "Topic :: Software Development :: Libraries :: Python Modules"
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
 ]
 
 [project.optional-dependencies]
@@ -41,6 +53,7 @@ classifiers = [
 # installable on 3.10 (the package's minimum) by simply skipping it there.
 dev = [
     "great-docs; python_version >= '3.11'",
+    "pytest",
 ]
 
 # These surface on the PyPI project page; the labels below map to PyPI's

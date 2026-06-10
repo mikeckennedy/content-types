@@ -11,7 +11,7 @@ The one entry point -- map a filename, bare extension, Path, or URL to its MIME 
 
 
 [get_content_type()](get_content_type.md#content_types.get_content_type)  
-Given a filename (or just an extension), return the most specific,
+Return the most specific, commonly accepted MIME type for a filename or extension.
 
 
 ## Mapping data

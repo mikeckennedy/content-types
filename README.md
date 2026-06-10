@@ -80,7 +80,7 @@ print(f'Content-Type for webp is {content_types.webp}.')
 print(content_types.parquet)  # "application/vnd.apache.parquet"
 print(content_types.ipynb)    # "application/x-ipynb+json"
 print(content_types.pkl)      # "application/octet-stream"
-print(content_types.yaml)     # "text/yaml"
+print(content_types.yaml)     # "application/yaml"
 print(content_types.toml)     # "application/toml"
 print(content_types.sqlite)   # "application/vnd.sqlite3"
 
@@ -97,6 +97,10 @@ print(content_types.get_content_type(url))  # "audio/mpeg"
 # pass treat_as_binary=False to fall back to 'text/plain' instead.
 print(content_types.get_content_type("notes.unknownext"))  # "application/octet-stream"
 print(content_types.get_content_type("notes.unknownext", treat_as_binary=False))  # "text/plain"
+
+# Or supply your own fallback for unknown extensions; it takes precedence
+# over treat_as_binary. Known extensions still resolve normally.
+print(content_types.get_content_type("notes.unknownext", fallback="application/x-custom"))  # "application/x-custom"
 ```
 
 ## CLI
@@ -141,7 +145,7 @@ And mimetypes is missing important types such as:
 - .ipynb -> application/x-ipynb+json
 - .mkv -> video/x-matroska
 - .toml -> application/toml
-- .yaml -> text/yaml
+- .yaml -> application/yaml
 - .rs -> text/x-rust
 - .go -> text/x-go
 - .tsx -> text/tsx
@@ -221,7 +225,7 @@ for more details on how to get involved.
 `pytest` and `ruff` aren't declared dependencies — `uv` provides them on the fly:
 
 ```bash
-# Run the test suite (31 tests)
+# Run the test suite (35 tests)
 uv run --with pytest pytest
 
 # Lint and format (config in ruff.toml)

@@ -36,7 +36,7 @@ class TestGetContentType:
         """Spot test: data science file formats."""
         assert content_types.get_content_type('data.parquet') == 'application/vnd.apache.parquet'
         assert content_types.get_content_type('notebook.ipynb') == 'application/x-ipynb+json'
-        assert content_types.get_content_type('config.yaml') == 'text/yaml'
+        assert content_types.get_content_type('config.yaml') == 'application/yaml'
         assert content_types.get_content_type('config.toml') == 'application/toml'
 
     def test_video_formats(self):
@@ -171,7 +171,7 @@ class TestShortcutConstants:
         assert content_types.parquet == 'application/vnd.apache.parquet'
         assert content_types.ipynb == 'application/x-ipynb+json'
         assert content_types.pkl == 'application/octet-stream'
-        assert content_types.yaml == 'text/yaml'
+        assert content_types.yaml == 'application/yaml'
         assert content_types.toml == 'application/toml'
         assert content_types.sqlite == 'application/vnd.sqlite3'
 
@@ -196,6 +196,15 @@ class TestExtensionToContentTypeDict:
         # Check that all keys are without leading dots
         for key in content_types.EXTENSION_TO_CONTENT_TYPE.keys():
             assert not key.startswith('.'), f"Extension '{key}' should not start with a dot"
+
+
+class TestPackaging:
+    """Test packaging-level guarantees."""
+
+    def test_py_typed_marker_present(self):
+        """The PEP 561 marker must ship so type checkers honor inline types."""
+        pkg_dir = Path(content_types.__file__).parent
+        assert (pkg_dir / 'py.typed').is_file()
 
 
 class TestSpecialCases:
@@ -224,6 +233,13 @@ class TestSpecialCases:
         assert content_types.get_content_type('.editorconfig') == 'text/plain'
         assert content_types.get_content_type('config.ini') == 'text/plain'
         assert content_types.get_content_type('.babelrc') == 'application/json'
+
+    def test_subtitle_and_text_formats(self):
+        """Spot test: subtitle and reStructuredText formats map to text types."""
+        # .ass / .ssa are SubStation Alpha subtitles, not audio.
+        assert content_types.get_content_type('movie.ass') == 'text/x-ssa'
+        assert content_types.get_content_type('movie.ssa') == 'text/x-ssa'
+        assert content_types.get_content_type('readme.rst') == 'text/x-rst'
 
     def test_multiple_dots_in_filename(self):
         """Integration test: filenames with multiple dots."""

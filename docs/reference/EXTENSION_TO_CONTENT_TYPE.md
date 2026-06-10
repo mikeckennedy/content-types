@@ -4,7 +4,7 @@
 dict() -\> new empty dictionary
 
 
-`EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {`  
+`EXTENSION_TO_CONTENT_TYPE: dict[str, str] = {`  
 `    ``"txt": `<span class="st">`"text/plain"``,`  
 `    ``"htm"``: ``"text/html"``,`  
 `    ``"html"``: ``"text/html"``,`  
@@ -60,9 +60,7 @@ dict() -\> new empty dictionary
 `    ``"flac"``: ``"audio/flac"``,`  
 `    ``"m4a"``: ``"audio/mp4"``,`  
 `    ``"weba"``: ``"audio/webm"``,`  
-`    ``"ass"``: ``"audio/aac"``,`  
 `    ``"adts"``: ``"audio/aac"``,`  
-`    ``"rst"``: ``"text/x-rst"``,`  
 `    ``"loas"``: ``"audio/aac"``,`  
 `    ``"mp2"``: ``"audio/mpeg"``,`  
 `    ``"opus"``: ``"audio/opus"``,`  
@@ -284,8 +282,8 @@ dict() -\> new empty dictionary
 `    ``"arrow"``: ``"application/vnd.apache.arrow.file"``,`  
 `    ``"feather"``: ``"application/vnd.apache.arrow.file"``,`  
 `    ``"hdf5"``: ``"application/x-hdf5"``,`  
-`    ``"yaml"``: ``"text/yaml"``,`  
-`    ``"yml"``: ``"text/yaml"``,`  
+`    ``"yaml"``: ``"application/yaml"``,`  
+`    ``"yml"``: ``"application/yaml"``,`  
 `    ``"toml"``: ``"application/toml"``,`  
 `    ``"proto"``: ``"text/plain"``,`  
 `    ``"pb"``: ``"application/octet-stream"``,`  
@@ -308,7 +306,7 @@ dict() -\> new empty dictionary
 `    ``"tfvars"``: ``"text/plain"``,`  
 `    ``"nomad"``: ``"text/plain"``,`  
 `    ``"hcl"``: ``"text/plain"``,`  
-`    ``"kubeconfig"``: ``"text/yaml"``,`  
+`    ``"kubeconfig"``: ``"application/yaml"``,`  
 `    ``"gradle"``: ``"text/plain"``,`  
 `    ``"nuspec"``: ``"application/xml"``,`  
 `    ``"gemspec"``: ``"text/x-ruby"``,`  
@@ -320,6 +318,7 @@ dict() -\> new empty dictionary
 `    ``"org"``: ``"text/org"``,`  
 `    ``"bib"``: ``"text/x-bibtex"``,`  
 `    ``"wiki"``: ``"text/plain"``,`  
+`    ``"rst"``: ``"text/x-rst"``,`  
 `    ``"sol"``: ``"text/x-solidity"``,`  
 `    ``"vy"``: ``"text/x-vyper"``,`  
 `    ``"psd"``: ``"image/vnd.adobe.photoshop"``,`  
@@ -367,6 +366,7 @@ dict() -\> new empty dictionary
 `    ``"dcm"``: ``"application/dicom"``,`  
 `    ``"pdb"``: ``"chemical/x-pdb"``,`  
 `    ``"ssa"``: ``"text/x-ssa"``,`  
+`    ``"ass"``: ``"text/x-ssa"``,`  
 `    ``"sub"``: ``"text/x-microdvd"``,`  
 `    ``"idx"``: ``"application/octet-stream"``,`  
 `}`  

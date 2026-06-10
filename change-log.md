@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - The sdist now contains only the package, change log, readme, and license — previously it bundled every git-tracked file (the built `docs/` site, `tests/`, `scripts/`, editor config, etc.). Wheels were already minimal. (`[tool.hatch.build.targets.sdist]` in `pyproject.toml`)
+- `get_content_type()` now raises `TypeError` (instead of a bare `Exception`) when called with `None`. The message is unchanged, so existing `except Exception` handlers keep working.
+- Modernized type hints (`dict[str, str]`, `Optional[str]`) and rewrote the `get_content_type()` / `cli()` docstrings in Google style (Args/Returns/Raises) for a cleaner generated API reference.
+- `.yaml`, `.yml`, and `.kubeconfig` now map to `application/yaml` (RFC 9512, registered 2024) instead of the legacy `text/yaml`. The `content_types.yaml` shortcut constant updates to match.
+- Added the `Typing :: Typed` trove classifier to advertise the existing PEP 561 `py.typed` marker on PyPI; added a test asserting the marker ships with the package.
+- Files: `content_types/__init__.py`, `pyproject.toml`, `README.md`, `tests/test_content_types.py`
 
 ### Deprecated
 - 
@@ -22,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Fixed
+- `.ass` (Advanced SubStation Alpha subtitles) now maps to `text/x-ssa` — matching its sibling `.ssa` — instead of the incorrect `audio/aac`. `.rst` (reStructuredText, value unchanged at `text/x-rst`) moved out of the audio block into the documentation block.
 - Docstring example for `get_content_type("script.js")` now shows `'text/javascript'` (the actual return value) instead of the outdated `'application/javascript'`
 - Files: `content_types/__init__.py`
 

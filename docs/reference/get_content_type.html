@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../theme-init.js"></script>
 
 
-  <meta name="description" content="Given a filename (or just an extension), return the most specific,">
+  <meta name="description" content="Return the most specific, commonly accepted MIME type for a filename or extension.">
   <script type="application/ld+json">
 [
   {
@@ -141,12 +141,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="get_content_type() – content-types | content-types">
-  <meta property="og:description" content="Given a filename (or just an extension), return the most specific,">
+  <meta property="og:description" content="Return the most specific, commonly accepted MIME type for a filename or extension.">
   <meta property="og:url" content="https://mkennedy.codes/docs/content-types/reference/get_content_type.html">
   <meta property="og:site_name" content="content-types">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="get_content_type() – content-types | content-types">
-  <meta name="twitter:description" content="Given a filename (or just an extension), return the most specific,">
+  <meta name="twitter:description" content="Return the most specific, commonly accepted MIME type for a filename or extension.">
 </head>
 
 <body class="gd-ref-sidebar nav-sidebar floating nav-fixed doc-api-page quarto-light">
@@ -352,7 +352,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h3 id="toc-title">On this page</h3>
    
   <ul class="collapse">
-  <li><a href="#example" id="toc-example" class="nav-link active" data-scroll-target="#example">Example</a></li>
+  <li><a href="#parameters" id="toc-parameters" class="nav-link active" data-scroll-target="#parameters">Parameters</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
+  <li><a href="#raises" id="toc-raises" class="nav-link" data-scroll-target="#raises">Raises</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
   </ul>
 </nav>
     </div>
@@ -379,11 +382,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <div class="doc-subject">
-<p>Given a filename (or just an extension), return the most specific,</p>
+<p>Return the most specific, commonly accepted MIME type for a filename or extension.</p>
 </div>
 <div class="doc-usage-source">
 <p>Usage</p>
-<p><a href="https://github.com/mikeckennedy/content-types/blob/main/content_types/__init__.py#L427-L487" target="_blank" rel="noopener">Source</a></p>
+<p><a href="https://github.com/mikeckennedy/content-types/blob/main/content_types/__init__.py#L427-L502" target="_blank" rel="noopener">Source</a></p>
 </div>
 <div class="doc-signature doc-Kind.FUNCTION">
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sig-name">get_content_type</span>(
@@ -393,19 +396,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 )</span></code></pre></div>
 </div>
 <div class="doc-text">
-<p>commonly accepted MIME type based on extension.</p>
-<p>Falls back to ‘application/octet-stream’ if <code>treat_as_binary</code> is True (default) and ‘text/plain’ if it is False when the extension is not known.</p>
-<p>To override the fallback, pass <code>fallback='application/x-custom'</code> (or any string you’d like returned for unknown extensions). When <code>fallback</code> is provided, it takes precedence over <code>treat_as_binary</code>.</p>
+<p>The lookup is based purely on the extension — the file’s bytes are never read. A filename, a bare extension (with or without a leading dot), or a <code>pathlib.Path</code> are all accepted. For URLs, any query string (<code>?...</code>) or fragment (<code>#...</code>) is stripped first; for compound extensions the last segment wins (<code>archive.tar.gz</code> resolves as <code>gz</code>). Matching is case-insensitive.</p>
 </div>
+<section id="parameters" class="level2 doc-parameters">
+<h2 class="doc-parameters">Parameters</h2>
+<div class="doc-definition-items">
+<dl>
+<dt><code><span class="doc-parameter-name">filename_or_extension</span><span class="doc-parameter-annotation-sep">:</span> <span class="doc-parameter-annotation">str | Path</span></code></dt>
+<dd>
+<p>A filename, path, URL, or bare extension to look up. Accepts a <code>str</code> or a <code>pathlib.Path</code>.</p>
+</dd>
+<dt><code><span class="doc-parameter-name">treat_as_binary</span><span class="doc-parameter-annotation-sep">:</span> <span class="doc-parameter-annotation">bool</span> <span class="doc-parameter-default-sep op">=</span> <span class="doc-parameter-default"><span class="va">True</span></span></code></dt>
+<dd>
+<p>Selects the default fallback when the extension is unknown and no explicit <code>fallback</code> is given. <code>True</code> (default) returns <code>application/octet-stream</code>; <code>False</code> returns <code>text/plain</code>.</p>
+</dd>
+<dt><code><span class="doc-parameter-name">fallback</span><span class="doc-parameter-annotation-sep">:</span> <span class="doc-parameter-annotation">Optional[str]</span> <span class="doc-parameter-default-sep op">=</span> <span class="doc-parameter-default">None</span></code></dt>
+<dd>
+An explicit MIME type to return for unknown extensions. When provided, it takes precedence over <code>treat_as_binary</code>.
+</dd>
+</dl>
+</div>
+</section>
+<section id="returns" class="level2 doc-returns">
+<h2 class="doc-returns">Returns</h2>
+<div class="doc-definition-items">
+<dl>
+<dt><code> <span class="doc-parameter-annotation">str</span></code></dt>
+<dd>
+The mapped MIME type, or the chosen fallback when the extension is unknown.
+</dd>
+</dl>
+</div>
+</section>
+<section id="raises" class="level2 doc-raises">
+<h2 class="doc-raises">Raises</h2>
+<div class="doc-definition-items">
+<dl>
+<dt><code> <span class="doc-parameter-annotation">TypeError</span></code></dt>
+<dd>
+If <code>filename_or_extension</code> is <code>None</code>.
+</dd>
+</dl>
+</div>
+</section>
 <section id="example" class="level2 doc-example">
 <h2 class="doc-example">Example</h2>
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<p>get_content_type(“picture.jpg”) ‘image/jpeg’ get_content_type(“.webp”) ‘image/webp’ get_content_type(“script.js”) ‘text/javascript’ get_content_type(“unknown.xyz”) ‘application/octet-stream’ get_content_type(“unknown.xyz”, treat_as_binary=False) ‘text/plain’ get_content_type(“unknown.xyz”, fallback=‘application/x-custom’) ‘application/x-custom’</p>
-</blockquote>
-</blockquote>
-</blockquote>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">"picture.jpg"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">'image/jpeg'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">".webp"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">'image/webp'</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">"script.js"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">'text/javascript'</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">"unknown.xyz"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">'application/octet-stream'</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">"unknown.xyz"</span>, treat_as_binary<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">'text/plain'</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">"unknown.xyz"</span>, fallback<span class="op">=</span><span class="st">'application/x-custom'</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">'application/x-custom'</span></span></code></pre></div>
 
 
 </section>

@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `pytest` and `ruff` are **not** declared dependencies, so run them through `uv` which provides them on the fly:
 
 ```bash
-# Tests (31 tests)
+# Tests (35 tests)
 uv run --with pytest pytest
 
 # A single test by node id, or by keyword
@@ -44,6 +44,7 @@ Everything lives in one module: [content_types/__init__.py](content_types/__init
 ## Conventions
 
 - Ruff enforces **single quotes**, 120-char lines, rules `E`/`F`/`I`, and max complexity 10. Match the existing single-quote style.
+- **Nullable types:** always write `Optional[X]` (import from `typing`), never `X | None`. `str | Path` is a true union of two peer types, but `X | None` conflates "a value" with "absence of one," which `Optional[X]` states directly. Keep real unions as `|`; use `Optional` only for the nullable case.
 - **Adding an extension:** add the key (no dot) to `EXTENSION_TO_CONTENT_TYPE` in the appropriate category block, and add a spot-test assertion in [tests/test_content_types.py](tests/test_content_types.py). If it's a very common type, also add a module-level shortcut constant and a corresponding assertion in `TestShortcutConstants`.
 
 ## Releasing

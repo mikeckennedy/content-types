@@ -22,7 +22,7 @@ pip install content-types
 
 The one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.
 
-- `get_content_type`: Given a filename (or just an extension), return the most specific,
+- `get_content_type`: Return the most specific, commonly accepted MIME type for a filename or extension
 
 ### Mapping data
 

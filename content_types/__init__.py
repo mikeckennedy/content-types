@@ -1,14 +1,14 @@
 import sys
 from importlib.metadata import version
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Optional
 
 __version__ = version('content-types')
 
 # This dictionary maps file extensions (no dot) to the most specific content type.
 
 # noinspection SpellCheckingInspection
-EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
+EXTENSION_TO_CONTENT_TYPE: dict[str, str] = {
     # Text
     'txt': 'text/plain',
     'htm': 'text/html',
@@ -73,9 +73,7 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'flac': 'audio/flac',
     'm4a': 'audio/mp4',
     'weba': 'audio/webm',
-    'ass': 'audio/aac',
     'adts': 'audio/aac',
-    'rst': 'text/x-rst',
     'loas': 'audio/aac',
     # New ones:
     'mp2': 'audio/mpeg',  # new
@@ -325,8 +323,8 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'arrow': 'application/vnd.apache.arrow.file',
     'feather': 'application/vnd.apache.arrow.file',  # Apache Arrow IPC format
     'hdf5': 'application/x-hdf5',
-    'yaml': 'text/yaml',
-    'yml': 'text/yaml',
+    'yaml': 'application/yaml',  # RFC 9512
+    'yml': 'application/yaml',
     'toml': 'application/toml',
     'proto': 'text/plain',  # Protocol Buffers definition
     'pb': 'application/octet-stream',  # Protocol Buffers binary
@@ -350,7 +348,7 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'tfvars': 'text/plain',
     'nomad': 'text/plain',
     'hcl': 'text/plain',
-    'kubeconfig': 'text/yaml',
+    'kubeconfig': 'application/yaml',
     # Build & Package Management
     'gradle': 'text/plain',
     'nuspec': 'application/xml',
@@ -364,6 +362,7 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'org': 'text/org',
     'bib': 'text/x-bibtex',
     'wiki': 'text/plain',
+    'rst': 'text/x-rst',  # reStructuredText
     # Blockchain & Crypto
     'sol': 'text/x-solidity',
     'vy': 'text/x-vyper',
@@ -419,6 +418,7 @@ EXTENSION_TO_CONTENT_TYPE: Dict[str, str] = {
     'pdb': 'chemical/x-pdb',
     # Subtitle & Caption Formats
     'ssa': 'text/x-ssa',
+    'ass': 'text/x-ssa',  # Advanced SubStation Alpha
     'sub': 'text/x-microdvd',
     'idx': 'application/octet-stream',
 }
@@ -429,17 +429,31 @@ def get_content_type(
     treat_as_binary: bool = True,
     fallback: Optional[str] = None,
 ) -> str:
-    """
-    Given a filename (or just an extension), return the most specific,
-    commonly accepted MIME type based on extension.
+    """Return the most specific, commonly accepted MIME type for a filename or extension.
 
-    Falls back to 'application/octet-stream' if `treat_as_binary` is True (default) and 'text/plain' if it is
-    False when the extension is not known.
+    The lookup is based purely on the extension — the file's bytes are never read. A
+    filename, a bare extension (with or without a leading dot), or a `pathlib.Path` are
+    all accepted. For URLs, any query string (`?...`) or fragment (`#...`) is stripped
+    first; for compound extensions the last segment wins (`archive.tar.gz` resolves as
+    `gz`). Matching is case-insensitive.
 
-    To override the fallback, pass `fallback='application/x-custom'` (or any string you'd like returned for
-    unknown extensions). When `fallback` is provided, it takes precedence over `treat_as_binary`.
+    Args:
+        filename_or_extension: A filename, path, URL, or bare extension to look up.
+            Accepts a `str` or a `pathlib.Path`.
+        treat_as_binary: Selects the default fallback when the extension is unknown and
+            no explicit `fallback` is given. `True` (default) returns
+            `application/octet-stream`; `False` returns `text/plain`.
+        fallback: An explicit MIME type to return for unknown extensions. When provided,
+            it takes precedence over `treat_as_binary`.
+
+    Returns:
+        The mapped MIME type, or the chosen fallback when the extension is unknown.
+
+    Raises:
+        TypeError: If `filename_or_extension` is `None`.
 
     Example:
+        ```python
         >>> get_content_type("picture.jpg")
         'image/jpeg'
         >>> get_content_type(".webp")
@@ -452,10 +466,11 @@ def get_content_type(
         'text/plain'
         >>> get_content_type("unknown.xyz", fallback='application/x-custom')
         'application/x-custom'
+        ```
     """
 
     if filename_or_extension is None:
-        raise Exception('filename cannot be None.')
+        raise TypeError('filename cannot be None.')
 
     if isinstance(filename_or_extension, Path):
         filename_or_extension = filename_or_extension.suffix
@@ -506,12 +521,15 @@ toml: str = get_content_type('.toml')
 sqlite: str = get_content_type('.sqlite')
 
 
-def cli():
-    """
-    A simple CLI to look up the MIME type for a given filename or extension.
-    Install via uv tool install content-types
-    Usage example :
-        content-types my_file.jpg
+def cli() -> None:
+    """Look up the MIME type for a filename or extension and print it to stdout.
+
+    Installed as the `content-types` console script (e.g. via `uv tool install
+    content-types`). Exits with status 1 if no argument is supplied.
+
+    Example:
+        $ content-types my_file.jpg
+        image/jpeg
     """
     if len(sys.argv) < 2:
         print('Usage: content-types [FILENAME_OR_EXTENSION]\nExample: content-types .jpg')

@@ -288,7 +288,7 @@ section.level2:first-of-type > h2:first-child,
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.parquet)  <span class="co"># "application/vnd.apache.parquet"</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.ipynb)    <span class="co"># "application/x-ipynb+json"</span></span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.pkl)      <span class="co"># "application/octet-stream"</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.yaml)     <span class="co"># "text/yaml"</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.yaml)     <span class="co"># "application/yaml"</span></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.toml)     <span class="co"># "application/toml"</span></span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.sqlite)   <span class="co"># "application/vnd.sqlite3"</span></span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
@@ -304,7 +304,11 @@ section.level2:first-of-type > h2:first-child,
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">## Unknown extensions fall back to 'application/octet-stream' by default;</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">## pass treat_as_binary=False to fall back to 'text/plain' instead.</span></span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notes.unknownext"</span>))  <span class="co"># "application/octet-stream"</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notes.unknownext"</span>, treat_as_binary<span class="op">=</span><span class="va">False</span>))  <span class="co"># "text/plain"</span></span></code></pre></div>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notes.unknownext"</span>, treat_as_binary<span class="op">=</span><span class="va">False</span>))  <span class="co"># "text/plain"</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co">## Or supply your own fallback for unknown extensions; it takes precedence</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">## over treat_as_binary. Known extensions still resolve normally.</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notes.unknownext"</span>, fallback<span class="op">=</span><span class="st">"application/x-custom"</span>))  <span class="co"># "application/x-custom"</span></span></code></pre></div>
 </section>
 <section id="cli" class="level2">
 <h2 class="anchored" data-anchor-id="cli">CLI</h2>
@@ -337,7 +341,7 @@ section.level2:first-of-type > h2:first-child,
 <li>.ipynb -&gt; application/x-ipynb+json</li>
 <li>.mkv -&gt; video/x-matroska</li>
 <li>.toml -&gt; application/toml</li>
-<li>.yaml -&gt; text/yaml</li>
+<li>.yaml -&gt; application/yaml</li>
 <li>.rs -&gt; text/x-rust</li>
 <li>.go -&gt; text/x-go</li>
 <li>.tsx -&gt; text/tsx</li>
@@ -366,7 +370,7 @@ section.level2:first-of-type > h2:first-child,
 <section id="development" class="level3">
 <h3 class="anchored" data-anchor-id="development">Development</h3>
 <p><code>pytest</code> and <code>ruff</code> aren’t declared dependencies — <code>uv</code> provides them on the fly:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Run the test suite (31 tests)</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Run the test suite (35 tests)</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> pytest pytest</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Lint and format (config in ruff.toml)</span></span>

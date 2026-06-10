@@ -1,125 +1,125 @@
 {
-  "build_time": "2026-06-09T21:09:47Z",
-  "total_seconds": 9.536,
+  "build_time": "2026-06-10T04:22:06Z",
+  "total_seconds": 9.914,
   "pages": [
     {
       "page": "reference/jpg.qmd",
-      "seconds": 3.447,
+      "seconds": 3.487,
       "frozen": false
     },
     {
       "page": "index.qmd",
-      "seconds": 1.109,
+      "seconds": 1.582,
       "frozen": false
     },
     {
       "page": "reference/EXTENSION_TO_CONTENT_TYPE.qmd",
-      "seconds": 0.713,
+      "seconds": 0.697,
       "frozen": false
     },
     {
       "page": "reference/index.qmd",
-      "seconds": 0.22,
-      "frozen": false
-    },
-    {
-      "page": "reference/json.qmd",
-      "seconds": 0.217,
-      "frozen": false
-    },
-    {
-      "page": "reference/get_content_type.qmd",
-      "seconds": 0.214,
-      "frozen": false
-    },
-    {
-      "page": "reference/pdf.qmd",
-      "seconds": 0.21,
-      "frozen": false
-    },
-    {
-      "page": "reference/mp3.qmd",
-      "seconds": 0.207,
-      "frozen": false
-    },
-    {
-      "page": "reference/toml.qmd",
-      "seconds": 0.206,
-      "frozen": false
-    },
-    {
-      "page": "reference/yaml.qmd",
-      "seconds": 0.206,
-      "frozen": false
-    },
-    {
-      "page": "reference/zip.qmd",
-      "seconds": 0.205,
-      "frozen": false
-    },
-    {
-      "page": "reference/pkl.qmd",
-      "seconds": 0.205,
-      "frozen": false
-    },
-    {
-      "page": "reference/csv.qmd",
-      "seconds": 0.205,
-      "frozen": false
-    },
-    {
-      "page": "reference/sqlite.qmd",
-      "seconds": 0.205,
-      "frozen": false
-    },
-    {
-      "page": "reference/parquet.qmd",
-      "seconds": 0.205,
-      "frozen": false
-    },
-    {
-      "page": "reference/png.qmd",
-      "seconds": 0.205,
-      "frozen": false
-    },
-    {
-      "page": "reference/xml.qmd",
-      "seconds": 0.204,
+      "seconds": 0.216,
       "frozen": false
     },
     {
       "page": "reference/ipynb.qmd",
+      "seconds": 0.215,
+      "frozen": false
+    },
+    {
+      "page": "reference/get_content_type.qmd",
+      "seconds": 0.207,
+      "frozen": false
+    },
+    {
+      "page": "reference/pdf.qmd",
+      "seconds": 0.205,
+      "frozen": false
+    },
+    {
+      "page": "reference/toml.qmd",
       "seconds": 0.204,
       "frozen": false
     },
     {
-      "page": "reference/webp.qmd",
+      "page": "reference/png.qmd",
       "seconds": 0.203,
       "frozen": false
     },
     {
-      "page": "skills.qmd",
-      "seconds": 0.196,
+      "page": "reference/md.qmd",
+      "seconds": 0.202,
       "frozen": false
     },
     {
-      "page": "reference/md.qmd",
+      "page": "reference/json.qmd",
+      "seconds": 0.202,
+      "frozen": false
+    },
+    {
+      "page": "changelog.qmd",
+      "seconds": 0.198,
+      "frozen": false
+    },
+    {
+      "page": "reference/mp3.qmd",
+      "seconds": 0.198,
+      "frozen": false
+    },
+    {
+      "page": "reference/zip.qmd",
+      "seconds": 0.197,
+      "frozen": false
+    },
+    {
+      "page": "reference/xml.qmd",
       "seconds": 0.195,
       "frozen": false
     },
     {
       "page": "skill.md",
+      "seconds": 0.193,
+      "frozen": false
+    },
+    {
+      "page": "reference/pkl.qmd",
+      "seconds": 0.192,
+      "frozen": false
+    },
+    {
+      "page": "reference/csv.qmd",
+      "seconds": 0.192,
+      "frozen": false
+    },
+    {
+      "page": "reference/webp.qmd",
+      "seconds": 0.192,
+      "frozen": false
+    },
+    {
+      "page": "reference/yaml.qmd",
+      "seconds": 0.192,
+      "frozen": false
+    },
+    {
+      "page": "reference/parquet.qmd",
       "seconds": 0.191,
       "frozen": false
     },
     {
-      "page": "changelog.qmd",
-      "seconds": 0.187,
+      "page": "reference/sqlite.qmd",
+      "seconds": 0.19,
+      "frozen": false
+    },
+    {
+      "page": "skills.qmd",
+      "seconds": 0.184,
       "frozen": false
     },
     {
       "page": "license.qmd",
-      "seconds": 0.177,
+      "seconds": 0.18,
       "frozen": false
     }
   ]

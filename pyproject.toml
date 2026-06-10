@@ -2,6 +2,11 @@
 requires = ["hatchling>=1.0"]
 build-backend = "hatchling.build"
 
+# The wheel already ships only content_types/ by default; the sdist would
+# otherwise include everything git-tracked (docs/, tests/, scripts/, ...).
+[tool.hatch.build.targets.sdist]
+only-include = ["content_types", "change-log.md"]
+
 [project]
 name = "content-types"
 version = "0.3.2"

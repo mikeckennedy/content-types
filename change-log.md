@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Files: `content_types/__init__.py`, `tests/test_content_types.py`, `great-docs.yml`, `scripts/build_docs.py`, `scripts/serve_docs.py`, `pyproject.toml`, `docs/`
 
 ### Changed
-- 
+- The sdist now contains only the package, change log, readme, and license — previously it bundled every git-tracked file (the built `docs/` site, `tests/`, `scripts/`, editor config, etc.). Wheels were already minimal. (`[tool.hatch.build.targets.sdist]` in `pyproject.toml`)
 
 ### Deprecated
 - 

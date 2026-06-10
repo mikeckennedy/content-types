@@ -18,7 +18,6 @@ authors = [
 ]
 requires-python = ">=3.10"
 keywords = ["mime", "content-type", "mapping", "file extensions"]
-homepage = "https://github.com/mikeckennedy/content-types"
 
 # If you have no runtime dependencies, this can be an empty array or omitted
 dependencies = []
@@ -44,11 +43,14 @@ dev = [
     "great-docs; python_version >= '3.11'",
 ]
 
+# These surface on the PyPI project page; the labels below map to PyPI's
+# recognized link icons (Homepage / Documentation / Repository / Issues / Changelog).
 [project.urls]
 "Homepage" = "https://github.com/mikeckennedy/content-types"
 "Documentation" = "https://mkennedy.codes/docs/content-types/"
-"Bug Reports" = "https://github.com/mikeckennedy/content-types/issues"
-"Source" = "https://github.com/mikeckennedy/content-types"
+"Repository" = "https://github.com/mikeckennedy/content-types"
+"Issues" = "https://github.com/mikeckennedy/content-types/issues"
+"Changelog" = "https://github.com/mikeckennedy/content-types/blob/main/change-log.md"
 
 [project.scripts]
 content-types = "content_types:cli"

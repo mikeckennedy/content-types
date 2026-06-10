@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tar -tzf dist/content_types-0.3.2.tar.gz)",
+      "Bash(git add *)",
+      "Bash(git restore *)"
+    ]
+  }
+}

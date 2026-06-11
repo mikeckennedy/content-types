@@ -1,80 +1,110 @@
 {
-  "build_time": "2026-06-10T16:21:09Z",
-  "total_seconds": 9.493,
+  "build_time": "2026-06-11T06:12:03Z",
+  "total_seconds": 10.732,
   "pages": [
     {
       "page": "reference/jpg.qmd",
-      "seconds": 3.428,
+      "seconds": 3.911,
       "frozen": false
     },
     {
       "page": "index.qmd",
-      "seconds": 1.09,
+      "seconds": 1.591,
       "frozen": false
     },
     {
       "page": "reference/EXTENSION_TO_CONTENT_TYPE.qmd",
-      "seconds": 0.709,
-      "frozen": false
-    },
-    {
-      "page": "reference/xml.qmd",
-      "seconds": 0.222,
-      "frozen": false
-    },
-    {
-      "page": "reference/md.qmd",
-      "seconds": 0.219,
+      "seconds": 0.794,
       "frozen": false
     },
     {
       "page": "reference/get_content_type.qmd",
-      "seconds": 0.218,
+      "seconds": 0.235,
       "frozen": false
     },
     {
       "page": "reference/index.qmd",
-      "seconds": 0.211,
-      "frozen": false
-    },
-    {
-      "page": "reference/pdf.qmd",
-      "seconds": 0.211,
-      "frozen": false
-    },
-    {
-      "page": "reference/zip.qmd",
-      "seconds": 0.21,
-      "frozen": false
-    },
-    {
-      "page": "reference/json.qmd",
-      "seconds": 0.205,
-      "frozen": false
-    },
-    {
-      "page": "reference/ipynb.qmd",
-      "seconds": 0.203,
-      "frozen": false
-    },
-    {
-      "page": "reference/mp3.qmd",
-      "seconds": 0.203,
+      "seconds": 0.225,
       "frozen": false
     },
     {
       "page": "reference/webp.qmd",
-      "seconds": 0.203,
+      "seconds": 0.219,
       "frozen": false
     },
     {
-      "page": "reference/sqlite.qmd",
-      "seconds": 0.202,
+      "page": "reference/json.qmd",
+      "seconds": 0.217,
+      "frozen": false
+    },
+    {
+      "page": "reference/ipynb.qmd",
+      "seconds": 0.217,
+      "frozen": false
+    },
+    {
+      "page": "reference/mp3.qmd",
+      "seconds": 0.217,
+      "frozen": false
+    },
+    {
+      "page": "reference/pkl.qmd",
+      "seconds": 0.217,
       "frozen": false
     },
     {
       "page": "reference/parquet.qmd",
-      "seconds": 0.202,
+      "seconds": 0.217,
+      "frozen": false
+    },
+    {
+      "page": "reference/zip.qmd",
+      "seconds": 0.216,
+      "frozen": false
+    },
+    {
+      "page": "reference/pdf.qmd",
+      "seconds": 0.216,
+      "frozen": false
+    },
+    {
+      "page": "reference/xml.qmd",
+      "seconds": 0.208,
+      "frozen": false
+    },
+    {
+      "page": "reference/csv.qmd",
+      "seconds": 0.208,
+      "frozen": false
+    },
+    {
+      "page": "reference/toml.qmd",
+      "seconds": 0.207,
+      "frozen": false
+    },
+    {
+      "page": "skill.md",
+      "seconds": 0.206,
+      "frozen": false
+    },
+    {
+      "page": "skills.qmd",
+      "seconds": 0.206,
+      "frozen": false
+    },
+    {
+      "page": "reference/md.qmd",
+      "seconds": 0.204,
+      "frozen": false
+    },
+    {
+      "page": "reference/sqlite.qmd",
+      "seconds": 0.204,
+      "frozen": false
+    },
+    {
+      "page": "reference/yaml.qmd",
+      "seconds": 0.204,
       "frozen": false
     },
     {
@@ -83,43 +113,13 @@
       "frozen": false
     },
     {
-      "page": "reference/yaml.qmd",
-      "seconds": 0.201,
-      "frozen": false
-    },
-    {
-      "page": "reference/pkl.qmd",
-      "seconds": 0.198,
-      "frozen": false
-    },
-    {
-      "page": "reference/toml.qmd",
-      "seconds": 0.197,
+      "page": "changelog.qmd",
+      "seconds": 0.199,
       "frozen": false
     },
     {
       "page": "license.qmd",
-      "seconds": 0.194,
-      "frozen": false
-    },
-    {
-      "page": "skill.md",
-      "seconds": 0.193,
-      "frozen": false
-    },
-    {
-      "page": "changelog.qmd",
-      "seconds": 0.191,
-      "frozen": false
-    },
-    {
-      "page": "reference/csv.qmd",
-      "seconds": 0.191,
-      "frozen": false
-    },
-    {
-      "page": "skills.qmd",
-      "seconds": 0.19,
+      "seconds": 0.192,
       "frozen": false
     }
   ]

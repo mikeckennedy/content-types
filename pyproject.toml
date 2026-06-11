@@ -9,7 +9,7 @@ only-include = ["content_types", "change-log.md"]
 
 [project]
 name = "content-types"
-version = "0.4.0"
+version = "0.4.1"
 description = "A library to map file extensions to content types and vice versa."
 readme = "README.md"
 license = "MIT"

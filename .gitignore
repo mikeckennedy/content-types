@@ -176,3 +176,4 @@ cython_debug/
 .pypirc
 /.idea/
 /.ruff_cache
+docs/build-timings.json

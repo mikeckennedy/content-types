@@ -95,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">content-types <span class="version-badge" title="Released 2025-10-01">v0.3.0</span></span>
+    <span class="navbar-title">content-types <span class="version-badge" title="Released 2026-06-11">v0.4.0</span></span>
     </a>
   </div>
             <div id="quarto-search" class=""></div>
@@ -135,7 +135,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#v0.3.0" id="toc-v0.3.0" class="nav-link active" data-scroll-target="#v0.3.0">v0.3.0</a></li>
+  <li><a href="#v0.4.0" id="toc-v0.4.0" class="nav-link active" data-scroll-target="#v0.4.0">v0.4.0</a>
+  <ul class="collapse">
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">[0.4.0] - 2026-06-10</a></li>
+  </ul></li>
+  <li><a href="#v0.3.0" id="toc-v0.3.0" class="nav-link" data-scroll-target="#v0.3.0">v0.3.0</a></li>
   <li><a href="#v0.2.3" id="toc-v0.2.3" class="nav-link" data-scroll-target="#v0.2.3">v0.2.3</a></li>
   <li><a href="#v0.2.2" id="toc-v0.2.2" class="nav-link" data-scroll-target="#v0.2.2">v0.2.2</a></li>
   <li><a href="#v0.2.1" id="toc-v0.2.1" class="nav-link" data-scroll-target="#v0.2.1">v0.2.1</a></li>
@@ -166,11 +170,49 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>This changelog is generated automatically from <a href="https://github.com/mikeckennedy/content-types/releases">GitHub Releases</a>.</p>
+<section id="v0.4.0" class="level1 changelog-version">
+<h1 class="changelog-version">v0.4.0</h1>
+<p><em>2026-06-11</em> · <a href="https://github.com/mikeckennedy/content-types/releases/tag/v0.4.0">GitHub</a></p>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section">[0.4.0] - 2026-06-10</h2>
+<section id="added" class="level3">
+<h3 class="anchored" data-anchor-id="added">Added</h3>
+<ul>
+<li><code>fallback</code> parameter on <a href="reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> to override the default MIME type returned for unknown extensions — pass any string and it will be returned in place of <code>application/octet-stream</code> / <code>text/plain</code> (<a href="https://github.com/mikeckennedy/content-types/issues/8">#8</a>)</li>
+<li>URL support: <a href="reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> now handles query strings and URL fragments</li>
+<li>MIME types for <code>.sas</code> (<code>text/x-sas</code>) and <code>.sql</code> (<code>application/sql</code>) extensions (<a href="https://github.com/mikeckennedy/content-types/issues/5">#5</a>)</li>
+<li>Comprehensive test suite (35 tests) covering integration, spot tests, and negative conditions</li>
+<li>Documentation site built with <a href="https://github.com/posit-dev/great-docs">Great Docs</a> and published at <a href="https://mkennedy.codes/docs/content-types/" class="uri">https://mkennedy.codes/docs/content-types/</a> — auto-generated API reference plus a README-driven landing page. Built locally with <code>scripts/build_docs.py</code> and served from the committed <code>docs/</code> folder (<code>scripts/serve_docs.py</code> previews it under the production subpath).</li>
+<li>Files: <code>content_types/__init__.py</code>, <code>tests/test_content_types.py</code>, <code>tests/__init__.py</code>, <code>pytest.ini</code>, <code>great-docs.yml</code>, <code>scripts/build_docs.py</code>, <code>scripts/serve_docs.py</code>, <code>pyproject.toml</code>, <code>docs/</code></li>
+</ul>
+</section>
+<section id="changed" class="level3">
+<h3 class="anchored" data-anchor-id="changed">Changed</h3>
+<ul>
+<li><a href="reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> now raises <code>TypeError</code> (instead of a bare <code>Exception</code>) when called with <code>None</code>. The message is unchanged, so existing <code>except Exception</code> handlers keep working.</li>
+<li>Modernized type hints (<code>dict[str, str]</code>, <code>Optional[str]</code>) and rewrote the <a href="reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> / <code>cli()</code> docstrings in Google style (Args/Returns/Raises) for a cleaner generated API reference.</li>
+<li><code>.yaml</code>, <code>.yml</code>, and <code>.kubeconfig</code> now map to <code>application/yaml</code> (RFC 9512, registered 2024) instead of the legacy <code>text/yaml</code>. The <a href="reference/yaml.html#content_types.yaml" class="gdls-link gdls-code">content_types.yaml</a> shortcut constant updates to match.</li>
+<li>Added the <code>Typing :: Typed</code> trove classifier to advertise the existing PEP 561 <code>py.typed</code> marker on PyPI; added a test asserting the marker ships with the package.</li>
+<li>Dynamic version metadata: package now pulls <code>__version__</code> from distribution metadata.</li>
+<li>The sdist now contains only the package, change log, readme, and license — previously it bundled every git-tracked file (the built <code>docs/</code> site, <code>tests/</code>, <code>scripts/</code>, editor config, etc.). Wheels were already minimal. (<code>[tool.hatch.build.targets.sdist]</code> in <code>pyproject.toml</code>)</li>
+<li>Files: <code>content_types/__init__.py</code>, <code>pyproject.toml</code>, <code>README.md</code>, <code>tests/test_content_types.py</code></li>
+</ul>
+</section>
+<section id="fixed" class="level3">
+<h3 class="anchored" data-anchor-id="fixed">Fixed</h3>
+<ul>
+<li><code>.ass</code> (Advanced SubStation Alpha subtitles) now maps to <code>text/x-ssa</code> — matching its sibling <code>.ssa</code> — instead of the incorrect <code>audio/aac</code>. <code>.rst</code> (reStructuredText, value unchanged at <code>text/x-rst</code>) moved out of the audio block into the documentation block.</li>
+<li>Docstring example for <code>get_content_type("script.js")</code> now shows <code>'text/javascript'</code> (the actual return value) instead of the outdated <code>'application/javascript'</code></li>
+<li>Files: <code>content_types/__init__.py</code></li>
+</ul>
+</section>
+</section>
+</section>
 <section id="v0.3.0" class="level1 changelog-version">
 <h1 class="changelog-version">v0.3.0</h1>
 <p><em>2025-10-01</em> · <a href="https://github.com/mikeckennedy/content-types/releases/tag/v0.3.0">GitHub</a></p>
-<section id="added" class="level3">
-<h3 class="anchored" data-anchor-id="added">Added</h3>
+<section id="added-1" class="level3">
+<h3 class="anchored" data-anchor-id="added-1">Added</h3>
 <ul>
 <li>137 new file extensions across 17 categories, expanding format recognition capabilities</li>
 <li>Comprehensive support for data-science MIME types (e.g., <code>application/vnd.pandas</code>, <code>application/x-ipynb+json</code>)</li>
@@ -179,8 +221,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Files: <code>content_types/__init__.py</code>, <code>WARP.md</code></li>
 </ul>
 </section>
-<section id="changed" class="level3">
-<h3 class="anchored" data-anchor-id="changed">Changed</h3>
+<section id="changed-1" class="level3">
+<h3 class="anchored" data-anchor-id="changed-1">Changed</h3>
 <ul>
 <li>Implemented alphabetical sorting of output listings for better navigation</li>
 <li>Enhanced README to highlight 360+ supported file formats</li>
@@ -188,8 +230,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Files: <code>content_types/__init__.py</code>, <code>README.md</code></li>
 </ul>
 </section>
-<section id="fixed" class="level3">
-<h3 class="anchored" data-anchor-id="fixed">Fixed</h3>
+<section id="fixed-1" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-1">Fixed</h3>
 <ul>
 <li>Corrected CLI help text instructions for clearer usage guidance</li>
 <li>Adjusted code indentation for better visual consistency</li>

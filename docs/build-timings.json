@@ -1,104 +1,104 @@
 {
-  "build_time": "2026-06-11T06:12:03Z",
-  "total_seconds": 10.732,
+  "build_time": "2026-06-11T17:20:04Z",
+  "total_seconds": 10.45,
   "pages": [
     {
       "page": "reference/jpg.qmd",
-      "seconds": 3.911,
+      "seconds": 3.619,
       "frozen": false
     },
     {
       "page": "index.qmd",
-      "seconds": 1.591,
+      "seconds": 1.677,
       "frozen": false
     },
     {
       "page": "reference/EXTENSION_TO_CONTENT_TYPE.qmd",
-      "seconds": 0.794,
+      "seconds": 0.753,
       "frozen": false
     },
     {
       "page": "reference/get_content_type.qmd",
-      "seconds": 0.235,
-      "frozen": false
-    },
-    {
-      "page": "reference/index.qmd",
-      "seconds": 0.225,
-      "frozen": false
-    },
-    {
-      "page": "reference/webp.qmd",
-      "seconds": 0.219,
-      "frozen": false
-    },
-    {
-      "page": "reference/json.qmd",
-      "seconds": 0.217,
-      "frozen": false
-    },
-    {
-      "page": "reference/ipynb.qmd",
-      "seconds": 0.217,
-      "frozen": false
-    },
-    {
-      "page": "reference/mp3.qmd",
-      "seconds": 0.217,
-      "frozen": false
-    },
-    {
-      "page": "reference/pkl.qmd",
-      "seconds": 0.217,
-      "frozen": false
-    },
-    {
-      "page": "reference/parquet.qmd",
-      "seconds": 0.217,
-      "frozen": false
-    },
-    {
-      "page": "reference/zip.qmd",
-      "seconds": 0.216,
-      "frozen": false
-    },
-    {
-      "page": "reference/pdf.qmd",
-      "seconds": 0.216,
-      "frozen": false
-    },
-    {
-      "page": "reference/xml.qmd",
-      "seconds": 0.208,
-      "frozen": false
-    },
-    {
-      "page": "reference/csv.qmd",
-      "seconds": 0.208,
-      "frozen": false
-    },
-    {
-      "page": "reference/toml.qmd",
-      "seconds": 0.207,
-      "frozen": false
-    },
-    {
-      "page": "skill.md",
-      "seconds": 0.206,
-      "frozen": false
-    },
-    {
-      "page": "skills.qmd",
-      "seconds": 0.206,
+      "seconds": 0.234,
       "frozen": false
     },
     {
       "page": "reference/md.qmd",
-      "seconds": 0.204,
+      "seconds": 0.222,
+      "frozen": false
+    },
+    {
+      "page": "reference/index.qmd",
+      "seconds": 0.222,
+      "frozen": false
+    },
+    {
+      "page": "changelog.qmd",
+      "seconds": 0.219,
+      "frozen": false
+    },
+    {
+      "page": "skills.qmd",
+      "seconds": 0.219,
+      "frozen": false
+    },
+    {
+      "page": "reference/xml.qmd",
+      "seconds": 0.214,
+      "frozen": false
+    },
+    {
+      "page": "reference/zip.qmd",
+      "seconds": 0.214,
+      "frozen": false
+    },
+    {
+      "page": "reference/pkl.qmd",
+      "seconds": 0.211,
+      "frozen": false
+    },
+    {
+      "page": "reference/csv.qmd",
+      "seconds": 0.211,
+      "frozen": false
+    },
+    {
+      "page": "reference/ipynb.qmd",
+      "seconds": 0.21,
+      "frozen": false
+    },
+    {
+      "page": "reference/toml.qmd",
+      "seconds": 0.209,
+      "frozen": false
+    },
+    {
+      "page": "reference/mp3.qmd",
+      "seconds": 0.207,
       "frozen": false
     },
     {
       "page": "reference/sqlite.qmd",
+      "seconds": 0.206,
+      "frozen": false
+    },
+    {
+      "page": "reference/pdf.qmd",
+      "seconds": 0.205,
+      "frozen": false
+    },
+    {
+      "page": "reference/json.qmd",
+      "seconds": 0.204,
+      "frozen": false
+    },
+    {
+      "page": "reference/parquet.qmd",
+      "seconds": 0.204,
+      "frozen": false
+    },
+    {
+      "page": "reference/png.qmd",
       "seconds": 0.204,
       "frozen": false
     },
@@ -108,18 +108,18 @@
       "frozen": false
     },
     {
-      "page": "reference/png.qmd",
-      "seconds": 0.202,
+      "page": "reference/webp.qmd",
+      "seconds": 0.2,
       "frozen": false
     },
     {
-      "page": "changelog.qmd",
-      "seconds": 0.199,
+      "page": "skill.md",
+      "seconds": 0.195,
       "frozen": false
     },
     {
       "page": "license.qmd",
-      "seconds": 0.192,
+      "seconds": 0.187,
       "frozen": false
     }
   ]

@@ -177,3 +177,5 @@ cython_debug/
 /.idea/
 /.ruff_cache
 docs/build-timings.json
+uv.lock
+.DS_Store

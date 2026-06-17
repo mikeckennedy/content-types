@@ -302,3 +302,201 @@ class TestRealWorldScenarios:
         assert results[4] == 'image/jpeg'
         assert results[5] == 'text/csv'
         assert results[6] == 'application/zip'
+
+
+class TestGuessExtension:
+    """Test the guess_extension reverse lookup (MIME type -> canonical extension)."""
+
+    def test_common_reverse_lookups(self):
+        """Spot test: common content types map back to their canonical extension."""
+        assert content_types.guess_extension('application/pdf') == '.pdf'
+        assert content_types.guess_extension('image/png') == '.png'
+        assert content_types.guess_extension('image/jpeg') == '.jpg'
+        assert content_types.guess_extension('application/json') == '.json'
+        assert content_types.guess_extension('audio/mpeg') == '.mp3'
+        assert content_types.guess_extension('application/zip') == '.zip'
+        assert content_types.guess_extension('text/markdown') == '.md'
+
+    def test_canonical_overrides(self):
+        """The override table promotes the modern/representative ext over the first-listed alias."""
+        assert content_types.guess_extension('text/html') == '.html'  # not '.htm'
+        assert content_types.guess_extension('image/tiff') == '.tiff'  # not '.tif'
+        assert content_types.guess_extension('video/mpeg') == '.mpeg'  # not '.mpg'
+        assert content_types.guess_extension('application/x-msdownload') == '.exe'  # not '.dll'
+
+    def test_with_dot_false(self):
+        """with_dot=False returns the bare extension with no leading dot."""
+        assert content_types.guess_extension('application/pdf', with_dot=False) == 'pdf'
+        assert content_types.guess_extension('image/jpeg', with_dot=False) == 'jpg'
+
+    def test_data_science_reverse_lookups(self):
+        """Spot test: data science content types reverse to their canonical extension."""
+        assert content_types.guess_extension('application/vnd.apache.parquet') == '.parquet'
+        assert content_types.guess_extension('application/x-ipynb+json') == '.ipynb'
+        assert content_types.guess_extension('application/yaml') == '.yaml'
+        assert content_types.guess_extension('application/toml') == '.toml'
+        assert content_types.guess_extension('application/vnd.sqlite3') == '.sqlite'
+
+    def test_unknown_type_returns_none(self):
+        """Negative test: an unknown content type returns None (no sensible default)."""
+        assert content_types.guess_extension('application/x-does-not-exist') is None
+        assert content_types.guess_extension('made/up') is None
+
+    def test_none_input_raises_typeerror(self):
+        """Negative test: None input raises TypeError, mirroring get_content_type."""
+        with pytest.raises(TypeError, match='content_type cannot be None'):
+            content_types.guess_extension(None)
+
+    def test_empty_string_returns_none(self):
+        """Negative test: empty / whitespace-only input is a miss, not an error."""
+        assert content_types.guess_extension('') is None
+        assert content_types.guess_extension('   ') is None
+
+    def test_case_insensitive(self):
+        """Integration test: content type matching is case-insensitive."""
+        assert content_types.guess_extension('IMAGE/JPEG') == '.jpg'
+        assert content_types.guess_extension('Application/PDF') == '.pdf'
+
+    def test_mime_parameters_are_stripped(self):
+        """Integration test: MIME parameters (e.g. '; charset=...') are ignored."""
+        assert content_types.guess_extension('text/plain; charset=utf-8') == '.txt'
+        assert content_types.guess_extension('application/json;charset=UTF-8') == '.json'
+        assert content_types.guess_extension('text/html ; x=y') == '.html'
+
+    def test_non_canonical_aliases(self):
+        """Common non-canonical / legacy MIME spellings resolve to the canonical extension."""
+        assert content_types.guess_extension('text/json') == '.json'
+        assert content_types.guess_extension('text/xml') == '.xml'
+        assert content_types.guess_extension('application/javascript') == '.js'
+        assert content_types.guess_extension('image/jpg') == '.jpg'
+        assert content_types.guess_extension('image/x-icon') == '.ico'
+        assert content_types.guess_extension('application/x-yaml') == '.yaml'
+        assert content_types.guess_extension('audio/mp3') == '.mp3'
+        assert content_types.guess_extension('application/x-zip-compressed') == '.zip'
+        assert content_types.guess_extension('application/x-gzip') == '.gz'
+
+    def test_aliases_compose_with_case_and_params(self):
+        """Aliases still resolve after case-folding and parameter stripping."""
+        assert content_types.guess_extension('TEXT/JSON; charset=utf-8') == '.json'
+        assert content_types.guess_extension('Image/JPG') == '.jpg'
+
+    def test_returns_leading_dot(self):
+        """Every non-None return value starts with a leading dot by default."""
+        for content_type in set(content_types.EXTENSION_TO_CONTENT_TYPE.values()):
+            ext = content_types.guess_extension(content_type)
+            assert ext is not None and ext.startswith('.')
+
+
+class TestGuessAllExtensions:
+    """Test guess_all_extensions (MIME type -> all extensions, canonical first)."""
+
+    def test_single_extension_type(self):
+        """A content type with one extension returns a one-element list."""
+        assert content_types.guess_all_extensions('application/pdf') == ['.pdf']
+
+    def test_many_to_one_ordering_and_contents(self):
+        """A many-to-one type returns all extensions, canonical first."""
+        result = content_types.guess_all_extensions('image/jpeg')
+        # Order follows this library's table (canonical first); differs from stdlib.
+        assert result == ['.jpg', '.jpeg', '.jpe']
+        assert result[0] == content_types.guess_extension('image/jpeg')
+
+    def test_override_group_is_canonical_first(self):
+        """Override groups lead with the promoted canonical extension."""
+        assert content_types.guess_all_extensions('text/html') == ['.html', '.htm']
+        assert content_types.guess_all_extensions('video/mpeg') == [
+            '.mpeg',
+            '.mpg',
+            '.m1v',
+            '.mpa',
+            '.mpe',
+            '.vob',
+        ]
+
+    def test_largest_collision_group(self):
+        """text/plain is the largest group; it leads with .txt and stays complete."""
+        result = content_types.guess_all_extensions('text/plain')
+        assert result[0] == '.txt'
+        assert len(result) == 32
+        assert '.ini' in result
+
+    def test_unknown_type_returns_empty_list(self):
+        """Negative test: unknown / empty input returns an empty list."""
+        assert content_types.guess_all_extensions('made/up') == []
+        assert content_types.guess_all_extensions('') == []
+
+    def test_none_input_raises_typeerror(self):
+        """Negative test: None input raises TypeError."""
+        with pytest.raises(TypeError, match='content_type cannot be None'):
+            content_types.guess_all_extensions(None)
+
+    def test_case_insensitive_and_param_stripping(self):
+        """Integration test: matching is case-insensitive and parameters are stripped."""
+        assert content_types.guess_all_extensions('IMAGE/JPEG') == ['.jpg', '.jpeg', '.jpe']
+        assert content_types.guess_all_extensions('text/html; charset=utf-8') == ['.html', '.htm']
+
+    def test_aliases_return_full_canonical_list(self):
+        """An alias returns exactly the same extension list as its canonical type."""
+        assert content_types.guess_all_extensions('text/json') == content_types.guess_all_extensions('application/json')
+        assert content_types.guess_all_extensions('image/jpg') == ['.jpg', '.jpeg', '.jpe']
+        assert content_types.guess_all_extensions('application/x-zip-compressed') == content_types.guess_all_extensions(
+            'application/zip'
+        )
+
+    def test_with_dot_false(self):
+        """with_dot=False returns bare extensions with no leading dots."""
+        assert content_types.guess_all_extensions('image/jpeg', with_dot=False) == ['jpg', 'jpeg', 'jpe']
+
+    def test_all_entries_are_dotted_and_unique(self):
+        """Every returned extension is dotted, and a group has no duplicates."""
+        for content_type in set(content_types.EXTENSION_TO_CONTENT_TYPE.values()):
+            result = content_types.guess_all_extensions(content_type)
+            assert all(ext.startswith('.') for ext in result)
+            assert len(result) == len(set(result))
+
+
+class TestReverseLookupInvariants:
+    """Property tests for the reverse lookup, exercised over the whole dictionary."""
+
+    def _all_types(self):
+        return set(content_types.EXTENSION_TO_CONTENT_TYPE.values())
+
+    def test_roundtrip_type_to_ext_to_type(self):
+        """Every content type has a canonical ext that maps forward to that same type."""
+        for content_type in self._all_types():
+            ext = content_types.guess_extension(content_type)
+            assert ext is not None
+            assert content_types.get_content_type(ext) == content_type
+
+    def test_guess_all_forward_consistency(self):
+        """Every extension in a group maps forward to that group's content type."""
+        for content_type in self._all_types():
+            for ext in content_types.guess_all_extensions(content_type):
+                assert content_types.get_content_type(ext) == content_type
+
+    def test_guess_extension_is_first_of_guess_all(self):
+        """guess_extension(t) always equals guess_all_extensions(t)[0]."""
+        for content_type in self._all_types():
+            assert content_types.guess_extension(content_type) == content_types.guess_all_extensions(content_type)[0]
+
+    def test_every_extension_is_reachable(self):
+        """Every extension key is reachable via its own content type's group."""
+        for ext, content_type in content_types.EXTENSION_TO_CONTENT_TYPE.items():
+            assert f'.{ext}' in content_types.guess_all_extensions(content_type)
+
+    def test_aliases_resolve_to_known_types(self):
+        """Every alias target is a real content type in the table (no dead aliases)."""
+        for canonical in content_types._CONTENT_TYPE_ALIASES.values():
+            assert canonical in self._all_types()
+            assert content_types.guess_all_extensions(canonical)
+
+    def test_aliases_do_not_shadow_canonical_types(self):
+        """No alias key is itself a canonical type, so aliases never override real types."""
+        for alias in content_types._CONTENT_TYPE_ALIASES:
+            assert alias not in self._all_types()
+
+    def test_alias_matches_its_canonical_target(self):
+        """Each alias resolves to exactly the same result as its canonical type."""
+        for alias, canonical in content_types._CONTENT_TYPE_ALIASES.items():
+            assert content_types.guess_extension(alias) == content_types.guess_extension(canonical)
+            assert content_types.guess_all_extensions(alias) == content_types.guess_all_extensions(canonical)

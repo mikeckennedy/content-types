@@ -12,27 +12,39 @@
     ]
   },
   {
-    "objectID": "reference/png.html",
-    "href": "reference/png.html",
-    "title": "png",
+    "objectID": "reference/yaml.html",
+    "href": "reference/yaml.html",
+    "title": "yaml",
     "section": "",
-    "text": "str(object=’’) -&gt; str\n\n\npng: str = get_content_type(\".png\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "text": "str(object=’’) -&gt; str\n\n\nyaml: str = get_content_type(\".yaml\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
     "crumbs": [
       "API Reference",
       "Shortcut constants",
-      "[png]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+      "[yaml]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
     ]
   },
   {
-    "objectID": "reference/parquet.html",
-    "href": "reference/parquet.html",
-    "title": "parquet",
+    "objectID": "reference/webp.html",
+    "href": "reference/webp.html",
+    "title": "webp",
     "section": "",
-    "text": "str(object=’’) -&gt; str\n\n\nparquet: str = get_content_type(\".parquet\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "text": "str(object=’’) -&gt; str\n\n\nwebp: str = get_content_type(\".webp\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
     "crumbs": [
       "API Reference",
       "Shortcut constants",
-      "[parquet]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+      "[webp]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/guess_extension.html",
+    "href": "reference/guess_extension.html",
+    "title": "guess_extension()",
+    "section": "",
+    "text": "Return the canonical file extension for a MIME / content type.\n\n\nUsage\nSource\n\n\nguess_extension(content_type, with_dot=True)\n\n\nThis is the reverse of get_content_type(). The lookup is case-insensitive and any MIME parameters are ignored, so an HTTP Content-Type header value such as text/html; charset=utf-8 resolves the same as text/html. Common non-canonical or legacy spellings are also accepted — text/json resolves like application/json and image/jpg like image/jpeg. When a content type maps to several extensions, the canonical one is returned (e.g. image/jpeg -&gt; .jpg); use guess_all_extensions() to get every extension.\nThe canonical choice follows this library’s table and may differ from the standard library mimetypes module — for example, this returns .html for text/html.\n\n\nParameters\n\n\ncontent_type: str\n\nA MIME type to look up, optionally with parameters (e.g. application/pdf or text/html; charset=utf-8).\n\nwith_dot: bool = True\n\nWhen True (default) the returned extension has a leading dot (e.g. .pdf), which is what you concatenate onto a filename. When False the bare extension is returned (e.g. pdf).\n\n\n\n\n\nReturns\n\n\n Optional[str]\n\nThe canonical extension for the content type, or None if it is unknown\n(including empty, whitespace-only, or parameter-only input).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf content_type is None.\n\n\n\n\n\nExample\n&gt;&gt;&gt; guess_extension(\"application/pdf\")\n'.pdf'\n&gt;&gt;&gt; guess_extension(\"image/jpeg\")\n'.jpg'\n&gt;&gt;&gt; guess_extension(\"text/html; charset=utf-8\")\n'.html'\n&gt;&gt;&gt; guess_extension(\"application/pdf\", with_dot=False)\n'pdf'\n&gt;&gt;&gt; guess_extension(\"application/x-does-not-exist\") is None\nTrue",
+    "crumbs": [
+      "API Reference",
+      "Reverse lookup",
+      "[guess_extension()]{.doc-object-name .doc-function .doc-label .doc-label-function}"
     ]
   },
   {
@@ -79,7 +91,7 @@
     "text": "Return the most specific, commonly accepted MIME type for a filename or extension.\n\n\nUsage\nSource\n\n\nget_content_type(filename_or_extension, treat_as_binary=True, fallback=None)\n\n\nThe lookup is based purely on the extension — the file’s bytes are never read. A filename, a bare extension (with or without a leading dot), or a pathlib.Path are all accepted. For URLs, any query string (?...) or fragment (#...) is stripped first; for compound extensions the last segment wins (archive.tar.gz resolves as gz). Matching is case-insensitive.\n\n\nParameters\n\n\nfilename_or_extension: str | Path\n\nA filename, path, URL, or bare extension to look up. Accepts a str or a pathlib.Path.\n\ntreat_as_binary: bool = True\n\nSelects the default fallback when the extension is unknown and no explicit fallback is given. True (default) returns application/octet-stream; False returns text/plain.\n\nfallback: Optional[str] = None\n\nAn explicit MIME type to return for unknown extensions. When provided, it takes precedence over treat_as_binary.\n\n\n\n\n\nReturns\n\n\n str\n\nThe mapped MIME type, or the chosen fallback when the extension is unknown.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf filename_or_extension is None.\n\n\n\n\n\nExample\n&gt;&gt;&gt; get_content_type(\"picture.jpg\")\n'image/jpeg'\n&gt;&gt;&gt; get_content_type(\".webp\")\n'image/webp'\n&gt;&gt;&gt; get_content_type(\"script.js\")\n'text/javascript'\n&gt;&gt;&gt; get_content_type(\"unknown.xyz\")\n'application/octet-stream'\n&gt;&gt;&gt; get_content_type(\"unknown.xyz\", treat_as_binary=False)\n'text/plain'\n&gt;&gt;&gt; get_content_type(\"unknown.xyz\", fallback='application/x-custom')\n'application/x-custom'",
     "crumbs": [
       "API Reference",
-      "Lookup",
+      "Forward lookup",
       "[get_content_type()]{.doc-object-name .doc-function .doc-label .doc-label-function}"
     ]
   },
@@ -88,7 +100,7 @@
     "href": "reference/index.html",
     "title": "API Reference",
     "section": "",
-    "text": "content-types is intentionally tiny: a single lookup function, the mapping table behind it, and a handful of precomputed shortcut constants for the most common formats.\n\n\nLookup\n\nThe one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.\n\n\nget_content_type()\n\nReturn the most specific, commonly accepted MIME type for a filename or extension.\n\n\n\n\nMapping data\n\nThe underlying extension -&gt; content-type table (364 entries; keys have no leading dot).\n\n\nEXTENSION_TO_CONTENT_TYPE\n\ndict() -&gt; new empty dictionary\n\n\n\n\nShortcut constants\n\nPrecomputed content types for very common formats, exposed as module-level attributes.\n\n\nwebp\n\nstr(object=’’) -&gt; str\n\npng\n\nstr(object=’’) -&gt; str\n\njpg\n\nstr(object=’’) -&gt; str\n\nmp3\n\nstr(object=’’) -&gt; str\n\njson\n\nstr(object=’’) -&gt; str\n\npdf\n\nstr(object=’’) -&gt; str\n\nzip\n\nstr(object=’’) -&gt; str\n\nxml\n\nstr(object=’’) -&gt; str\n\ncsv\n\nstr(object=’’) -&gt; str\n\nmd\n\nstr(object=’’) -&gt; str\n\nparquet\n\nstr(object=’’) -&gt; str\n\nipynb\n\nstr(object=’’) -&gt; str\n\npkl\n\nstr(object=’’) -&gt; str\n\nyaml\n\nstr(object=’’) -&gt; str\n\ntoml\n\nstr(object=’’) -&gt; str\n\nsqlite\n\nstr(object=’’) -&gt; str",
+    "text": "content-types is intentionally tiny: lookup functions for both directions (filename -&gt; type, and type -&gt; extension), the mapping table behind them, and a handful of precomputed shortcut constants for the most common formats.\n\n\nForward lookup\n\nMap a filename, bare extension, Path, or URL to its MIME / content type.\n\n\nget_content_type()\n\nReturn the most specific, commonly accepted MIME type for a filename or extension.\n\n\n\n\nReverse lookup\n\nMap a MIME / content type back to its file extension(s) — the inverse of get_content_type.\n\n\nguess_extension()\n\nReturn the canonical file extension for a MIME / content type.\n\nguess_all_extensions()\n\nReturn every known file extension for a MIME / content type, canonical first.\n\n\n\n\nMapping data\n\nThe underlying extension -&gt; content-type table (364 entries; keys have no leading dot).\n\n\nEXTENSION_TO_CONTENT_TYPE\n\ndict() -&gt; new empty dictionary\n\n\n\n\nShortcut constants\n\nPrecomputed content types for very common formats, exposed as module-level attributes.\n\n\nwebp\n\nstr(object=’’) -&gt; str\n\npng\n\nstr(object=’’) -&gt; str\n\njpg\n\nstr(object=’’) -&gt; str\n\nmp3\n\nstr(object=’’) -&gt; str\n\njson\n\nstr(object=’’) -&gt; str\n\npdf\n\nstr(object=’’) -&gt; str\n\nzip\n\nstr(object=’’) -&gt; str\n\nxml\n\nstr(object=’’) -&gt; str\n\ncsv\n\nstr(object=’’) -&gt; str\n\nmd\n\nstr(object=’’) -&gt; str\n\nparquet\n\nstr(object=’’) -&gt; str\n\nipynb\n\nstr(object=’’) -&gt; str\n\npkl\n\nstr(object=’’) -&gt; str\n\nyaml\n\nstr(object=’’) -&gt; str\n\ntoml\n\nstr(object=’’) -&gt; str\n\nsqlite\n\nstr(object=’’) -&gt; str",
     "crumbs": [
       "API Reference",
       "API Index"
@@ -123,7 +135,7 @@
     "href": "skills.html",
     "title": "Skills",
     "section": "",
-    "text": "A skill is a package of structured files that teaches an AI coding agent how to work with a specific tool or framework. The skill below was generated by Great Docs from this project’s documentation. Install it in your agent and it will be able to run commands, edit configuration, write content, and troubleshoot problems without step-by-step guidance from you.\n\n  \n    ▶    Install this skill\n  \n  \n    \n      \nAny agent — install with npx:\nnpx skills add https://mkennedy.codes/docs/content-types/\nCodex / OpenCode\nTell the agent:Fetch the skill file at https://mkennedy.codes/docs/content-types/skill.md and follow the instructions.\nManual — download the skill file:\ncurl -O https://mkennedy.codes/docs/content-types/skill.md\nOr browse the SKILL.md file.\n      \n    \n  \n\n\nSKILL.md\n---\nname: content-types\ndescription: &gt;\n  A library to map file extensions to content types and vice versa. Use when writing Python code that uses the content_types package.\nlicense: MIT\ncompatibility: Requires Python &gt;=3.10.\n---\n\n# content-types\n\nA library to map file extensions to content types and vice versa.\n\n## Installation\n\n```bash\npip install content-types\n```\n\n## API overview\n\n### Lookup\n\nThe one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.\n\n- `get_content_type`: Return the most specific, commonly accepted MIME type for a filename or extension\n\n### Mapping data\n\nThe underlying extension -&gt; content-type table (364 entries; keys have no leading dot).\n\n- `EXTENSION_TO_CONTENT_TYPE`: dict() -&gt; new empty dictionary\n\n### Shortcut constants\n\nPrecomputed content types for very common formats, exposed as module-level attributes.\n\n- `webp`: str(object='') -&gt; str\n- `png`: str(object='') -&gt; str\n- `jpg`: str(object='') -&gt; str\n- `mp3`: str(object='') -&gt; str\n- `json`: str(object='') -&gt; str\n- `pdf`: str(object='') -&gt; str\n- `zip`: str(object='') -&gt; str\n- `xml`: str(object='') -&gt; str\n- `csv`: str(object='') -&gt; str\n- `md`: str(object='') -&gt; str\n- `parquet`: str(object='') -&gt; str\n- `ipynb`: str(object='') -&gt; str\n- `pkl`: str(object='') -&gt; str\n- `yaml`: str(object='') -&gt; str\n- `toml`: str(object='') -&gt; str\n- `sqlite`: str(object='') -&gt; str\n\n## Resources\n\n- [Full documentation](https://mkennedy.codes/docs/content-types/)\n- [llms.txt](llms.txt) — Indexed API reference for LLMs\n- [llms-full.txt](llms-full.txt) — Comprehensive documentation for LLMs\n- [Source code](https://github.com/mikeckennedy/content-types)"
+    "text": "A skill is a package of structured files that teaches an AI coding agent how to work with a specific tool or framework. The skill below was generated by Great Docs from this project’s documentation. Install it in your agent and it will be able to run commands, edit configuration, write content, and troubleshoot problems without step-by-step guidance from you.\n\n  \n    ▶    Install this skill\n  \n  \n    \n      \nAny agent — install with npx:\nnpx skills add https://mkennedy.codes/docs/content-types/\nCodex / OpenCode\nTell the agent:Fetch the skill file at https://mkennedy.codes/docs/content-types/skill.md and follow the instructions.\nManual — download the skill file:\ncurl -O https://mkennedy.codes/docs/content-types/skill.md\nOr browse the SKILL.md file.\n      \n    \n  \n\n\nSKILL.md\n---\nname: content-types\ndescription: &gt;\n  A library to map file extensions to content types and vice versa. Use when writing Python code that uses the content_types package.\nlicense: MIT\ncompatibility: Requires Python &gt;=3.10.\n---\n\n# content-types\n\nA library to map file extensions to content types and vice versa.\n\n## Installation\n\n```bash\npip install content-types\n```\n\n## API overview\n\n### Forward lookup\n\nMap a filename, bare extension, Path, or URL to its MIME / content type.\n\n- `get_content_type`: Return the most specific, commonly accepted MIME type for a filename or extension\n\n### Reverse lookup\n\nMap a MIME / content type back to its file extension(s) — the inverse of get_content_type.\n\n- `guess_extension`: Return the canonical file extension for a MIME / content type\n- `guess_all_extensions`: Return every known file extension for a MIME / content type, canonical first\n\n### Mapping data\n\nThe underlying extension -&gt; content-type table (364 entries; keys have no leading dot).\n\n- `EXTENSION_TO_CONTENT_TYPE`: dict() -&gt; new empty dictionary\n\n### Shortcut constants\n\nPrecomputed content types for very common formats, exposed as module-level attributes.\n\n- `webp`: str(object='') -&gt; str\n- `png`: str(object='') -&gt; str\n- `jpg`: str(object='') -&gt; str\n- `mp3`: str(object='') -&gt; str\n- `json`: str(object='') -&gt; str\n- `pdf`: str(object='') -&gt; str\n- `zip`: str(object='') -&gt; str\n- `xml`: str(object='') -&gt; str\n- `csv`: str(object='') -&gt; str\n- `md`: str(object='') -&gt; str\n- `parquet`: str(object='') -&gt; str\n- `ipynb`: str(object='') -&gt; str\n- `pkl`: str(object='') -&gt; str\n- `yaml`: str(object='') -&gt; str\n- `toml`: str(object='') -&gt; str\n- `sqlite`: str(object='') -&gt; str\n\n## Resources\n\n- [Full documentation](https://mkennedy.codes/docs/content-types/)\n- [llms.txt](llms.txt) — Indexed API reference for LLMs\n- [llms-full.txt](llms-full.txt) — Comprehensive documentation for LLMs\n- [Source code](https://github.com/mikeckennedy/content-types)"
   },
   {
     "objectID": "changelog.html",
@@ -172,7 +184,7 @@
     "href": "index.html#usage",
     "title": "content-types 🗃️🔎",
     "section": "Usage",
-    "text": "Usage\nimport content_types\n\n## Forward lookup: filename -&gt; MIME type\nthe_type = content_types.get_content_type(\"example.jpg\")\nprint(the_type)  # \"image/jpeg\"\n\n## Works with any supported extension\nprint(content_types.get_content_type(\"data.parquet\"))  # \"application/vnd.apache.parquet\"\nprint(content_types.get_content_type(\"notebook.ipynb\"))  # \"application/x-ipynb+json\"\nprint(content_types.get_content_type(\"photo.cr2\"))  # \"image/x-canon-cr2\"\nprint(content_types.get_content_type(\"model.blend\"))  # \"application/x-blender\"\nprint(content_types.get_content_type(\"contract.sol\"))  # \"text/x-solidity\"\n\n## For very common files, you have shortcuts:\nprint(f'Content-Type for webp is {content_types.webp}.') \n## Content-Type for webp is image/webp.\n\n## Data science shortcuts\nprint(content_types.parquet)  # \"application/vnd.apache.parquet\"\nprint(content_types.ipynb)    # \"application/x-ipynb+json\"\nprint(content_types.pkl)      # \"application/octet-stream\"\nprint(content_types.yaml)     # \"application/yaml\"\nprint(content_types.toml)     # \"application/toml\"\nprint(content_types.sqlite)   # \"application/vnd.sqlite3\"\n\n## Works with Path objects too\nfrom pathlib import Path\npath = Path(\"document.pdf\")\nprint(content_types.get_content_type(path))  # \"application/pdf\"\n\n## URLs work too — query strings and fragments are stripped before lookup\nurl = \"https://cdn.example.com/song.mp3?cache_id=678c2a\"\nprint(content_types.get_content_type(url))  # \"audio/mpeg\"\n\n## Unknown extensions fall back to 'application/octet-stream' by default;\n## pass treat_as_binary=False to fall back to 'text/plain' instead.\nprint(content_types.get_content_type(\"notes.unknownext\"))  # \"application/octet-stream\"\nprint(content_types.get_content_type(\"notes.unknownext\", treat_as_binary=False))  # \"text/plain\"\n\n## Or supply your own fallback for unknown extensions; it takes precedence\n## over treat_as_binary. Known extensions still resolve normally.\nprint(content_types.get_content_type(\"notes.unknownext\", fallback=\"application/x-custom\"))  # \"application/x-custom\""
+    "text": "Usage\nimport content_types\n\n## Forward lookup: filename -&gt; MIME type\nthe_type = content_types.get_content_type(\"example.jpg\")\nprint(the_type)  # \"image/jpeg\"\n\n## Works with any supported extension\nprint(content_types.get_content_type(\"data.parquet\"))  # \"application/vnd.apache.parquet\"\nprint(content_types.get_content_type(\"notebook.ipynb\"))  # \"application/x-ipynb+json\"\nprint(content_types.get_content_type(\"photo.cr2\"))  # \"image/x-canon-cr2\"\nprint(content_types.get_content_type(\"model.blend\"))  # \"application/x-blender\"\nprint(content_types.get_content_type(\"contract.sol\"))  # \"text/x-solidity\"\n\n## For very common files, you have shortcuts:\nprint(f'Content-Type for webp is {content_types.webp}.') \n## Content-Type for webp is image/webp.\n\n## Data science shortcuts\nprint(content_types.parquet)  # \"application/vnd.apache.parquet\"\nprint(content_types.ipynb)    # \"application/x-ipynb+json\"\nprint(content_types.pkl)      # \"application/octet-stream\"\nprint(content_types.yaml)     # \"application/yaml\"\nprint(content_types.toml)     # \"application/toml\"\nprint(content_types.sqlite)   # \"application/vnd.sqlite3\"\n\n## Works with Path objects too\nfrom pathlib import Path\npath = Path(\"document.pdf\")\nprint(content_types.get_content_type(path))  # \"application/pdf\"\n\n## URLs work too — query strings and fragments are stripped before lookup\nurl = \"https://cdn.example.com/song.mp3?cache_id=678c2a\"\nprint(content_types.get_content_type(url))  # \"audio/mpeg\"\n\n## Unknown extensions fall back to 'application/octet-stream' by default;\n## pass treat_as_binary=False to fall back to 'text/plain' instead.\nprint(content_types.get_content_type(\"notes.unknownext\"))  # \"application/octet-stream\"\nprint(content_types.get_content_type(\"notes.unknownext\", treat_as_binary=False))  # \"text/plain\"\n\n## Or supply your own fallback for unknown extensions; it takes precedence\n## over treat_as_binary. Known extensions still resolve normally.\nprint(content_types.get_content_type(\"notes.unknownext\", fallback=\"application/x-custom\"))  # \"application/x-custom\"\n\n## Reverse lookup: MIME type -&gt; extension (the inverse of get_content_type)\nprint(content_types.guess_extension(\"application/pdf\"))   # \".pdf\"\nprint(content_types.guess_extension(\"image/jpeg\"))        # \".jpg\" (the canonical pick)\nprint(content_types.guess_all_extensions(\"image/jpeg\"))   # ['.jpg', '.jpeg', '.jpe']\n\n## Matching is case-insensitive, and parameters on a Content-Type header are ignored\nprint(content_types.guess_extension(\"text/html; charset=utf-8\"))  # \".html\"\n\n## Common non-canonical / legacy spellings resolve to the canonical type too\nprint(content_types.guess_extension(\"text/json\"))  # \".json\"  (canonical: application/json)\nprint(content_types.guess_extension(\"image/jpg\"))  # \".jpg\"   (canonical: image/jpeg)\n\n## Pass with_dot=False for a bare extension; unknown types return None / []\nprint(content_types.guess_extension(\"application/toml\", with_dot=False))  # \"toml\"\nprint(content_types.guess_extension(\"application/x-nope\"))       # None\nprint(content_types.guess_all_extensions(\"application/x-nope\"))  # []\nThe reverse lookup mirrors the standard library mimetypes.guess_extension / guess_all_extensions, but draws on this library’s larger, more-correct table — so the canonical extension can differ (for example, it returns .html for text/html, not .htm). It is also forgiving of common non-canonical spellings: text/json, image/jpg, application/javascript, and application/x-zip-compressed all resolve to a sensible extension."
   },
   {
     "objectID": "index.html#cli",
@@ -207,7 +219,7 @@
     "href": "index.html#contributing",
     "title": "content-types 🗃️🔎",
     "section": "Contributing",
-    "text": "Contributing\nContributions are welcome! Check out the GitHub repo for more details on how to get involved.\n\nDevelopment\npytest and ruff aren’t declared dependencies — uv provides them on the fly:\n## Run the test suite (35 tests)\nuv run --with pytest pytest\n\n## Lint and format (config in ruff.toml)\nuvx ruff check .\nuvx ruff format .\n\n\nBuilding the docs\nThe docs site is built with Great Docs and published at mkennedy.codes/docs/content-types. Great Docs imports the package for API introspection, so the toolchain lives in the dev extra and needs an editable install:\n## Install the docs toolchain into your virtualenv\nuv pip install -e \".[dev]\"\n\n## Build the site (mirrors great-docs/_site/ into the committed docs/ folder)\npython scripts/build_docs.py\n\n## Preview exactly as hosted, under the /docs/content-types subpath\npython scripts/serve_docs.py   # -&gt; http://127.0.0.1:8099/docs/content-types/"
+    "text": "Contributing\nContributions are welcome! Check out the GitHub repo for more details on how to get involved.\n\nDevelopment\npytest and ruff aren’t declared dependencies — uv provides them on the fly:\n## Run the test suite (58 tests)\nuv run --with pytest pytest\n\n## Lint and format (config in ruff.toml)\nuvx ruff check .\nuvx ruff format .\n\n\nBuilding the docs\nThe docs site is built with Great Docs and published at mkennedy.codes/docs/content-types. Great Docs imports the package for API introspection, so the toolchain lives in the dev extra and needs an editable install:\n## Install the docs toolchain into your virtualenv\nuv pip install -e \".[dev]\"\n\n## Build the site (mirrors great-docs/_site/ into the committed docs/ folder)\npython scripts/build_docs.py\n\n## Preview exactly as hosted, under the /docs/content-types subpath\npython scripts/serve_docs.py   # -&gt; http://127.0.0.1:8099/docs/content-types/"
   },
   {
     "objectID": "skill.html",
@@ -217,11 +229,18 @@
     "text": "A library to map file extensions to content types and vice versa."
   },
   {
-    "objectID": "skill.html#lookup",
-    "href": "skill.html#lookup",
+    "objectID": "skill.html#forward-lookup",
+    "href": "skill.html#forward-lookup",
     "title": "content-types",
-    "section": "Lookup",
-    "text": "Lookup\nThe one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.\n\nget_content_type: Return the most specific, commonly accepted MIME type for a filename or extension"
+    "section": "Forward lookup",
+    "text": "Forward lookup\nMap a filename, bare extension, Path, or URL to its MIME / content type.\n\nget_content_type: Return the most specific, commonly accepted MIME type for a filename or extension"
+  },
+  {
+    "objectID": "skill.html#reverse-lookup",
+    "href": "skill.html#reverse-lookup",
+    "title": "content-types",
+    "section": "Reverse lookup",
+    "text": "Reverse lookup\nMap a MIME / content type back to its file extension(s) — the inverse of get_content_type.\n\nguess_extension: Return the canonical file extension for a MIME / content type\nguess_all_extensions: Return every known file extension for a MIME / content type, canonical first"
   },
   {
     "objectID": "skill.html#mapping-data",
@@ -329,27 +348,39 @@
     ]
   },
   {
-    "objectID": "reference/webp.html",
-    "href": "reference/webp.html",
-    "title": "webp",
+    "objectID": "reference/parquet.html",
+    "href": "reference/parquet.html",
+    "title": "parquet",
     "section": "",
-    "text": "str(object=’’) -&gt; str\n\n\nwebp: str = get_content_type(\".webp\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "text": "str(object=’’) -&gt; str\n\n\nparquet: str = get_content_type(\".parquet\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
     "crumbs": [
       "API Reference",
       "Shortcut constants",
-      "[webp]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+      "[parquet]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
     ]
   },
   {
-    "objectID": "reference/yaml.html",
-    "href": "reference/yaml.html",
-    "title": "yaml",
+    "objectID": "reference/png.html",
+    "href": "reference/png.html",
+    "title": "png",
     "section": "",
-    "text": "str(object=’’) -&gt; str\n\n\nyaml: str = get_content_type(\".yaml\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
+    "text": "str(object=’’) -&gt; str\n\n\npng: str = get_content_type(\".png\")\n\n\nstr(bytes_or_buffer[, encoding[, errors]]) -&gt; str\nCreate a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.__str__() (if defined) or repr(object). encoding defaults to ‘utf-8’. errors defaults to ‘strict’.",
     "crumbs": [
       "API Reference",
       "Shortcut constants",
-      "[yaml]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+      "[png]{.doc-object-name .doc-attribute .doc-label .doc-label-constant}"
+    ]
+  },
+  {
+    "objectID": "reference/guess_all_extensions.html",
+    "href": "reference/guess_all_extensions.html",
+    "title": "guess_all_extensions()",
+    "section": "",
+    "text": "Return every known file extension for a MIME / content type, canonical first.\n\n\nUsage\nSource\n\n\nguess_all_extensions(content_type, with_dot=True)\n\n\nLike guess_extension(), but returns the full list rather than just the canonical extension. The lookup is case-insensitive, MIME parameters are ignored, and common non-canonical spellings (e.g. text/json, image/jpg) resolve to their canonical type. The first element always equals guess_extension(content_type). The order follows this library’s table (canonical first) and is not guaranteed to match the standard library mimetypes module.\n\n\nParameters\n\n\ncontent_type: str\n\nA MIME type to look up, optionally with parameters (e.g. image/jpeg or text/html; charset=utf-8).\n\nwith_dot: bool = True\n\nWhen True (default) each extension has a leading dot (e.g. .jpg); when False the bare extensions are returned (e.g. jpg).\n\n\n\n\n\nReturns\n\n\n list[str]\n\nA list of extensions, canonical first, or an empty list if the content type is\nunknown (including empty, whitespace-only, or parameter-only input).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf content_type is None.\n\n\n\n\n\nExample\n&gt;&gt;&gt; guess_all_extensions(\"image/jpeg\")\n['.jpg', '.jpeg', '.jpe']\n&gt;&gt;&gt; guess_all_extensions(\"text/html\")\n['.html', '.htm']\n&gt;&gt;&gt; guess_all_extensions(\"application/pdf\")\n['.pdf']\n&gt;&gt;&gt; guess_all_extensions(\"application/x-does-not-exist\")\n[]",
+    "crumbs": [
+      "API Reference",
+      "Reverse lookup",
+      "[guess_all_extensions()]{.doc-object-name .doc-function .doc-label .doc-label-function}"
     ]
   }
 ]

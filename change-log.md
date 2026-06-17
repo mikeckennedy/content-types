@@ -27,6 +27,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.7] - 2026-06-17
+
+### Added
+- `guess_extension(content_type, with_dot=True)` — reverse lookup from a MIME type to its canonical file extension (e.g. `application/pdf` → `.pdf`), the inverse of `get_content_type()`. Case-insensitive, and MIME parameters on a `Content-Type` header are ignored (`text/html; charset=utf-8` → `.html`). Common non-canonical / legacy spellings also resolve (e.g. `text/json` → `.json`, `image/jpg` → `.jpg`, `application/x-zip-compressed` → `.zip`). Unknown types return `None`. (#9)
+- `guess_all_extensions(content_type, with_dot=True)` — returns every known extension for a MIME type, canonical first (e.g. `image/jpeg` → `['.jpg', '.jpeg', '.jpe']`); unknown types return `[]`. Same case-insensitivity, parameter-stripping, and alias handling as `guess_extension()`. (#9)
+- Files: `content_types/__init__.py`, `tests/test_content_types.py`, `README.md`, `great-docs.yml`, `docs/`
+
+---
+
 ## [0.4.0] - 2026-06-10
 
 ### Added
@@ -112,6 +121,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release
 - Files: `content_types/__init__.py`, `pyproject.toml`, `README.md`
+
+[Unreleased]: https://github.com/mikeckennedy/content-types/compare/v0.5.7...HEAD
+[0.5.7]: https://github.com/mikeckennedy/content-types/compare/v0.4.0...v0.5.7
+[0.4.0]: https://github.com/mikeckennedy/content-types/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/mikeckennedy/content-types/compare/v0.2.3...v0.3.0
+[0.2.3]: https://github.com/mikeckennedy/content-types/compare/v0.2.2...v0.2.3
+[0.2.2]: https://github.com/mikeckennedy/content-types/compare/v0.2.1...v0.2.2
+[0.2.1]: https://github.com/mikeckennedy/content-types/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/mikeckennedy/content-types/releases/tag/v0.2.0
 
 ---
 

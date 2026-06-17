@@ -1,3 +1,4 @@
+import functools
 import sys
 from importlib.metadata import version
 from pathlib import Path
@@ -422,6 +423,195 @@ EXTENSION_TO_CONTENT_TYPE: dict[str, str] = {
     'sub': 'text/x-microdvd',
     'idx': 'application/octet-stream',
 }
+
+
+# Canonical-extension overrides for the few content types whose first-listed
+# extension in EXTENSION_TO_CONTENT_TYPE is the less-common alias. Each preferred
+# extension is promoted to the front of its reverse-map list so that
+# guess_extension() and guess_all_extensions()[0] always agree.
+_CANONICAL_OVERRIDES: dict[str, str] = {
+    'text/html': 'html',  # not 'htm' (a DOS 8.3 holdover)
+    'image/tiff': 'tiff',  # not 'tif'
+    'video/mpeg': 'mpeg',  # not 'mpg'
+    'application/x-msdownload': 'exe',  # not 'dll'
+}
+
+# Well-known non-canonical / legacy MIME spellings mapped to the canonical type this
+# library uses. Applied on reverse lookup only (the forward table stays pure), so that
+# guess_extension('text/json') resolves the same as 'application/json'. Each value MUST
+# be a real type in EXTENSION_TO_CONTENT_TYPE, and no key may itself be a canonical type
+# — both are enforced by tests so this table can't silently rot.
+_CONTENT_TYPE_ALIASES: dict[str, str] = {
+    # JSON
+    'text/json': 'application/json',
+    # XML — we standardize on application/xml; stdlib and older tools use text/xml
+    'text/xml': 'application/xml',
+    # JavaScript — application/javascript was the RFC 4329 spelling for years
+    'application/javascript': 'text/javascript',
+    'application/x-javascript': 'text/javascript',
+    # JPEG — image/jpg is a near-universal mistake; image/pjpeg is a legacy IE form
+    'image/jpg': 'image/jpeg',
+    'image/pjpeg': 'image/jpeg',
+    # PNG — legacy
+    'image/x-png': 'image/png',
+    # Icons — how most favicons are actually served
+    'image/x-icon': 'image/vnd.microsoft.icon',
+    # SVG — common shorthand for image/svg+xml
+    'image/svg': 'image/svg+xml',
+    # YAML — application/yaml is RFC 9512 (2024); these predate it
+    'application/x-yaml': 'application/yaml',
+    'text/yaml': 'application/yaml',
+    'text/x-yaml': 'application/yaml',
+    # TOML
+    'text/toml': 'application/toml',
+    # MP3
+    'audio/mp3': 'audio/mpeg',
+    # ZIP — Windows / IIS commonly send these
+    'application/x-zip-compressed': 'application/zip',
+    'application/x-zip': 'application/zip',
+    # gzip — stdlib and older tools use x-gzip
+    'application/x-gzip': 'application/gzip',
+    # PDF
+    'application/x-pdf': 'application/pdf',
+    # CSV
+    'application/csv': 'text/csv',
+    'text/x-csv': 'text/csv',
+    # Markdown — older x- form
+    'text/x-markdown': 'text/markdown',
+}
+
+
+@functools.cache
+def _reverse_map() -> dict[str, list[str]]:
+    """Build the content-type -> extensions reverse of EXTENSION_TO_CONTENT_TYPE.
+
+    Extensions are listed canonical-first: insertion order from the forward dict,
+    then adjusted by _CANONICAL_OVERRIDES. The map is built lazily on the first
+    reverse lookup and cached for the process lifetime, so importers who only call
+    get_content_type() (or the shortcut constants) never pay to construct it.
+    """
+    reverse: dict[str, list[str]] = {}
+    for ext, content_type in EXTENSION_TO_CONTENT_TYPE.items():
+        reverse.setdefault(content_type, []).append(ext)
+
+    for content_type, preferred in _CANONICAL_OVERRIDES.items():
+        extensions = reverse.get(content_type)
+        if extensions and preferred in extensions:
+            extensions.remove(preferred)
+            extensions.insert(0, preferred)
+
+    return reverse
+
+
+def _normalize_content_type(content_type: str) -> str:
+    """Normalize a MIME type to its canonical lookup key.
+
+    Drops any parameters, trims whitespace, and lowercases, then maps well-known
+    non-canonical spellings to the canonical type via _CONTENT_TYPE_ALIASES.
+
+    e.g. '  TEXT/JSON ; charset=utf-8 ' -> 'application/json'
+    """
+    content_type = content_type.strip()
+    if ';' in content_type:
+        content_type = content_type.split(';', 1)[0]
+    content_type = content_type.strip().lower()
+    return _CONTENT_TYPE_ALIASES.get(content_type, content_type)
+
+
+def guess_extension(content_type: str, with_dot: bool = True) -> Optional[str]:
+    """Return the canonical file extension for a MIME / content type.
+
+    This is the reverse of get_content_type(). The lookup is case-insensitive and any
+    MIME parameters are ignored, so an HTTP `Content-Type` header value such as
+    `text/html; charset=utf-8` resolves the same as `text/html`. Common non-canonical
+    or legacy spellings are also accepted — `text/json` resolves like `application/json`
+    and `image/jpg` like `image/jpeg`. When a content type maps to several extensions,
+    the canonical one is returned (e.g. `image/jpeg` -> `.jpg`); use
+    guess_all_extensions() to get every extension.
+
+    The canonical choice follows this library's table and may differ from the standard
+    library `mimetypes` module — for example, this returns `.html` for `text/html`.
+
+    Args:
+        content_type: A MIME type to look up, optionally with parameters
+            (e.g. `application/pdf` or `text/html; charset=utf-8`).
+        with_dot: When `True` (default) the returned extension has a leading dot
+            (e.g. `.pdf`), which is what you concatenate onto a filename. When `False`
+            the bare extension is returned (e.g. `pdf`).
+
+    Returns:
+        The canonical extension for the content type, or `None` if it is unknown
+        (including empty, whitespace-only, or parameter-only input).
+
+    Raises:
+        TypeError: If `content_type` is `None`.
+
+    Example:
+        ```python
+        >>> guess_extension("application/pdf")
+        '.pdf'
+        >>> guess_extension("image/jpeg")
+        '.jpg'
+        >>> guess_extension("text/html; charset=utf-8")
+        '.html'
+        >>> guess_extension("application/pdf", with_dot=False)
+        'pdf'
+        >>> guess_extension("application/x-does-not-exist") is None
+        True
+        ```
+    """
+
+    if content_type is None:
+        raise TypeError('content_type cannot be None.')
+
+    extensions = _reverse_map().get(_normalize_content_type(content_type))
+    if not extensions:
+        return None
+
+    return f'.{extensions[0]}' if with_dot else extensions[0]
+
+
+def guess_all_extensions(content_type: str, with_dot: bool = True) -> list[str]:
+    """Return every known file extension for a MIME / content type, canonical first.
+
+    Like guess_extension(), but returns the full list rather than just the canonical
+    extension. The lookup is case-insensitive, MIME parameters are ignored, and common
+    non-canonical spellings (e.g. `text/json`, `image/jpg`) resolve to their canonical
+    type. The first element always equals guess_extension(content_type). The order
+    follows this library's table (canonical first) and is not guaranteed to match the
+    standard library `mimetypes` module.
+
+    Args:
+        content_type: A MIME type to look up, optionally with parameters
+            (e.g. `image/jpeg` or `text/html; charset=utf-8`).
+        with_dot: When `True` (default) each extension has a leading dot (e.g. `.jpg`);
+            when `False` the bare extensions are returned (e.g. `jpg`).
+
+    Returns:
+        A list of extensions, canonical first, or an empty list if the content type is
+        unknown (including empty, whitespace-only, or parameter-only input).
+
+    Raises:
+        TypeError: If `content_type` is `None`.
+
+    Example:
+        ```python
+        >>> guess_all_extensions("image/jpeg")
+        ['.jpg', '.jpeg', '.jpe']
+        >>> guess_all_extensions("text/html")
+        ['.html', '.htm']
+        >>> guess_all_extensions("application/pdf")
+        ['.pdf']
+        >>> guess_all_extensions("application/x-does-not-exist")
+        []
+        ```
+    """
+
+    if content_type is None:
+        raise TypeError('content_type cannot be None.')
+
+    extensions = _reverse_map().get(_normalize_content_type(content_type), [])
+    return [f'.{ext}' for ext in extensions] if with_dot else list(extensions)
 
 
 def get_content_type(

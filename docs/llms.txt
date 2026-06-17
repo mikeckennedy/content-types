@@ -6,10 +6,16 @@
 
 ### API Reference
 
-#### Lookup
-> The one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.
+#### Forward lookup
+> Map a filename, bare extension, Path, or URL to its MIME / content type.
 
 - [get_content_type](https://mkennedy.codes/docs/content-types/reference/get_content_type.html): Return the most specific, commonly accepted MIME type for a filename or extension
+
+#### Reverse lookup
+> Map a MIME / content type back to its file extension(s) — the inverse of get_content_type.
+
+- [guess_extension](https://mkennedy.codes/docs/content-types/reference/guess_extension.html): Return the canonical file extension for a MIME / content type
+- [guess_all_extensions](https://mkennedy.codes/docs/content-types/reference/guess_all_extensions.html): Return every known file extension for a MIME / content type, canonical first
 
 #### Mapping data
 > The underlying extension -> content-type table (364 entries; keys have no leading dot).

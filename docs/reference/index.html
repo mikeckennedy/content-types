@@ -42,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-aa1552726bdd3cb78d40c93fdbd5382a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2de4c26ee36d61e771850f62d491bbdc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -73,10 +73,16 @@ ul.task-list li input[type="checkbox"] {
 <script async="" src="https://uma.mkennedy.codes/script.js" data-website-id="fc9b6770-3b44-4073-944e-4a4f0e79f66a"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-compare.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
 <script src="../theme-init.js"></script>
 
 
-  <meta name="description" content="content-types is intentionally tiny: a single lookup function, the mapping table behind it, and a handful of precomputed shortcut constants for the...">
+  <meta name="description" content="content-types is intentionally tiny: lookup functions for both directions (filename -&amp;gt; type, and type -&amp;gt; extension), the mapping table behind...">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -95,12 +101,12 @@ ul.task-list li input[type="checkbox"] {
 </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="API Reference – content-types | content-types">
-  <meta property="og:description" content="content-types is intentionally tiny: a single lookup function, the mapping table behind it, and a handful of precomputed shortcut constants for the...">
+  <meta property="og:description" content="content-types is intentionally tiny: lookup functions for both directions (filename -&amp;amp;gt; type, and type -&amp;amp;gt; extension), the mapping table behind...">
   <meta property="og:url" content="https://mkennedy.codes/docs/content-types/reference/">
   <meta property="og:site_name" content="content-types">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="API Reference – content-types | content-types">
-  <meta name="twitter:description" content="content-types is intentionally tiny: a single lookup function, the mapping table behind it, and a handful of precomputed shortcut constants for the...">
+  <meta name="twitter:description" content="content-types is intentionally tiny: lookup functions for both directions (filename -&amp;amp;gt; type, and type -&amp;amp;gt; extension), the mapping table behind...">
 </head>
 
 <body class="gd-ref-sidebar nav-sidebar floating nav-fixed doc-reference quarto-light">
@@ -132,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <span class="nav-link">
-<div id="github-widget" data-owner="mikeckennedy" data-repo="content-types"></div>
+<div id="github-widget" data-owner="mikeckennedy" data-repo="content-types" data-stars="54" data-forks="3"></div>
     </span>
   </li>  
 </ul>
@@ -167,7 +173,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Lookup</span></a>
+ <span class="menu-text">Forward lookup</span></a>
 </div>
       <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
@@ -181,9 +187,29 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Mapping data</span></a>
+ <span class="menu-text">Reverse lookup</span></a>
 </div>
       <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/guess_extension.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="doc-object-name doc-function doc-label doc-label-function">guess_extension()</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/guess_all_extensions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="doc-object-name doc-function doc-label doc-label-function">guess_all_extensions()</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Mapping data</span></a>
+</div>
+      <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../reference/EXTENSION_TO_CONTENT_TYPE.html" class="sidebar-item-text sidebar-link">
@@ -197,7 +223,7 @@ ul.task-list li input[type="checkbox"] {
             <a class="sidebar-item-text sidebar-link text-start">
  <span class="menu-text">Shortcut constants</span></a>
 </div>
-      <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-4" class="list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../reference/webp.html" class="sidebar-item-text sidebar-link">
@@ -306,7 +332,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#lookup" id="toc-lookup" class="nav-link active" data-scroll-target="#lookup">Lookup</a></li>
+  <li><a href="#forward-lookup" id="toc-forward-lookup" class="nav-link active" data-scroll-target="#forward-lookup">Forward lookup</a></li>
+  <li><a href="#reverse-lookup" id="toc-reverse-lookup" class="nav-link" data-scroll-target="#reverse-lookup">Reverse lookup</a></li>
   <li><a href="#mapping-data" id="toc-mapping-data" class="nav-link" data-scroll-target="#mapping-data">Mapping data</a></li>
   <li><a href="#shortcut-constants" id="toc-shortcut-constants" class="nav-link" data-scroll-target="#shortcut-constants">Shortcut constants</a></li>
   </ul>
@@ -335,17 +362,33 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="doc-description">
-<p>content-types is intentionally tiny: a single lookup function, the mapping table behind it, and a handful of precomputed shortcut constants for the most common formats.</p>
+<p>content-types is intentionally tiny: lookup functions for both directions (filename -&gt; type, and type -&gt; extension), the mapping table behind them, and a handful of precomputed shortcut constants for the most common formats.</p>
 </div>
-<section id="lookup" class="level2 doc-group">
-<h2 class="doc-group">Lookup</h2>
+<section id="forward-lookup" class="level2 doc-group">
+<h2 class="doc-group">Forward lookup</h2>
 <div class="doc-description">
-<p>The one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.</p>
+<p>Map a filename, bare extension, Path, or URL to its MIME / content type.</p>
 </div>
 <dl>
 <dt><a href="../reference/get_content_type.html#content_types.get_content_type" class="doc-function doc-label doc-label-function">get_content_type()</a></dt>
 <dd>
 <p>Return the most specific, commonly accepted MIME type for a filename or extension.</p>
+</dd>
+</dl>
+</section>
+<section id="reverse-lookup" class="level2 doc-group">
+<h2 class="doc-group">Reverse lookup</h2>
+<div class="doc-description">
+<p>Map a MIME / content type back to its file extension(s) — the inverse of get_content_type.</p>
+</div>
+<dl>
+<dt><a href="../reference/guess_extension.html#content_types.guess_extension" class="doc-function doc-label doc-label-function">guess_extension()</a></dt>
+<dd>
+<p>Return the canonical file extension for a MIME / content type.</p>
+</dd>
+<dt><a href="../reference/guess_all_extensions.html#content_types.guess_all_extensions" class="doc-function doc-label doc-label-function">guess_all_extensions()</a></dt>
+<dd>
+<p>Return every known file extension for a MIME / content type, canonical first.</p>
 </dd>
 </dl>
 </section>

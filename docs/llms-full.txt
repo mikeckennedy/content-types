@@ -3,9 +3,9 @@ This is the API documentation for the content_types library.
 ----------------------------------------------------------------------
 
 
-## Lookup
+## Forward lookup
 
-The one entry point — map a filename, bare extension, Path, or URL to its MIME / content type.
+Map a filename, bare extension, Path, or URL to its MIME / content type.
 
 
 get_content_type(filename_or_extension: str | pathlib.Path, treat_as_binary: bool = True, fallback: str | None = None) -> str
@@ -47,6 +47,91 @@ Example:
     'text/plain'
     >>> get_content_type("unknown.xyz", fallback='application/x-custom')
     'application/x-custom'
+    ```
+
+
+## Reverse lookup
+
+Map a MIME / content type back to its file extension(s) — the inverse of get_content_type.
+
+
+guess_extension(content_type: str, with_dot: bool = True) -> str | None
+
+Return the canonical file extension for a MIME / content type.
+
+This is the reverse of get_content_type(). The lookup is case-insensitive and any
+MIME parameters are ignored, so an HTTP `Content-Type` header value such as
+`text/html; charset=utf-8` resolves the same as `text/html`. Common non-canonical
+or legacy spellings are also accepted — `text/json` resolves like `application/json`
+and `image/jpg` like `image/jpeg`. When a content type maps to several extensions,
+the canonical one is returned (e.g. `image/jpeg` -> `.jpg`); use
+guess_all_extensions() to get every extension.
+
+The canonical choice follows this library's table and may differ from the standard
+library `mimetypes` module — for example, this returns `.html` for `text/html`.
+
+Args:
+    content_type: A MIME type to look up, optionally with parameters
+        (e.g. `application/pdf` or `text/html; charset=utf-8`).
+    with_dot: When `True` (default) the returned extension has a leading dot
+        (e.g. `.pdf`), which is what you concatenate onto a filename. When `False`
+        the bare extension is returned (e.g. `pdf`).
+
+Returns:
+    The canonical extension for the content type, or `None` if it is unknown
+    (including empty, whitespace-only, or parameter-only input).
+
+Raises:
+    TypeError: If `content_type` is `None`.
+
+Example:
+    ```python
+    >>> guess_extension("application/pdf")
+    '.pdf'
+    >>> guess_extension("image/jpeg")
+    '.jpg'
+    >>> guess_extension("text/html; charset=utf-8")
+    '.html'
+    >>> guess_extension("application/pdf", with_dot=False)
+    'pdf'
+    >>> guess_extension("application/x-does-not-exist") is None
+    True
+    ```
+
+guess_all_extensions(content_type: str, with_dot: bool = True) -> list[str]
+
+Return every known file extension for a MIME / content type, canonical first.
+
+Like guess_extension(), but returns the full list rather than just the canonical
+extension. The lookup is case-insensitive, MIME parameters are ignored, and common
+non-canonical spellings (e.g. `text/json`, `image/jpg`) resolve to their canonical
+type. The first element always equals guess_extension(content_type). The order
+follows this library's table (canonical first) and is not guaranteed to match the
+standard library `mimetypes` module.
+
+Args:
+    content_type: A MIME type to look up, optionally with parameters
+        (e.g. `image/jpeg` or `text/html; charset=utf-8`).
+    with_dot: When `True` (default) each extension has a leading dot (e.g. `.jpg`);
+        when `False` the bare extensions are returned (e.g. `jpg`).
+
+Returns:
+    A list of extensions, canonical first, or an empty list if the content type is
+    unknown (including empty, whitespace-only, or parameter-only input).
+
+Raises:
+    TypeError: If `content_type` is `None`.
+
+Example:
+    ```python
+    >>> guess_all_extensions("image/jpeg")
+    ['.jpg', '.jpeg', '.jpe']
+    >>> guess_all_extensions("text/html")
+    ['.html', '.htm']
+    >>> guess_all_extensions("application/pdf")
+    ['.pdf']
+    >>> guess_all_extensions("application/x-does-not-exist")
+    []
     ```
 
 

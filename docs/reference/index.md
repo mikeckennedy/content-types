@@ -1,17 +1,30 @@
 # API Reference
 
 
-content-types is intentionally tiny: a single lookup function, the mapping table behind it, and a handful of precomputed shortcut constants for the most common formats.
+content-types is intentionally tiny: lookup functions for both directions (filename -\> type, and type -\> extension), the mapping table behind them, and a handful of precomputed shortcut constants for the most common formats.
 
 
-## Lookup
+## Forward lookup
 
 
-The one entry point -- map a filename, bare extension, Path, or URL to its MIME / content type.
+Map a filename, bare extension, Path, or URL to its MIME / content type.
 
 
 [get_content_type()](get_content_type.md#content_types.get_content_type)  
 Return the most specific, commonly accepted MIME type for a filename or extension.
+
+
+## Reverse lookup
+
+
+Map a MIME / content type back to its file extension(s) -- the inverse of get_content_type.
+
+
+[guess_extension()](guess_extension.md#content_types.guess_extension)  
+Return the canonical file extension for a MIME / content type.
+
+[guess_all_extensions()](guess_all_extensions.md#content_types.guess_all_extensions)  
+Return every known file extension for a MIME / content type, canonical first.
 
 
 ## Mapping data

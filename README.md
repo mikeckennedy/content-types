@@ -101,7 +101,30 @@ print(content_types.get_content_type("notes.unknownext", treat_as_binary=False))
 # Or supply your own fallback for unknown extensions; it takes precedence
 # over treat_as_binary. Known extensions still resolve normally.
 print(content_types.get_content_type("notes.unknownext", fallback="application/x-custom"))  # "application/x-custom"
+
+# Reverse lookup: MIME type -> extension (the inverse of get_content_type)
+print(content_types.guess_extension("application/pdf"))   # ".pdf"
+print(content_types.guess_extension("image/jpeg"))        # ".jpg" (the canonical pick)
+print(content_types.guess_all_extensions("image/jpeg"))   # ['.jpg', '.jpeg', '.jpe']
+
+# Matching is case-insensitive, and parameters on a Content-Type header are ignored
+print(content_types.guess_extension("text/html; charset=utf-8"))  # ".html"
+
+# Common non-canonical / legacy spellings resolve to the canonical type too
+print(content_types.guess_extension("text/json"))  # ".json"  (canonical: application/json)
+print(content_types.guess_extension("image/jpg"))  # ".jpg"   (canonical: image/jpeg)
+
+# Pass with_dot=False for a bare extension; unknown types return None / []
+print(content_types.guess_extension("application/toml", with_dot=False))  # "toml"
+print(content_types.guess_extension("application/x-nope"))       # None
+print(content_types.guess_all_extensions("application/x-nope"))  # []
 ```
+
+The reverse lookup mirrors the standard library `mimetypes.guess_extension` /
+`guess_all_extensions`, but draws on this library's larger, more-correct table — so the
+canonical extension can differ (for example, it returns `.html` for `text/html`, not `.htm`).
+It is also forgiving of common non-canonical spellings: `text/json`, `image/jpg`,
+`application/javascript`, and `application/x-zip-compressed` all resolve to a sensible extension.
 
 ## CLI
 
@@ -225,7 +248,7 @@ for more details on how to get involved.
 `pytest` and `ruff` aren't declared dependencies — `uv` provides them on the fly:
 
 ```bash
-# Run the test suite (35 tests)
+# Run the test suite (58 tests)
 uv run --with pytest pytest
 
 # Lint and format (config in ruff.toml)

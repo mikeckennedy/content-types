@@ -102,6 +102,11 @@ print(content_types.get_content_type("notes.unknownext", treat_as_binary=False))
 # over treat_as_binary. Known extensions still resolve normally.
 print(content_types.get_content_type("notes.unknownext", fallback="application/x-custom"))  # "application/x-custom"
 
+# Pass fallback=None to get None back for unknowns (e.g. to branch on a miss).
+# Omitting fallback keeps the default 'application/octet-stream' — existing callers are unaffected.
+print(content_types.get_content_type("notes.unknownext", fallback=None))  # None
+print(content_types.get_content_type("photo.jpg", fallback=None))         # "image/jpeg" (known, unaffected)
+
 # Reverse lookup: MIME type -> extension (the inverse of get_content_type)
 print(content_types.guess_extension("application/pdf"))   # ".pdf"
 print(content_types.guess_extension("image/jpeg"))        # ".jpg" (the canonical pick)
@@ -248,7 +253,7 @@ for more details on how to get involved.
 `pytest` and `ruff` aren't declared dependencies — `uv` provides them on the fly:
 
 ```bash
-# Run the test suite (58 tests)
+# Run the test suite (67 tests)
 uv run --with pytest pytest
 
 # Lint and format (config in ruff.toml)

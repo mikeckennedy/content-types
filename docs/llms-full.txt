@@ -8,7 +8,7 @@ This is the API documentation for the content_types library.
 Map a filename, bare extension, Path, or URL to its MIME / content type.
 
 
-get_content_type(filename_or_extension: str | pathlib.Path, treat_as_binary: bool = True, fallback: str | None = None) -> str
+get_content_type(filename_or_extension: str | pathlib.Path, treat_as_binary: bool = True, fallback: str | None | content_types._Unset = <content_types._Unset object at 0x1078b3cb0>) -> str | None
 
 Return the most specific, commonly accepted MIME type for a filename or extension.
 
@@ -24,11 +24,14 @@ Args:
     treat_as_binary: Selects the default fallback when the extension is unknown and
         no explicit `fallback` is given. `True` (default) returns
         `application/octet-stream`; `False` returns `text/plain`.
-    fallback: An explicit MIME type to return for unknown extensions. When provided,
-        it takes precedence over `treat_as_binary`.
+    fallback: An explicit value to return for unknown extensions. When provided, it
+        takes precedence over `treat_as_binary`. Pass a MIME type string to override
+        the default, or `None` to get `None` back for unknowns (handy when you want to
+        branch on a miss rather than receive a placeholder type). When omitted entirely,
+        the `treat_as_binary` default is used — so existing callers are unaffected.
 
 Returns:
-    The mapped MIME type, or the chosen fallback when the extension is unknown.
+    For a known extension, its MIME type; otherwise the explicit `fallback` (which may be `None`) or the default.
 
 Raises:
     TypeError: If `filename_or_extension` is `None`.
@@ -47,6 +50,8 @@ Example:
     'text/plain'
     >>> get_content_type("unknown.xyz", fallback='application/x-custom')
     'application/x-custom'
+    >>> get_content_type("unknown.xyz", fallback=None) is None
+    True
     ```
 
 

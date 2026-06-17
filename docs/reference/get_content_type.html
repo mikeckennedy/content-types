@@ -413,13 +413,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="doc-usage-source">
 <p>Usage</p>
-<p><a href="https://github.com/mikeckennedy/content-types/blob/main/content_types/__init__.py#L617-L692" target="_blank" rel="noopener">Source</a></p>
+<p><a href="https://github.com/mikeckennedy/content-types/blob/main/content_types/__init__.py#L629-L709" target="_blank" rel="noopener">Source</a></p>
 </div>
 <div class="doc-signature doc-Kind.FUNCTION">
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sig-name">get_content_type</span>(
     <span class="va">filename_or_extension</span>,
     <span class="va">treat_as_binary</span><span class="op">=</span><span class="cn-bool">True</span>,
-    <span class="va">fallback</span><span class="op">=</span><span class="cn-none">None</span>,
+    <span class="va">fallback</span><span class="op">=</span><span class="va">_UNSET</span>,
 )</span></code></pre></div>
 </div>
 <div class="doc-text">
@@ -437,9 +437,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <dd>
 <p>Selects the default fallback when the extension is unknown and no explicit <code>fallback</code> is given. <code>True</code> (default) returns <code>application/octet-stream</code>; <code>False</code> returns <code>text/plain</code>.</p>
 </dd>
-<dt><code><span class="doc-parameter-name">fallback</span><span class="doc-parameter-annotation-sep">:</span> <span class="doc-parameter-annotation">Optional[str]</span> <span class="doc-parameter-default-sep op">=</span> <span class="doc-parameter-default">None</span></code></dt>
+<dt><code><span class="doc-parameter-name">fallback</span><span class="doc-parameter-annotation-sep">:</span> <span class="doc-parameter-annotation">Optional[str] | _Unset</span> <span class="doc-parameter-default-sep op">=</span> <span class="doc-parameter-default">_UNSET<br></span></code></dt>
 <dd>
-An explicit MIME type to return for unknown extensions. When provided, it takes precedence over <code>treat_as_binary</code>.
+An explicit value to return for unknown extensions. When provided, it takes precedence over <code>treat_as_binary</code>. Pass a MIME type string to override the default, or <code>None</code> to get <code>None</code> back for unknowns (handy when you want to branch on a miss rather than receive a placeholder type). When omitted entirely, the <code>treat_as_binary</code> default is used — so existing callers are unaffected.
 </dd>
 </dl>
 </div>
@@ -448,9 +448,9 @@ An explicit MIME type to return for unknown extensions. When provided, it takes 
 <h2 class="doc-returns">Returns</h2>
 <div class="doc-definition-items">
 <dl>
-<dt><code> <span class="doc-parameter-annotation">str</span></code></dt>
+<dt><code> <span class="doc-parameter-annotation">Optional[str]</span></code></dt>
 <dd>
-The mapped MIME type, or the chosen fallback when the extension is unknown.
+For a known extension, its MIME type; otherwise the explicit <code>fallback</code> (which may be <code>None</code>) or the default.
 </dd>
 </dl>
 </div>
@@ -479,7 +479,9 @@ If <code>filename_or_extension</code> is <code>None</code>.
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">"unknown.xyz"</span>, treat_as_binary<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">'text/plain'</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">"unknown.xyz"</span>, fallback<span class="op">=</span><span class="st">'application/x-custom'</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">'application/x-custom'</span></span></code></pre></div>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">'application/x-custom'</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> get_content_type(<span class="st">"unknown.xyz"</span>, fallback<span class="op">=</span><span class="va">None</span>) <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="va">True</span></span></code></pre></div>
 
 
 </section>

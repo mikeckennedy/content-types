@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `guess_all_extensions(content_type, with_dot=True)` — returns every known extension for a MIME type, canonical first (e.g. `image/jpeg` → `['.jpg', '.jpeg', '.jpe']`); unknown types return `[]`. Same case-insensitivity, parameter-stripping, and alias handling as `guess_extension()`. (#9)
 - Files: `content_types/__init__.py`, `tests/test_content_types.py`, `README.md`, `great-docs.yml`, `docs/`
 
+### Changed
+- `get_content_type()` now distinguishes an omitted `fallback` from an explicit `fallback=None`. Passing `fallback=None` returns `None` for unknown extensions (handy when you want to branch on a miss rather than receive a placeholder type), while omitting `fallback` is unchanged and still returns `application/octet-stream` (or `text/plain` with `treat_as_binary=False`) — so existing callers are unaffected. The default keyword switched from `None` to a private sentinel to tell the two cases apart, and the return type widened to `Optional[str]`. (#8)
+- Files: `content_types/__init__.py`, `tests/test_content_types.py`, `README.md`
+
 ---
 
 ## [0.4.0] - 2026-06-10

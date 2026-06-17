@@ -115,6 +115,24 @@ class TestGetContentType:
         assert content_types.get_content_type('file.xyz', treat_as_binary=True, fallback='x/y') == 'x/y'
         assert content_types.get_content_type('file.xyz', treat_as_binary=False, fallback='x/y') == 'x/y'
 
+    def test_fallback_none_returns_none(self):
+        """Integration test: an explicit fallback=None returns None for unknown extensions (issue #8)."""
+        assert content_types.get_content_type('file.xyz123', fallback=None) is None
+        assert content_types.get_content_type('README', fallback=None) is None
+        # An explicit None overrides treat_as_binary, just like a string fallback does.
+        assert content_types.get_content_type('file.xyz', treat_as_binary=False, fallback=None) is None
+
+    def test_fallback_none_does_not_affect_known_extensions(self):
+        """Integration test: fallback=None only applies to misses; known extensions still resolve."""
+        assert content_types.get_content_type('photo.jpg', fallback=None) == 'image/jpeg'
+        assert content_types.get_content_type('doc.pdf', fallback=None) == 'application/pdf'
+
+    def test_omitted_fallback_preserves_default(self):
+        """Integration test: omitting fallback keeps the historical default (not None)."""
+        # The sentinel default must be distinct from an explicit None.
+        assert content_types.get_content_type('file.xyz123') == 'application/octet-stream'
+        assert content_types.get_content_type('file.xyz123', treat_as_binary=False) == 'text/plain'
+
     def test_none_input_raises_exception(self):
         """Negative test: None input raises exception."""
         with pytest.raises(Exception, match='filename cannot be None'):

@@ -10,7 +10,7 @@ Usage
 get_content_type(
     filename_or_extension,
     treat_as_binary=True,
-    fallback=None,
+    fallback=_UNSET,
 )
 ```
 
@@ -27,15 +27,15 @@ A filename, path, URL, or bare extension to look up. Accepts a `str` or a `pathl
 `treat_as_binary: bool = ``True`  
 Selects the default fallback when the extension is unknown and no explicit `fallback` is given. `True` (default) returns `application/octet-stream`; `False` returns `text/plain`.
 
-`fallback: Optional[str] = None`  
-An explicit MIME type to return for unknown extensions. When provided, it takes precedence over `treat_as_binary`.
+`fallback: Optional[str] | _Unset = _UNSET`    
+An explicit value to return for unknown extensions. When provided, it takes precedence over `treat_as_binary`. Pass a MIME type string to override the default, or `None` to get `None` back for unknowns (handy when you want to branch on a miss rather than receive a placeholder type). When omitted entirely, the `treat_as_binary` default is used -- so existing callers are unaffected.
 
 
 ## Returns
 
 
-`str`  
-The mapped MIME type, or the chosen fallback when the extension is unknown.
+`Optional[str]`  
+For a known extension, its MIME type; otherwise the explicit `fallback` (which may be `None`) or the default.
 
 
 ## Raises
@@ -60,4 +60,6 @@ If `filename_or_extension` is `None`.
 'text/plain'
 >>> get_content_type("unknown.xyz", fallback='application/x-custom')
 'application/x-custom'
+>>> get_content_type("unknown.xyz", fallback=None) is None
+True
 ```

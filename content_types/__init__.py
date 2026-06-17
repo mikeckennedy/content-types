@@ -614,11 +614,23 @@ def guess_all_extensions(content_type: str, with_dot: bool = True) -> list[str]:
     return [f'.{ext}' for ext in extensions] if with_dot else list(extensions)
 
 
+class _Unset:
+    """Marker type for an omitted ``fallback`` argument.
+
+    Using a private sentinel as the default lets ``get_content_type()`` tell the
+    difference between ``fallback`` being left off (use the ``treat_as_binary``
+    default) and an explicit ``fallback=None`` (return ``None`` for unknowns).
+    """
+
+
+_UNSET = _Unset()
+
+
 def get_content_type(
     filename_or_extension: str | Path,
     treat_as_binary: bool = True,
-    fallback: Optional[str] = None,
-) -> str:
+    fallback: Optional[str] | _Unset = _UNSET,
+) -> Optional[str]:
     """Return the most specific, commonly accepted MIME type for a filename or extension.
 
     The lookup is based purely on the extension — the file's bytes are never read. A
@@ -633,11 +645,14 @@ def get_content_type(
         treat_as_binary: Selects the default fallback when the extension is unknown and
             no explicit `fallback` is given. `True` (default) returns
             `application/octet-stream`; `False` returns `text/plain`.
-        fallback: An explicit MIME type to return for unknown extensions. When provided,
-            it takes precedence over `treat_as_binary`.
+        fallback: An explicit value to return for unknown extensions. When provided, it
+            takes precedence over `treat_as_binary`. Pass a MIME type string to override
+            the default, or `None` to get `None` back for unknowns (handy when you want to
+            branch on a miss rather than receive a placeholder type). When omitted entirely,
+            the `treat_as_binary` default is used — so existing callers are unaffected.
 
     Returns:
-        The mapped MIME type, or the chosen fallback when the extension is unknown.
+        For a known extension, its MIME type; otherwise the explicit `fallback` (which may be `None`) or the default.
 
     Raises:
         TypeError: If `filename_or_extension` is `None`.
@@ -656,6 +671,8 @@ def get_content_type(
         'text/plain'
         >>> get_content_type("unknown.xyz", fallback='application/x-custom')
         'application/x-custom'
+        >>> get_content_type("unknown.xyz", fallback=None) is None
+        True
         ```
     """
 
@@ -686,7 +703,7 @@ def get_content_type(
     if ext in EXTENSION_TO_CONTENT_TYPE:
         return EXTENSION_TO_CONTENT_TYPE[ext]
 
-    if fallback is not None:
+    if not isinstance(fallback, _Unset):
         return fallback
 
     return 'application/octet-stream' if treat_as_binary else 'text/plain'

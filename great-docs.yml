@@ -51,6 +51,11 @@ seo:
 # Jupyter kernel for any executable code cells (none today, but set for safety).
 jupyter: python3
 
+skill:
+  # Hand-written prose injected into the generated skill body — things the API
+  # signatures can't convey. Adapted from the content-types_reference.md agent guide.
+  extra_body: skill_extra_body.md
+
 authors:
   - name: Michael Kennedy
     role: Author

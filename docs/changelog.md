@@ -3,6 +3,27 @@
 This changelog is generated automatically from [GitHub Releases](https://github.com/mikeckennedy/content-types/releases).
 
 
+# v0.5.7
+
+*2026-06-17* · [GitHub](https://github.com/mikeckennedy/content-types/releases/tag/v0.5.7)
+
+
+## \[0.5.7\] - 2026-06-17
+
+
+### Added
+
+- `guess_extension(content_type, with_dot=True)` -- reverse lookup from a MIME type to its canonical file extension (e.g. `application/pdf` → `.pdf`), the inverse of [get_content_type()](reference/get_content_type.html#content_types.get_content_type). Case-insensitive, and MIME parameters on a `Content-Type` header are ignored (`text/html; charset=utf-8` → `.html`). Common non-canonical / legacy spellings also resolve (e.g. `text/json` → `.json`, `image/jpg` → `.jpg`, `application/x-zip-compressed` → `.zip`). Unknown types return `None`. ([\#9](https://github.com/mikeckennedy/content-types/issues/9))
+- `guess_all_extensions(content_type, with_dot=True)` -- returns every known extension for a MIME type, canonical first (e.g. `image/jpeg` → `['.jpg', '.jpeg', '.jpe']`); unknown types return `[]`. Same case-insensitivity, parameter-stripping, and alias handling as [guess_extension()](reference/guess_extension.html#content_types.guess_extension). ([\#9](https://github.com/mikeckennedy/content-types/issues/9))
+- Files: `content_types/__init__.py`, `tests/test_content_types.py`, `README.md`, `great-docs.yml`, `docs/`
+
+
+### Changed
+
+- [get_content_type()](reference/get_content_type.html#content_types.get_content_type) now distinguishes an omitted `fallback` from an explicit `fallback=None`. Passing `fallback=None` returns `None` for unknown extensions (handy when you want to branch on a miss rather than receive a placeholder type), while omitting `fallback` is unchanged and still returns `application/octet-stream` (or `text/plain` with `treat_as_binary=False`) -- so existing callers are unaffected. The default keyword switched from `None` to a private sentinel to tell the two cases apart, and the return type widened to `Optional[str]`. ([\#8](https://github.com/mikeckennedy/content-types/issues/8))
+- Files: `content_types/__init__.py`, `tests/test_content_types.py`, `README.md`
+
+
 # v0.4.0
 
 *2026-06-11* · [GitHub](https://github.com/mikeckennedy/content-types/releases/tag/v0.4.0)

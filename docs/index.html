@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-2de4c26ee36d61e771850f62d491bbdc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b44a80f981ffe4e8ffda970bb00820f2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -117,6 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="theme-init.js"></script>
 
 
+  <link rel="canonical" href="https://mkennedy.codes/docs/content-types/">
   <meta name="description" content="A library to map file extensions to content types and vice versa.">
   <script type="application/ld+json">
 {
@@ -152,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">content-types <span class="version-badge" title="Released 2026-06-11">v0.4.0</span></span>
+    <span class="navbar-title">content-types <span class="version-badge" title="Released 2026-06-17">v0.5.7</span></span>
     </a>
   </div>
             <div id="quarto-search" class=""></div>
@@ -233,7 +234,7 @@ section.level2:first-of-type > h2:first-child,
 </section>
 <section id="meta" class="level3">
 <h3 class="anchored" data-anchor-id="meta">Meta</h3>
-<p><strong>Requires:</strong> Python <code>&gt;=3.10</code><br> <strong>Provides-Extra:</strong> <code>dev</code></p>
+<p><strong>Requires:</strong> Python <code>&gt;=3.10</code><br> <strong>Provides-Extra:</strong> <code>dev</code><br> <a href="package-info.html">Package Info</a></p>
 </section>
 </div></div><section id="content-types" class="level1">
 <h1>content-types 🗃️🔎</h1>
@@ -276,22 +277,22 @@ section.level2:first-of-type > h2:first-child,
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> content_types</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Forward lookup: filename -&gt; MIME type</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Forward lookup: filename -&gt; MIME type</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>the_type <span class="op">=</span> content_types.get_content_type(<span class="st">"example.jpg"</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(the_type)  <span class="co"># "image/jpeg"</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Works with any supported extension</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Works with any supported extension</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"data.parquet"</span>))  <span class="co"># "application/vnd.apache.parquet"</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notebook.ipynb"</span>))  <span class="co"># "application/x-ipynb+json"</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"photo.cr2"</span>))  <span class="co"># "image/x-canon-cr2"</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"model.blend"</span>))  <span class="co"># "application/x-blender"</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"contract.sol"</span>))  <span class="co"># "text/x-solidity"</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">## For very common files, you have shortcuts:</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># For very common files, you have shortcuts:</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Content-Type for webp is </span><span class="sc">{</span>content_types<span class="sc">.</span>webp<span class="sc">}</span><span class="ss">.'</span>) </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">## Content-Type for webp is image/webp.</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Content-Type for webp is image/webp.</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">## Data science shortcuts</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Data science shortcuts</span></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.parquet)  <span class="co"># "application/vnd.apache.parquet"</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.ipynb)    <span class="co"># "application/x-ipynb+json"</span></span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.pkl)      <span class="co"># "application/octet-stream"</span></span>
@@ -299,42 +300,42 @@ section.level2:first-of-type > h2:first-child,
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.toml)     <span class="co"># "application/toml"</span></span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.sqlite)   <span class="co"># "application/vnd.sqlite3"</span></span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">## Works with Path objects too</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Works with Path objects too</span></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> Path(<span class="st">"document.pdf"</span>)</span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(path))  <span class="co"># "application/pdf"</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">## URLs work too — query strings and fragments are stripped before lookup</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># URLs work too — query strings and fragments are stripped before lookup</span></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cdn.example.com/song.mp3?cache_id=678c2a"</span></span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(url))  <span class="co"># "audio/mpeg"</span></span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">## Unknown extensions fall back to 'application/octet-stream' by default;</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">## pass treat_as_binary=False to fall back to 'text/plain' instead.</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Unknown extensions fall back to 'application/octet-stream' by default;</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># pass treat_as_binary=False to fall back to 'text/plain' instead.</span></span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notes.unknownext"</span>))  <span class="co"># "application/octet-stream"</span></span>
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notes.unknownext"</span>, treat_as_binary<span class="op">=</span><span class="va">False</span>))  <span class="co"># "text/plain"</span></span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co">## Or supply your own fallback for unknown extensions; it takes precedence</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">## over treat_as_binary. Known extensions still resolve normally.</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Or supply your own fallback for unknown extensions; it takes precedence</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co"># over treat_as_binary. Known extensions still resolve normally.</span></span>
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notes.unknownext"</span>, fallback<span class="op">=</span><span class="st">"application/x-custom"</span>))  <span class="co"># "application/x-custom"</span></span>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">## Pass fallback=None to get None back for unknowns (e.g. to branch on a miss).</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">## Omitting fallback keeps the default 'application/octet-stream' — existing callers are unaffected.</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass fallback=None to get None back for unknowns (e.g. to branch on a miss).</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Omitting fallback keeps the default 'application/octet-stream' — existing callers are unaffected.</span></span>
 <span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"notes.unknownext"</span>, fallback<span class="op">=</span><span class="va">None</span>))  <span class="co"># None</span></span>
 <span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">"photo.jpg"</span>, fallback<span class="op">=</span><span class="va">None</span>))         <span class="co"># "image/jpeg" (known, unaffected)</span></span>
 <span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">## Reverse lookup: MIME type -&gt; extension (the inverse of get_content_type)</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Reverse lookup: MIME type -&gt; extension (the inverse of get_content_type)</span></span>
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">"application/pdf"</span>))   <span class="co"># ".pdf"</span></span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">"image/jpeg"</span>))        <span class="co"># ".jpg" (the canonical pick)</span></span>
 <span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_all_extensions(<span class="st">"image/jpeg"</span>))   <span class="co"># ['.jpg', '.jpeg', '.jpe']</span></span>
 <span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co">## Matching is case-insensitive, and parameters on a Content-Type header are ignored</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Matching is case-insensitive, and parameters on a Content-Type header are ignored</span></span>
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">"text/html; charset=utf-8"</span>))  <span class="co"># ".html"</span></span>
 <span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co">## Common non-canonical / legacy spellings resolve to the canonical type too</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Common non-canonical / legacy spellings resolve to the canonical type too</span></span>
 <span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">"text/json"</span>))  <span class="co"># ".json"  (canonical: application/json)</span></span>
 <span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">"image/jpg"</span>))  <span class="co"># ".jpg"   (canonical: image/jpeg)</span></span>
 <span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co">## Pass with_dot=False for a bare extension; unknown types return None / []</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass with_dot=False for a bare extension; unknown types return None / []</span></span>
 <span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">"application/toml"</span>, with_dot<span class="op">=</span><span class="va">False</span>))  <span class="co"># "toml"</span></span>
 <span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">"application/x-nope"</span>))       <span class="co"># None</span></span>
 <span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_all_extensions(<span class="st">"application/x-nope"</span>))  <span class="co"># []</span></span></code></pre></div>
@@ -346,16 +347,16 @@ section.level2:first-of-type > h2:first-child,
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install content-types</span></code></pre></div>
 <p>Now it will be available machine-wide.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> example.jpg</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Outputs: image/jpeg</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: image/jpeg</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> data.parquet</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">## Outputs: application/vnd.apache.parquet</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: application/vnd.apache.parquet</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> notebook.ipynb</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Outputs: application/x-ipynb+json</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: application/x-ipynb+json</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> photo.cr2</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Outputs: image/x-canon-cr2</span></span></code></pre></div>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: image/x-canon-cr2</span></span></code></pre></div>
 </section>
 <section id="more-correct-than-pythons-mimetypes" class="level2">
 <h2 class="anchored" data-anchor-id="more-correct-than-pythons-mimetypes">More correct than Python’s <code>mimetypes</code></h2>
@@ -400,23 +401,23 @@ section.level2:first-of-type > h2:first-child,
 <section id="development" class="level3">
 <h3 class="anchored" data-anchor-id="development">Development</h3>
 <p><code>pytest</code> and <code>ruff</code> aren’t declared dependencies — <code>uv</code> provides them on the fly:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Run the test suite (67 tests)</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the test suite (67 tests)</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> pytest pytest</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Lint and format (config in ruff.toml)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lint and format (config in ruff.toml)</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uvx</span> ruff check .</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">uvx</span> ruff format .</span></code></pre></div>
 </section>
 <section id="building-the-docs" class="level3">
 <h3 class="anchored" data-anchor-id="building-the-docs">Building the docs</h3>
 <p>The docs site is built with <a href="https://github.com/posit-dev/great-docs">Great Docs</a> and published at <a href="https://mkennedy.codes/docs/content-types/">mkennedy.codes/docs/content-types</a>. Great Docs imports the package for API introspection, so the toolchain lives in the <code>dev</code> extra and needs an editable install:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Install the docs toolchain into your virtualenv</span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the docs toolchain into your virtualenv</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> pip install <span class="at">-e</span> <span class="st">".[dev]"</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Build the site (mirrors great-docs/_site/ into the committed docs/ folder)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the site (mirrors great-docs/_site/ into the committed docs/ folder)</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/build_docs.py</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Preview exactly as hosted, under the /docs/content-types subpath</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview exactly as hosted, under the /docs/content-types subpath</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/serve_docs.py   <span class="co"># -&gt; http://127.0.0.1:8099/docs/content-types/</span></span></code></pre></div>
 
 
@@ -783,9 +784,9 @@ section.level2:first-of-type > h2:first-child,
 <script src="details.js"></script>
 <script src="mermaid-renderer.js"></script>
 <script src="tooltips.js"></script>
-<script>(function(){var s=document.createElement('script');s.src=(document.querySelector('link[rel="canonical"]')||{href:location.href}).href.replace(/\/[^\/]*$/,'').replace(/\/[^\/]*$/,'')+'/color-swatch.js';var h=document.currentScript;h.parentNode.insertBefore(s,h.nextSibling);})()</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'color-swatch.js';document.body.appendChild(s);})();</script>
 <script src="responsive-tables.js"></script>
-<script src="video-embed.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
 <script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
 <script src="navbar-widgets.js"></script>
 

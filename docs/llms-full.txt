@@ -8,7 +8,7 @@ This is the API documentation for the content_types library.
 Map a filename, bare extension, Path, or URL to its MIME / content type.
 
 
-get_content_type(filename_or_extension: str | pathlib.Path, treat_as_binary: bool = True, fallback: str | None | content_types._Unset = <content_types._Unset object at 0x1078b3cb0>) -> str | None
+get_content_type(filename_or_extension: str | pathlib.Path, treat_as_binary: bool = True, fallback: str | None | content_types._Unset = <content_types._Unset object at 0x106f2acf0>) -> str | None
 
 Return the most specific, commonly accepted MIME type for a filename or extension.
 

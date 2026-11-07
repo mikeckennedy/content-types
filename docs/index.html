@@ -247,24 +247,31 @@ section.level2:first-of-type > h2:first-child,
 </div></div><section id="content-types" class="level1">
 <h1>content-types 🗃️🔎</h1>
 <p><a href="https://pypi.org/project/content-types/"><img src="https://img.shields.io/pypi/v/content-types.svg" class="img-fluid" alt="PyPI version"></a> <a href="https://pypi.org/project/content-types/"><img src="https://img.shields.io/pypi/pyversions/content-types.svg" class="img-fluid" alt="Python versions"></a> <a href="https://github.com/mikeckennedy/content-types/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/content-types.svg" class="img-fluid" alt="License: MIT"></a> <a href="https://mkennedy.codes/docs/content-types/"><img src="https://img.shields.io/badge/docs-mkennedy.codes-2188ff.svg" class="img-fluid" alt="Docs"></a></p>
-<p>A comprehensive Python library to map file extensions to MIME types with <strong>360+ supported formats</strong>. It also provides a CLI for quick lookups right from your terminal. If no known mapping is found, the tool returns <code>application/octet-stream</code>.</p>
-<p>Unlike other libraries, this one does <strong>not</strong> try to access the file or parse the bytes of the file or stream. It just looks at the extension which is valuable when you don’t have access to the file directly. For example, you know the filename but it is stored in s3 and you don’t want to download it just to fully inspect the file.</p>
+<p>Someone hands you a sealed envelope and asks what is inside. You are not allowed to open it. All you get is the label on the front.</p>
+<p>That is the situation every time you need a <code>Content-Type</code> for a file you cannot, or would rather not, read. The object is in S3 and fetching it just to peek at the header bytes is slow and costs money. The URL has not been downloaded yet. The upload has a name but the bytes are still streaming in. In every one of those cases the label is right there, and the label is usually enough.</p>
+<p>content-types reads the label. Give it a filename, a path, a bare extension, a <code>pathlib.Path</code>, or a URL, and it returns the MIME type from a table of <strong>360+ extensions</strong>. It never opens, reads, or sniffs the file. It also runs the other way, turning a content type or a raw <code>Content-Type</code> header back into a file extension, and it ships a tiny command line tool for the moments when the question is in your terminal rather than your code.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> content_types</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'invoice-2026-03.pdf'</span>)  <span class="co"># 'application/pdf'</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'s3://bucket/photos/IMG_4021.CR2'</span>)  <span class="co"># 'image/x-canon-cr2'</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>content_types.guess_extension(<span class="st">'text/html; charset=utf-8'</span>)  <span class="co"># '.html'</span></span></code></pre></div>
+<p>Zero dependencies, pure Python, Python 3.10 and up.</p>
 <section id="documentation" class="level2">
 <h2 class="anchored" data-anchor-id="documentation">📚 Documentation</h2>
-<p>Full documentation is hosted at <strong><a href="https://mkennedy.codes/docs/content-types/">mkennedy.codes/docs/content-types</a></strong>. The quick examples below cover the essentials; the docs go deeper:</p>
+<p>Full documentation is hosted at <strong><a href="https://mkennedy.codes/docs/content-types/">mkennedy.codes/docs/content-types</a></strong>. The quick tour below covers the essentials; the docs go deeper:</p>
 <ul>
 <li><a href="https://mkennedy.codes/docs/content-types/user-guide/getting-started.html">Getting started</a>: install, first lookup, and every input shape the lookup accepts.</li>
 <li><a href="https://mkennedy.codes/docs/content-types/user-guide/unknown-extensions.html">Unknown extensions</a>: how to tell a miss from a real <code>application/octet-stream</code>, and the three ways to handle one.</li>
-<li><a href="https://mkennedy.codes/docs/content-types/user-guide/reverse-lookup.html">Reverse lookup</a>: from a content type or <code>Content-Type</code> header back to an extension.</li>
+<li><a href="https://mkennedy.codes/docs/content-types/user-guide/reverse-lookup.html">Reverse lookup</a>: from a content type or <code>Content-Type</code> header back to an extension, and why that direction is the hard one.</li>
 <li><a href="https://mkennedy.codes/docs/content-types/user-guide/cli.html">Command line</a>: the <code>content-types</code> script, its flags, and exit codes.</li>
-<li><a href="https://mkennedy.codes/docs/content-types/user-guide/compared-to-mimetypes.html">Compared to mimetypes</a>: how the table differs from the standard library and why.</li>
+<li><a href="https://mkennedy.codes/docs/content-types/user-guide/compared-to-mimetypes.html">Compared to mimetypes</a>: why the standard library was not enough and how the table differs.</li>
 <li><a href="https://mkennedy.codes/docs/content-types/user-guide/faq.html">FAQ</a> and the searchable <a href="https://mkennedy.codes/docs/content-types/reference/">API reference</a>.</li>
 </ul>
 <p>Coding agents can read <a href="https://mkennedy.codes/docs/content-types/llms-full.txt">llms-full.txt</a> or install the <a href="https://mkennedy.codes/docs/content-types/skills.html">skill</a>.</p>
 </section>
-<section id="extensive-format-support" class="level2">
-<h2 class="anchored" data-anchor-id="extensive-format-support">Extensive Format Support</h2>
-<p>With <strong>360+ file extensions</strong> mapped, content-types covers:</p>
+<section id="what-is-in-the-table" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-in-the-table">What is in the table</h2>
+<p>The 360+ extensions cover far more than the usual web suspects:</p>
 <ul>
 <li>🎨 <strong>Images</strong> - Standard formats plus RAW camera files (Canon, Nikon, Sony, Adobe DNG, etc.)</li>
 <li>🎵 <strong>Audio</strong> - MP3, FLAC, AAC, MIDI, WMA, ALAC, DSD, and more</li>
@@ -282,109 +289,116 @@ section.level2:first-of-type > h2:first-child,
 <li>🗄️ <strong>Databases</strong> - SQLite, Access, MySQL files</li>
 <li>📝 <strong>Documentation</strong> - Markdown, AsciiDoc, Org-mode, BibTeX</li>
 </ul>
-<p>…and much more!</p>
+<p>…and much more. The <a href="https://mkennedy.codes/docs/content-types/reference/EXTENSION_TO_CONTENT_TYPE.html">reference page</a> lists every entry.</p>
 <p>Why not just use Python’s built-in <code>mimetypes</code>? Or the excellent <code>python-magic</code> package? <a href="#more-correct-than-pythons-mimetypes">See below</a>.</p>
 </section>
 <section id="installation" class="level2">
 <h2 class="anchored" data-anchor-id="installation">Installation</h2>
-<p>Requires Python 3.10 or later. There are no runtime dependencies.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add content-types</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install content-types</span></code></pre></div>
+<p>Requires Python 3.10 or later. There are no runtime dependencies, so it adds nothing to your lock file but itself.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add content-types</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install content-types</span></code></pre></div>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> content_types</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Forward lookup: filename -&gt; MIME type</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>the_type <span class="op">=</span> content_types.get_content_type(<span class="st">'example.jpg'</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(the_type)  <span class="co"># 'image/jpeg'</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Works with any supported extension</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'data.parquet'</span>))  <span class="co"># 'application/vnd.apache.parquet'</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notebook.ipynb'</span>))  <span class="co"># 'application/x-ipynb+json'</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'photo.cr2'</span>))  <span class="co"># 'image/x-canon-cr2'</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'model.blend'</span>))  <span class="co"># 'application/x-blender'</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'contract.sol'</span>))  <span class="co"># 'text/x-solidity'</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># For very common files, you have shortcuts:</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Content-Type for webp is </span><span class="sc">{</span>content_types<span class="sc">.</span>webp<span class="sc">}</span><span class="ss">.'</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Content-Type for webp is image/webp.</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Data science shortcuts</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.parquet)  <span class="co"># 'application/vnd.apache.parquet'</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.ipynb)  <span class="co"># 'application/x-ipynb+json'</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.pkl)  <span class="co"># 'application/octet-stream'</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.yaml)  <span class="co"># 'application/yaml'</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.toml)  <span class="co"># 'application/toml'</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.sqlite)  <span class="co"># 'application/vnd.sqlite3'</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Works with Path objects too</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> Path(<span class="st">'document.pdf'</span>)</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(path))  <span class="co"># 'application/pdf'</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># URLs work too: query strings and fragments are stripped before lookup</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">'https://cdn.example.com/song.mp3?cache_id=678c2a'</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(url))  <span class="co"># 'audio/mpeg'</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Unknown extensions fall back to 'application/octet-stream' by default;</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># pass treat_as_binary=False to fall back to 'text/plain' instead.</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notes.unknownext'</span>))  <span class="co"># 'application/octet-stream'</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notes.unknownext'</span>, treat_as_binary<span class="op">=</span><span class="va">False</span>))  <span class="co"># 'text/plain'</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Or supply your own fallback for unknown extensions; it takes precedence</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co"># over treat_as_binary. Known extensions still resolve normally.</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notes.unknownext'</span>, fallback<span class="op">=</span><span class="st">'application/x-custom'</span>))  <span class="co"># 'application/x-custom'</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass fallback=None to get None back for unknowns (e.g. to branch on a miss).</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Omitting fallback keeps the default 'application/octet-stream', so existing callers are unaffected.</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notes.unknownext'</span>, fallback<span class="op">=</span><span class="va">None</span>))  <span class="co"># None</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'photo.jpg'</span>, fallback<span class="op">=</span><span class="va">None</span>))  <span class="co"># 'image/jpeg' (known, unaffected)</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Reverse lookup: MIME type -&gt; extension (the inverse of get_content_type)</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'application/pdf'</span>))  <span class="co"># '.pdf'</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'image/jpeg'</span>))  <span class="co"># '.jpg' (the canonical pick)</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_all_extensions(<span class="st">'image/jpeg'</span>))  <span class="co"># ['.jpg', '.jpeg', '.jpe']</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Matching is case-insensitive, and parameters on a Content-Type header are ignored</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'text/html; charset=utf-8'</span>))  <span class="co"># '.html'</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Common non-canonical / legacy spellings resolve to the canonical type too</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'text/json'</span>))  <span class="co"># '.json'  (canonical: application/json)</span></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'image/jpg'</span>))  <span class="co"># '.jpg'   (canonical: image/jpeg)</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass with_dot=False for a bare extension; unknown types return None / []</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'application/toml'</span>, with_dot<span class="op">=</span><span class="va">False</span>))  <span class="co"># 'toml'</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'application/x-nope'</span>))  <span class="co"># None</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_all_extensions(<span class="st">'application/x-nope'</span>))  <span class="co"># []</span></span></code></pre></div>
-<p>The reverse lookup mirrors the standard library <code>mimetypes.guess_extension</code> / <a href="reference/guess_all_extensions.html#content_types.guess_all_extensions" class="gdls-link gdls-code">guess_all_extensions</a>, but draws on this library’s larger, more-correct table, so the canonical extension can differ (for example, it returns <code>.html</code> for <code>text/html</code>, not <code>.htm</code>). It is also forgiving of common non-canonical spellings: <code>text/json</code>, <code>image/jpg</code>, <code>application/javascript</code>, and <code>application/x-zip-compressed</code> all resolve to a sensible extension. See <a href="https://mkennedy.codes/docs/content-types/user-guide/reverse-lookup.html">Reverse lookup</a> for the details.</p>
-<p>The type checker sees <code>str</code> for the default call and for a string <code>fallback</code>; only an explicit <code>fallback=None</code> widens the return type to <code>Optional[str]</code>. For the full story on misses, see <a href="https://mkennedy.codes/docs/content-types/user-guide/unknown-extensions.html">Unknown extensions</a>.</p>
+<p>The forward lookup is one function. It is not fussy about what you hand it.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> content_types</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Forward lookup: filename -&gt; MIME type</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>the_type <span class="op">=</span> content_types.get_content_type(<span class="st">'example.jpg'</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(the_type)  <span class="co"># 'image/jpeg'</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Works with any supported extension</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'data.parquet'</span>))  <span class="co"># 'application/vnd.apache.parquet'</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notebook.ipynb'</span>))  <span class="co"># 'application/x-ipynb+json'</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'photo.cr2'</span>))  <span class="co"># 'image/x-canon-cr2'</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'model.blend'</span>))  <span class="co"># 'application/x-blender'</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'contract.sol'</span>))  <span class="co"># 'text/x-solidity'</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Case does not matter, and a bare extension works with or without the dot</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'PHOTO.JPG'</span>))  <span class="co"># 'image/jpeg'</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'.webp'</span>))  <span class="co"># 'image/webp'</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'webp'</span>))  <span class="co"># 'image/webp'</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Path objects work</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> Path(<span class="st">'document.pdf'</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(path))  <span class="co"># 'application/pdf'</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># URLs work: query strings and fragments are stripped before the lookup</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">'https://cdn.example.com/song.mp3?cache_id=678c2a'</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(url))  <span class="co"># 'audio/mpeg'</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># For very common files there are shortcuts, plain strings ready for a header</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Content-Type for webp is </span><span class="sc">{</span>content_types<span class="sc">.</span>webp<span class="sc">}</span><span class="ss">.'</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Content-Type for webp is image/webp.</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.parquet)  <span class="co"># 'application/vnd.apache.parquet'</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.ipynb)  <span class="co"># 'application/x-ipynb+json'</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.yaml)  <span class="co"># 'application/yaml'</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.toml)  <span class="co"># 'application/toml'</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.sqlite)  <span class="co"># 'application/vnd.sqlite3'</span></span></code></pre></div>
+<section id="when-the-label-is-blank" class="level3">
+<h3 class="anchored" data-anchor-id="when-the-label-is-blank">When the label is blank</h3>
+<p>An unknown extension does not raise. By default it returns <code>application/octet-stream</code>, the universal “it is bytes” type, which is the right thing to put in a header but hides the fact that the lookup missed. You get to choose how loud a miss should be.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The default shrug</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notes.unknownext'</span>))  <span class="co"># 'application/octet-stream'</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrug towards text instead</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notes.unknownext'</span>, treat_as_binary<span class="op">=</span><span class="va">False</span>))  <span class="co"># 'text/plain'</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Your own placeholder; it outranks treat_as_binary and known extensions are unaffected</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notes.unknownext'</span>, fallback<span class="op">=</span><span class="st">'application/x-custom'</span>))  <span class="co"># 'application/x-custom'</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Refuse to shrug: get None back and branch on it</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'notes.unknownext'</span>, fallback<span class="op">=</span><span class="va">None</span>))  <span class="co"># None</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.get_content_type(<span class="st">'photo.jpg'</span>, fallback<span class="op">=</span><span class="va">None</span>))  <span class="co"># 'image/jpeg' (known, unaffected)</span></span></code></pre></div>
+<p>Omitting <code>fallback</code> and passing <code>fallback=None</code> are different on purpose, so existing callers never see a <code>None</code> they did not ask for. Your type checker agrees: the plain call is <code>str</code>, and only <code>fallback=None</code> widens it to <code>Optional[str]</code>. The full story, including how to tell a real <code>.pkl</code> from a miss, is in <a href="https://mkennedy.codes/docs/content-types/user-guide/unknown-extensions.html">Unknown extensions</a>.</p>
+</section>
+<section id="running-the-envelope-backwards" class="level3">
+<h3 class="anchored" data-anchor-id="running-the-envelope-backwards">Running the envelope backwards</h3>
+<p>A server has just told you what is inside, as a <code>Content-Type</code> header, and you need to write a label. That is the reverse lookup, and it reads headers the way servers actually send them: any case, with parameters, and with the legacy spellings that never quite went away.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reverse lookup: MIME type -&gt; extension (the inverse of get_content_type)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'application/pdf'</span>))  <span class="co"># '.pdf'</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'image/jpeg'</span>))  <span class="co"># '.jpg' (the canonical pick)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_all_extensions(<span class="st">'image/jpeg'</span>))  <span class="co"># ['.jpg', '.jpeg', '.jpe']</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Case-insensitive, and parameters on a Content-Type header are ignored</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'text/html; charset=utf-8'</span>))  <span class="co"># '.html'</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Legacy and mistaken spellings resolve to the canonical type</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'text/json'</span>))  <span class="co"># '.json'  (canonical: application/json)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'image/jpg'</span>))  <span class="co"># '.jpg'   (canonical: image/jpeg)</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass with_dot=False for a bare extension; unknown types return None / []</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'application/toml'</span>, with_dot<span class="op">=</span><span class="va">False</span>))  <span class="co"># 'toml'</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_extension(<span class="st">'application/x-nope'</span>))  <span class="co"># None</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(content_types.guess_all_extensions(<span class="st">'application/x-nope'</span>))  <span class="co"># []</span></span></code></pre></div>
+<p>The reverse direction is the hard one. The table’s 364 extensions collapse onto 223 types, and 57 of those types have more than one extension claiming them, so somebody has to pick a canonical spelling and keep it stable. This library picks the modern one (<code>.html</code> for <code>text/html</code>, not <code>.htm</code>) and guarantees that <code>guess_extension(t)</code> always equals <code>guess_all_extensions(t)[0]</code>. See <a href="https://mkennedy.codes/docs/content-types/user-guide/reverse-lookup.html">Reverse lookup</a> for the details.</p>
+</section>
 </section>
 <section id="cli" class="level2">
 <h2 class="anchored" data-anchor-id="cli">CLI</h2>
-<p>To use the library as a CLI tool, just install it with <strong>uv</strong> or <strong>pipx</strong>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install content-types</span></code></pre></div>
-<p>Now it will be available machine-wide.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> example.jpg</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: image/jpeg</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> data.parquet</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: application/vnd.apache.parquet</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> notebook.ipynb</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: application/x-ipynb+json</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> photo.cr2</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: image/x-canon-cr2</span></span></code></pre></div>
-<p>The script does the forward lookup only. An unknown extension prints <code>application/octet-stream</code> and exits 0; no argument prints the usage text and exits 1; <code>-h</code>, <code>--help</code>, and <code>--version</code> do what you expect. See <a href="https://mkennedy.codes/docs/content-types/user-guide/cli.html">Command line</a>.</p>
+<p>Sometimes the question is in your terminal. Install the tool with <strong>uv</strong> or <strong>pipx</strong> and it is available machine-wide.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install content-types</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> example.jpg</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: image/jpeg</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> data.parquet</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: application/vnd.apache.parquet</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> notebook.ipynb</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: application/x-ipynb+json</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> photo.cr2</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: image/x-canon-cr2</span></span></code></pre></div>
+<p>It does the forward lookup only. An unknown extension prints <code>application/octet-stream</code> and exits 0; no argument prints the usage text and exits 1; <code>-h</code>, <code>--help</code>, and <code>--version</code> do what you expect. See <a href="https://mkennedy.codes/docs/content-types/user-guide/cli.html">Command line</a>.</p>
 </section>
 <section id="more-correct-than-pythons-mimetypes" class="level2">
 <h2 class="anchored" data-anchor-id="more-correct-than-pythons-mimetypes">More correct than Python’s <code>mimetypes</code></h2>
-<p>When I first learned about Python’s mimetypes module, I thought it was exactly what I need. However, it doesn’t have all the MIME types, and it recommends deprecated, out-of-date answers for very obvious types.</p>
+<p>When I first learned about Python’s mimetypes module, I thought it was exactly what I needed. Then I used it. It does not have all the MIME types, and for some very obvious ones it recommends answers that stopped being right years ago.</p>
 <p>For example, mimetypes has <code>.xml</code> as <code>text/xml</code> where it should be <code>application/xml</code> (see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types/Common_types">MDN</a>).</p>
-<p>Its coverage also depends on which Python you run. The built-in table has 142 entries on Python 3.10 and about 210 on Python 3.15, so an extension that resolves on one interpreter can come back <code>None</code> on another. Types missing from mimetypes on every supported Python include:</p>
+<p>Its coverage also depends on which Python you happen to be running. The built-in table has 142 entries on Python 3.10 and about 210 on Python 3.15, so an extension that resolves on your laptop can come back <code>None</code> on an older production image. Types missing from mimetypes on every supported Python include:</p>
 <ul>
 <li>.tgz -&gt; application/gzip</li>
 <li>.parquet -&gt; application/vnd.apache.parquet</li>
@@ -396,46 +410,95 @@ section.level2:first-of-type > h2:first-child,
 <li>.dwg -&gt; application/acad</li>
 <li>… and 170 to 220 more, depending on your Python version</li>
 </ul>
-<p>Older Pythons are also missing everyday types such as <code>.webp</code>, <code>.yaml</code>, <code>.toml</code>, <code>.flac</code>, <code>.epub</code>, and <code>.mkv</code> that newer releases have since added. With this library, you get <strong>360+ file extensions</strong> properly mapped, with the same answers on every Python version. See <a href="https://mkennedy.codes/docs/content-types/user-guide/compared-to-mimetypes.html">Compared to mimetypes</a> for how the lookup works and a script that prints the exact differences on your interpreter.</p>
+<p>Older Pythons are also missing everyday types such as <code>.webp</code>, <code>.yaml</code>, <code>.toml</code>, <code>.flac</code>, <code>.epub</code>, and <code>.mkv</code> that newer releases have since added. With this library, you get <strong>360+ file extensions</strong> properly mapped, with the same answers on every Python version and every operating system. See <a href="https://mkennedy.codes/docs/content-types/user-guide/compared-to-mimetypes.html">Compared to mimetypes</a> for how the lookup works and a script that prints the exact differences on your interpreter.</p>
+</section>
+<section id="works-when-python-magic-package-doesnt" class="level2">
+<h2 class="anchored" data-anchor-id="works-when-python-magic-package-doesnt">Works when python-magic package doesn’t</h2>
+<p>Why not the excellent python-magic package? That one works by reading the header bytes of a file, which is the more reliable method when you have the bytes and the only method when the extension is missing or lying. The whole point of this project is the other case: you know the name but not the contents. The two are not rivals, and <code>fallback=None</code> is the hook for handing a miss over to byte sniffing when you do have the file.</p>
 </section>
 <section id="popular-format-examples" class="level2">
 <h2 class="anchored" data-anchor-id="popular-format-examples">Popular Format Examples</h2>
 <p>Here are some commonly used formats by category:</p>
-<p><strong>Data Science &amp; Analytics:</strong> - <code>.parquet</code> - Apache Parquet columnar storage - <code>.ipynb</code> - Jupyter Notebooks - <code>.pkl</code>, <code>.pickle</code> - Python pickle files - <code>.npy</code>, <code>.npz</code> - NumPy arrays - <code>.arrow</code>, <code>.feather</code> - Apache Arrow - <code>.hdf5</code>, <code>.h5</code> - HDF5 scientific data - <code>.mat</code> - MATLAB data files - <code>.dta</code> - Stata data files - <code>.sav</code> - SPSS data files</p>
-<p><strong>Modern Programming Languages:</strong> - <code>.rs</code> - Rust - <code>.go</code> - Go/Golang - <code>.ts</code>, <code>.tsx</code> - TypeScript/React - <code>.jsx</code> - React JavaScript - <code>.vue</code> - Vue.js components - <code>.swift</code> - Swift - <code>.kt</code>, <code>.kts</code> - Kotlin - <code>.dart</code> - Dart - <code>.sol</code> - Solidity (smart contracts)</p>
-<p><strong>Configuration &amp; Infrastructure:</strong> - <code>.yaml</code>, <code>.yml</code> - YAML configs - <code>.toml</code> - TOML configs - <code>.env</code> - Environment variables - <code>.dockerfile</code> - Docker files - <code>.tf</code>, <code>.tfvars</code> - Terraform - <code>.ini</code>, <code>.conf</code>, <code>.cfg</code> - Configuration files</p>
-<p><strong>Creative &amp; Design:</strong> - <code>.psd</code>, <code>.psb</code> - Adobe Photoshop - <code>.indd</code> - Adobe InDesign - <code>.aep</code> - Adobe After Effects - <code>.dwg</code>, <code>.dxf</code> - AutoCAD - <code>.skp</code> - SketchUp - <code>.blend</code> - Blender - <code>.cr2</code>, <code>.cr3</code> - Canon RAW - <code>.nef</code> - Nikon RAW - <code>.dng</code> - Adobe DNG RAW</p>
-<p><strong>Modern Media:</strong> - <code>.mkv</code> - Matroska video - <code>.webp</code> - WebP images - <code>.avif</code> - AVIF images - <code>.opus</code> - Opus audio - <code>.flac</code> - FLAC audio - <code>.midi</code>, <code>.mid</code> - MIDI</p>
-</section>
-<section id="works-when-python-magic-package-doesnt" class="level2">
-<h2 class="anchored" data-anchor-id="works-when-python-magic-package-doesnt">Works when python-magic package doesn’t</h2>
-<p>Why not the excellent python-magic package? That one works by reading the header bytes of binary files which requires access to the file data. The whole goal of this project is to avoid accessing or needing the file data. They are for different use-cases, and <code>fallback=None</code> is the hook for falling through to byte sniffing when the extension is unknown.</p>
+<p><strong>Data Science &amp; Analytics:</strong></p>
+<ul>
+<li><code>.parquet</code> - Apache Parquet columnar storage</li>
+<li><code>.ipynb</code> - Jupyter Notebooks</li>
+<li><code>.pkl</code>, <code>.pickle</code> - Python pickle files</li>
+<li><code>.npy</code>, <code>.npz</code> - NumPy arrays</li>
+<li><code>.arrow</code>, <code>.feather</code> - Apache Arrow</li>
+<li><code>.hdf5</code>, <code>.h5</code> - HDF5 scientific data</li>
+<li><code>.mat</code> - MATLAB data files</li>
+<li><code>.dta</code> - Stata data files</li>
+<li><code>.sav</code> - SPSS data files</li>
+</ul>
+<p><strong>Modern Programming Languages:</strong></p>
+<ul>
+<li><code>.rs</code> - Rust</li>
+<li><code>.go</code> - Go/Golang</li>
+<li><code>.ts</code>, <code>.tsx</code> - TypeScript/React</li>
+<li><code>.jsx</code> - React JavaScript</li>
+<li><code>.vue</code> - Vue.js components</li>
+<li><code>.swift</code> - Swift</li>
+<li><code>.kt</code>, <code>.kts</code> - Kotlin</li>
+<li><code>.dart</code> - Dart</li>
+<li><code>.sol</code> - Solidity (smart contracts)</li>
+</ul>
+<p><strong>Configuration &amp; Infrastructure:</strong></p>
+<ul>
+<li><code>.yaml</code>, <code>.yml</code> - YAML configs</li>
+<li><code>.toml</code> - TOML configs</li>
+<li><code>.env</code> - Environment variables</li>
+<li><code>.dockerfile</code> - Docker files</li>
+<li><code>.tf</code>, <code>.tfvars</code> - Terraform</li>
+<li><code>.ini</code>, <code>.conf</code>, <code>.cfg</code> - Configuration files</li>
+</ul>
+<p><strong>Creative &amp; Design:</strong></p>
+<ul>
+<li><code>.psd</code>, <code>.psb</code> - Adobe Photoshop</li>
+<li><code>.indd</code> - Adobe InDesign</li>
+<li><code>.aep</code> - Adobe After Effects</li>
+<li><code>.dwg</code>, <code>.dxf</code> - AutoCAD</li>
+<li><code>.skp</code> - SketchUp</li>
+<li><code>.blend</code> - Blender</li>
+<li><code>.cr2</code>, <code>.cr3</code> - Canon RAW</li>
+<li><code>.nef</code> - Nikon RAW</li>
+<li><code>.dng</code> - Adobe DNG RAW</li>
+</ul>
+<p><strong>Modern Media:</strong></p>
+<ul>
+<li><code>.mkv</code> - Matroska video</li>
+<li><code>.webp</code> - WebP images</li>
+<li><code>.avif</code> - AVIF images</li>
+<li><code>.opus</code> - Opus audio</li>
+<li><code>.flac</code> - FLAC audio</li>
+<li><code>.midi</code>, <code>.mid</code> - MIDI</li>
+</ul>
 </section>
 <section id="contributing" class="level2">
 <h2 class="anchored" data-anchor-id="contributing">Contributing</h2>
-<p>Contributions are welcome! Check out <a href="https://github.com/mikeckennedy/content-types">the GitHub repo</a> for more details on how to get involved.</p>
+<p>Contributions are welcome, and the most useful one is also the easiest: if an extension you rely on is missing or wrong, <a href="https://github.com/mikeckennedy/content-types/issues">open an issue</a> with the extension and the type you expected. Check out <a href="https://github.com/mikeckennedy/content-types">the GitHub repo</a> for more details on how to get involved.</p>
 <section id="development" class="level3">
 <h3 class="anchored" data-anchor-id="development">Development</h3>
 <p><code>pytest</code> and <code>ruff</code> aren’t declared dependencies; <code>uv</code> provides them on the fly:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the test suite (75 tests)</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> pytest pytest</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lint and format (config in ruff.toml)</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uvx</span> ruff check .</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">uvx</span> ruff format .</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the test suite (75 tests)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> pytest pytest</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lint and format (config in ruff.toml)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uvx</span> ruff check .</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">uvx</span> ruff format .</span></code></pre></div>
 </section>
 <section id="building-the-docs" class="level3">
 <h3 class="anchored" data-anchor-id="building-the-docs">Building the docs</h3>
 <p>The docs site is built with <a href="https://github.com/posit-dev/great-docs">Great Docs</a> and published at <a href="https://mkennedy.codes/docs/content-types/">mkennedy.codes/docs/content-types</a>. The user guide lives in <code>user_guide/</code>, the agent skill in <code>skills/content-types/SKILL.md</code>, and the landing page is this README. Great Docs imports the package for API introspection, so the toolchain lives in the <code>dev</code> extra and needs an editable install:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the docs toolchain into your virtualenv</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> pip install <span class="at">-e</span> <span class="st">".[dev]"</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the site (mirrors great-docs/_site/ into the committed docs/ folder;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fails if llms.txt, llms-full.txt, or skill.md did not get generated)</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/build_docs.py</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview exactly as hosted, under the /docs/content-types subpath</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/serve_docs.py   <span class="co"># -&gt; http://127.0.0.1:8099/docs/content-types/</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the docs toolchain into your virtualenv</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> pip install <span class="at">-e</span> <span class="st">".[dev]"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the site (mirrors great-docs/_site/ into the committed docs/ folder;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fails if llms.txt, llms-full.txt, or skill.md did not get generated)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/build_docs.py</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview exactly as hosted, under the /docs/content-types subpath</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/serve_docs.py   <span class="co"># -&gt; http://127.0.0.1:8099/docs/content-types/</span></span></code></pre></div>
 
 
 </section>

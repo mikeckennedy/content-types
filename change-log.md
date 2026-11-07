@@ -8,10 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
--
+- `content-types -h` / `--help` print the usage text and `--version` prints the installed version, both exiting 0. Previously `--help` was looked up as an extension and printed `application/octet-stream`.
+- `get_content_type()` is now overloaded for type checkers: the default call and a string `fallback` type as `str`, and only an explicit `fallback=None` types as `Optional[str]`. Callers no longer have to narrow the result of a plain lookup, and the shortcut constants type-check as `str` again (`ty check` on the package went from 16 errors to 0).
+- Files: `content_types/__init__.py`, `tests/test_content_types.py`
 
 ### Changed
--
+- `_UNSET` (the omitted-`fallback` sentinel) has a stable `repr`, so the generated signature in the docs and `llms-full.txt` reads `fallback=_UNSET` instead of `<content_types._Unset object at 0x...>`, which changed on every build.
+- The CLI usage line now reads `content-types FILENAME_OR_EXTENSION` (the argument is required, so it is no longer shown in square brackets).
+- Files: `content_types/__init__.py`
 
 ### Deprecated
 -
@@ -20,10 +24,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -
 
 ### Fixed
--
+- `get_content_type(Path('.env'))` and `get_content_type('.env')` now agree. The `Path` form used `Path.suffix`, which is empty for a dotfile, so `Path('.gitignore')` fell through to `application/octet-stream` while the string form returned `text/plain`. The lookup now uses the final path component.
+- Files: `content_types/__init__.py`, `tests/test_content_types.py`
 
 ### Security
 -
+
+### Documentation
+- New user guide on the docs site (Getting started, Unknown extensions, Reverse lookup, Command line, Compared to mimetypes, FAQ). The guide pages are included in `llms-full.txt`, which previously contained only the API reference.
+- The auto-generated agent skill is replaced by a hand-written `skills/content-types/SKILL.md` (rules, decision table, worked example, absolute links). `skill_extra_body.md` is removed and `great-docs.yml` points at the new file via `skill.file`.
+- Module docstring names the entry points, `EXTENSION_TO_CONTENT_TYPE` and the sixteen shortcut constants have attribute docstrings with examples, and the `cli()` docstring documents the flags and exit codes. The reference pages for the constants previously showed the builtin `str` docstring.
+- README: the comparison with `mimetypes` now gives per-version numbers (the built-in table has 142 entries on 3.10 and about 210 on 3.15, not "around 100"), drops examples that newer Pythons have since added (`.m4v`, `.flac`, `.epub`, `.mkv`, `.toml`, `.yaml`), links each section to the guide page that expands it, and uses single quotes in code so `ruff format` passes on it.
+- `scripts/build_docs.py` now fails when `llms.txt`, `llms-full.txt`, `skill.md`, or the `.well-known` skill files are missing from the build output, since Great Docs reports success even when the package fails to import.
+- Files: `user_guide/`, `skills/content-types/SKILL.md`, `great-docs.yml`, `README.md`, `content_types/__init__.py`, `scripts/build_docs.py`, `docs/`
 
 ---
 

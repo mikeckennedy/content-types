@@ -1,0 +1,72 @@
+---
+title: Getting started
+---
+
+content-types maps a filename to its MIME type by lookup alone. This page takes you from install to a first result and lists every input shape the lookup accepts.
+
+## The problem
+
+You have a filename and you need its content type. Maybe you are setting the `Content-Type` header on an upload to S3, serving a static file, or deciding whether a download is an image or a spreadsheet. Often you do not have the bytes at hand, or you do not want to fetch them just to find out what they are.
+
+content-types answers that question by lookup alone. It never opens, reads, or sniffs the file. It takes the extension, looks it up in a table of 364 entries, and returns the type. That makes it safe to call on remote object keys, URLs, and names of files that do not exist yet.
+
+## Install
+
+Requires Python 3.10 or later. There are no runtime dependencies.
+
+```bash
+uv add content-types
+# or
+pip install content-types
+```
+
+## First lookup
+
+```python
+import content_types
+
+content_types.get_content_type('report.pdf')
+# 'application/pdf'
+```
+
+That is the whole core API. The import name is `content_types` with an underscore; the distribution name is `content-types` with a hyphen.
+
+## What you can pass in
+
+`get_content_type()` accepts a filename, a path, a bare extension with or without a leading dot, a `pathlib.Path`, or a URL. Matching is case-insensitive.
+
+```python
+from pathlib import Path
+
+content_types.get_content_type('photo.JPG')  # 'image/jpeg'
+content_types.get_content_type('images/photo.jpg')  # 'image/jpeg'
+content_types.get_content_type('jpg')  # 'image/jpeg'
+content_types.get_content_type('.jpg')  # 'image/jpeg'
+content_types.get_content_type(Path('/data/photo.jpg'))  # 'image/jpeg'
+content_types.get_content_type('https://cdn.example.com/a.mp3?v=3#t=10')  # 'audio/mpeg'
+```
+
+For URLs, the query string and fragment are stripped before the lookup. For compound extensions the last segment wins, so `archive.tar.gz` resolves as `gz` and returns `application/gzip`. Dotfiles such as `.env` and `.gitignore` are in the table and resolve to `text/plain`.
+
+When the extension is not in the table you get `application/octet-stream` back. That is the right default for a header but not always what you want in your own code. [Unknown extensions](unknown-extensions.qmd) covers the options.
+
+## Shortcut constants
+
+For a handful of very common formats you do not need a lookup at all. The module exposes the answers as plain strings.
+
+```python
+content_types.json  # 'application/json'
+content_types.pdf  # 'application/pdf'
+content_types.parquet  # 'application/vnd.apache.parquet'
+```
+
+The full set is `webp`, `png`, `jpg`, `mp3`, `json`, `pdf`, `zip`, `xml`, `csv`, `md`, `parquet`, `ipynb`, `pkl`, `yaml`, `toml`, and `sqlite`. Prefer `import content_types` and attribute access over `from content_types import json`, because `json`, `csv`, and `zip` would shadow a standard library module or builtin.
+
+## Where to go next
+
+- [Unknown extensions](unknown-extensions.qmd) explains what a miss looks like and the three ways to handle one.
+- [Reverse lookup](reverse-lookup.qmd) goes from a content type or `Content-Type` header back to an extension.
+- [Command line](cli.qmd) covers the `content-types` console script.
+- [Compared to mimetypes](compared-to-mimetypes.qmd) explains how the table differs from the standard library and why.
+- [FAQ](faq.qmd) answers the questions that come up most.
+- The [API reference](../reference/index.qmd) lists every public name.

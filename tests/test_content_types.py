@@ -3,6 +3,7 @@ Test suite for content-types library.
 Focused on integration tests, spot tests, and negative conditions.
 """
 
+import sys
 from pathlib import Path
 
 import pytest
@@ -152,6 +153,16 @@ class TestGetContentType:
         assert content_types.get_content_type('.gitignore') == 'text/plain'
         assert content_types.get_content_type('.dockerignore') == 'text/plain'
 
+    def test_path_dotfile_matches_string(self):
+        """Integration test: a Path to a dotfile resolves the same as the equivalent string."""
+        assert content_types.get_content_type(Path('.gitignore')) == 'text/plain'
+        assert content_types.get_content_type(Path('/repo/.env')) == 'text/plain'
+        assert content_types.get_content_type(Path('/repo/README')) == 'application/octet-stream'
+
+    def test_unset_sentinel_has_stable_repr(self):
+        """The omitted-fallback sentinel must not leak a memory address into generated docs."""
+        assert repr(content_types._UNSET) == '_UNSET'
+
     def test_urls_with_and_without_querystring(self):
         """Integration test: URLs with and without query strings."""
         # URL with query string
@@ -223,6 +234,45 @@ class TestPackaging:
         """The PEP 561 marker must ship so type checkers honor inline types."""
         pkg_dir = Path(content_types.__file__).parent
         assert (pkg_dir / 'py.typed').is_file()
+
+
+class TestCli:
+    """Test the content-types console script entry point."""
+
+    def test_lookup_prints_type(self, monkeypatch, capsys):
+        """Integration test: one argument prints its content type and exits normally."""
+        monkeypatch.setattr(sys, 'argv', ['content-types', 'photo.jpg'])
+        content_types.cli()
+        assert capsys.readouterr().out == 'image/jpeg\n'
+
+    def test_unknown_extension_prints_default_fallback(self, monkeypatch, capsys):
+        """Negative test: the CLI uses the library default for unknown extensions."""
+        monkeypatch.setattr(sys, 'argv', ['content-types', 'file.zzz'])
+        content_types.cli()
+        assert capsys.readouterr().out == 'application/octet-stream\n'
+
+    def test_no_arguments_prints_usage_and_exits_1(self, monkeypatch, capsys):
+        """Negative test: no argument prints usage and exits with status 1."""
+        monkeypatch.setattr(sys, 'argv', ['content-types'])
+        with pytest.raises(SystemExit) as exc_info:
+            content_types.cli()
+        assert exc_info.value.code == 1
+        assert capsys.readouterr().out.startswith('Usage: content-types')
+
+    @pytest.mark.parametrize('flag', ['-h', '--help'])
+    def test_help_flags_print_usage(self, flag, monkeypatch, capsys):
+        """--help must show usage rather than being looked up as an extension."""
+        monkeypatch.setattr(sys, 'argv', ['content-types', flag])
+        content_types.cli()
+        out = capsys.readouterr().out
+        assert out.startswith('Usage: content-types')
+        assert 'octet-stream' not in out
+
+    def test_version_flag_prints_version(self, monkeypatch, capsys):
+        """--version prints the installed package version."""
+        monkeypatch.setattr(sys, 'argv', ['content-types', '--version'])
+        content_types.cli()
+        assert capsys.readouterr().out == f'{content_types.__version__}\n'
 
 
 class TestSpecialCases:

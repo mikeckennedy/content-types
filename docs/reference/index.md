@@ -34,7 +34,7 @@ The underlying extension -\> content-type table (364 entries; keys have no leadi
 
 
 [EXTENSION_TO_CONTENT_TYPE](EXTENSION_TO_CONTENT_TYPE.md#content_types.EXTENSION_TO_CONTENT_TYPE)  
-dict() -\> new empty dictionary
+The extension -\> content type table that every lookup reads from.
 
 
 ## Shortcut constants
@@ -44,49 +44,49 @@ Precomputed content types for very common formats, exposed as module-level attri
 
 
 [webp](webp.md#content_types.webp)  
-str(object='') -\> str
+The content type for `.webp` files: `image/webp`.
 
 [png](png.md#content_types.png)  
-str(object='') -\> str
+The content type for `.png` files: `image/png`.
 
 [jpg](jpg.md#content_types.jpg)  
-str(object='') -\> str
+The content type for `.jpg` files: `image/jpeg`.
 
 [mp3](mp3.md#content_types.mp3)  
-str(object='') -\> str
+The content type for `.mp3` files: `audio/mpeg`.
 
 [json](json.md#content_types.json)  
-str(object='') -\> str
+The content type for `.json` files: `application/json`.
 
 [pdf](pdf.md#content_types.pdf)  
-str(object='') -\> str
+The content type for `.pdf` files: `application/pdf`.
 
 [zip](zip.md#content_types.zip)  
-str(object='') -\> str
+The content type for `.zip` files: `application/zip`.
 
 [xml](xml.md#content_types.xml)  
-str(object='') -\> str
+The content type for `.xml` files: `application/xml`.
 
 [csv](csv.md#content_types.csv)  
-str(object='') -\> str
+The content type for `.csv` files: `text/csv`.
 
 [md](md.md#content_types.md)  
-str(object='') -\> str
+The content type for `.md` files: `text/markdown`.
 
 [parquet](parquet.md#content_types.parquet)  
-str(object='') -\> str
+The content type for `.parquet` files: `application/vnd.apache.parquet`.
 
 [ipynb](ipynb.md#content_types.ipynb)  
-str(object='') -\> str
+The content type for `.ipynb` files: `application/x-ipynb+json`.
 
 [pkl](pkl.md#content_types.pkl)  
-str(object='') -\> str
+The content type for `.pkl` files: `application/octet-stream`.
 
 [yaml](yaml.md#content_types.yaml)  
-str(object='') -\> str
+The content type for `.yaml` files: `application/yaml`.
 
 [toml](toml.md#content_types.toml)  
-str(object='') -\> str
+The content type for `.toml` files: `application/toml`.
 
 [sqlite](sqlite.md#content_types.sqlite)  
-str(object='') -\> str
+The content type for `.sqlite` files: `application/vnd.sqlite3`.

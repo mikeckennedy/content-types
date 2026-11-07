@@ -11,8 +11,12 @@ display_name: content-types
 # rather than relying on auto-detect — `init` guessed numpy, which is wrong here.
 parser: google
 
-# Import the package at build time for accurate introspection (verified working).
-dynamic: true
+# Build the API reference from static analysis. Dynamic introspection cannot see the
+# attribute docstrings on EXTENSION_TO_CONTENT_TYPE and the shortcut constants (it reports
+# the builtin `dict` / `str` docstrings instead), and static analysis renders the
+# `fallback=_UNSET` default without a memory address. llms-full.txt still imports the
+# package regardless of this setting.
+dynamic: false
 
 # Subpath hosting: drives Quarto's base path so CSS/JS/nav resolve correctly when
 # the site is served under /docs/content-types/. Keep the trailing slash.
@@ -52,9 +56,10 @@ seo:
 jupyter: python3
 
 skill:
-  # Hand-written prose injected into the generated skill body — things the API
-  # signatures can't convey. Adapted from the content-types_reference.md agent guide.
-  extra_body: skill_extra_body.md
+  # Hand-written SKILL.md (Agent Skills spec). Copied verbatim to skill.md,
+  # .well-known/agent-skills/content-types/SKILL.md, and .well-known/skills/default/SKILL.md,
+  # so every link inside it must be an absolute URL.
+  file: skills/content-types/SKILL.md
 
 authors:
   - name: Michael Kennedy

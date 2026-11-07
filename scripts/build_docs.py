@@ -25,6 +25,17 @@ REPO_ROOT = PKG_DIR  # package lives at the git root here
 SITE = PKG_DIR / 'great-docs' / '_site'
 DEST = REPO_ROOT / 'docs'
 
+# Machine-readable files the site must ship. Great Docs reports success even when
+# llms-full.txt is skipped (e.g. the package failed to import in its build environment),
+# so check the output rather than trusting the log.
+REQUIRED_OUTPUTS = (
+    'llms.txt',
+    'llms-full.txt',
+    'skill.md',
+    '.well-known/agent-skills/content-types/SKILL.md',
+    '.well-known/agent-skills/index.json',
+)
+
 
 def main() -> int:
     # Prefer the great-docs that ships next to the interpreter running this script
@@ -36,6 +47,12 @@ def main() -> int:
 
     if not SITE.is_dir():
         print(f'build output missing: {SITE}', file=sys.stderr)
+        return 1
+
+    missing = [name for name in REQUIRED_OUTPUTS if not (SITE / name).is_file()]
+    if missing:
+        print(f'build output is missing required files: {", ".join(missing)}', file=sys.stderr)
+        print('(a missing llms-full.txt usually means the package failed to import during the build)', file=sys.stderr)
         return 1
 
     if DEST.exists():

@@ -8,7 +8,7 @@ This is the API documentation for the content_types library.
 Map a filename, bare extension, Path, or URL to its MIME / content type.
 
 
-get_content_type(filename_or_extension: str | pathlib.Path, treat_as_binary: bool = True, fallback: str | None | content_types._Unset = <content_types._Unset object at 0x106f2acf0>) -> str | None
+get_content_type(filename_or_extension: str | pathlib.Path, treat_as_binary: bool = True, fallback: str | None | content_types._Unset = _UNSET) -> str | None
 
 Return the most specific, commonly accepted MIME type for a filename or extension.
 
@@ -370,3 +370,342 @@ Otherwise, returns the result of object.__str__() (if defined)
 or repr(object).
 encoding defaults to 'utf-8'.
 errors defaults to 'strict'.
+
+
+----------------------------------------------------------------------
+This is the User Guide documentation for the package.
+----------------------------------------------------------------------
+
+### Getting started
+
+content-types maps a filename to its MIME type by lookup alone. This page takes you from install to a first result and lists every input shape the lookup accepts.
+
+## The problem
+
+You have a filename and you need its content type. Maybe you are setting the `Content-Type` header on an upload to S3, serving a static file, or deciding whether a download is an image or a spreadsheet. Often you do not have the bytes at hand, or you do not want to fetch them just to find out what they are.
+
+content-types answers that question by lookup alone. It never opens, reads, or sniffs the file. It takes the extension, looks it up in a table of 364 entries, and returns the type. That makes it safe to call on remote object keys, URLs, and names of files that do not exist yet.
+
+## Install
+
+Requires Python 3.10 or later. There are no runtime dependencies.
+
+```bash
+uv add content-types
+# or
+pip install content-types
+```
+
+## First lookup
+
+```python
+import content_types
+
+content_types.get_content_type('report.pdf')
+# 'application/pdf'
+```
+
+That is the whole core API. The import name is `content_types` with an underscore; the distribution name is `content-types` with a hyphen.
+
+## What you can pass in
+
+`get_content_type()` accepts a filename, a path, a bare extension with or without a leading dot, a `pathlib.Path`, or a URL. Matching is case-insensitive.
+
+```python
+from pathlib import Path
+
+content_types.get_content_type('photo.JPG')  # 'image/jpeg'
+content_types.get_content_type('images/photo.jpg')  # 'image/jpeg'
+content_types.get_content_type('jpg')  # 'image/jpeg'
+content_types.get_content_type('.jpg')  # 'image/jpeg'
+content_types.get_content_type(Path('/data/photo.jpg'))  # 'image/jpeg'
+content_types.get_content_type('https://cdn.example.com/a.mp3?v=3#t=10')  # 'audio/mpeg'
+```
+
+For URLs, the query string and fragment are stripped before the lookup. For compound extensions the last segment wins, so `archive.tar.gz` resolves as `gz` and returns `application/gzip`. Dotfiles such as `.env` and `.gitignore` are in the table and resolve to `text/plain`.
+
+When the extension is not in the table you get `application/octet-stream` back. That is the right default for a header but not always what you want in your own code. [Unknown extensions](unknown-extensions.qmd) covers the options.
+
+## Shortcut constants
+
+For a handful of very common formats you do not need a lookup at all. The module exposes the answers as plain strings.
+
+```python
+content_types.json  # 'application/json'
+content_types.pdf  # 'application/pdf'
+content_types.parquet  # 'application/vnd.apache.parquet'
+```
+
+The full set is `webp`, `png`, `jpg`, `mp3`, `json`, `pdf`, `zip`, `xml`, `csv`, `md`, `parquet`, `ipynb`, `pkl`, `yaml`, `toml`, and `sqlite`. Prefer `import content_types` and attribute access over `from content_types import json`, because `json`, `csv`, and `zip` would shadow a standard library module or builtin.
+
+## Where to go next
+
+- [Unknown extensions](unknown-extensions.qmd) explains what a miss looks like and the three ways to handle one.
+- [Reverse lookup](reverse-lookup.qmd) goes from a content type or `Content-Type` header back to an extension.
+- [Command line](cli.qmd) covers the `content-types` console script.
+- [Compared to mimetypes](compared-to-mimetypes.qmd) explains how the table differs from the standard library and why.
+- [FAQ](faq.qmd) answers the questions that come up most.
+- The [API reference](../reference/index.qmd) lists every public name.
+
+
+### Unknown extensions
+
+A lookup that misses still returns a string by default. This page explains how to recognise a miss, the three ways to handle one, and how to extend the table.
+
+## How to read the result
+
+`get_content_type()` always returns a string unless you ask it not to. For a known extension the string is the content type. For an unknown extension it is a fallback, and by default that fallback is `application/octet-stream`.
+
+```python
+import content_types
+
+content_types.get_content_type('data.parquet')  # 'application/vnd.apache.parquet'
+content_types.get_content_type('notes.xyz')  # 'application/octet-stream'
+content_types.get_content_type('Makefile')  # 'application/octet-stream'
+```
+
+`application/octet-stream` is the correct generic type for "some bytes" and it is what S3 and most web servers use when they do not know better. The catch is that a few real extensions also map to it on purpose, among them `.bin`, `.pkl`, `.npy`, `.so`, and `.exe` style binaries, so you cannot tell a miss from a hit by looking at the return value alone.
+
+## Three ways to handle a miss
+
+**Ask for `text/plain` instead.** If the files you handle are mostly text, `treat_as_binary=False` changes the default fallback.
+
+```python
+content_types.get_content_type('notes.xyz', treat_as_binary=False)  # 'text/plain'
+```
+
+**Supply your own fallback.** Pass any string as `fallback` and it is returned for every unknown extension. It takes precedence over `treat_as_binary`. Known extensions are unaffected.
+
+```python
+content_types.get_content_type('notes.xyz', fallback='application/x-acme')  # 'application/x-acme'
+content_types.get_content_type('photo.jpg', fallback='application/x-acme')  # 'image/jpeg'
+```
+
+**Branch on the miss.** Pass `fallback=None` to get `None` back for unknowns, then decide what to do yourself. This is the one to use when a miss should change program flow, for example to sniff the bytes with another tool or to reject the upload.
+
+```python
+content_type = content_types.get_content_type(name, fallback=None)
+if content_type is None:
+    content_type = sniff_with_python_magic(path)
+```
+
+Omitting `fallback` and passing `fallback=None` are different. Omitting it keeps the historical default. The parameter defaults to a private sentinel so the two cases can be told apart.
+
+## Checking the table directly
+
+If you only need a yes or no, read the table. Keys are bare lowercase extensions with no leading dot.
+
+```python
+ext = 'parquet'
+ext in content_types.EXTENSION_TO_CONTENT_TYPE  # True
+```
+
+## Adding your own extensions
+
+The table is a plain `dict` and the lookup reads it on every call, so a process-local addition takes effect immediately. Keys must be lowercase and have no leading dot.
+
+```python
+content_types.EXTENSION_TO_CONTENT_TYPE['acme'] = 'application/x-acme'
+content_types.get_content_type('report.acme')  # 'application/x-acme'
+```
+
+Do this at startup, not per request, and keep in mind that the reverse lookup caches its view of the table on first use. If you need `guess_extension()` to see your additions, add them before the first reverse call.
+
+If the extension is a real, widely used format that other people would expect to work, please [open an issue](https://github.com/mikeckennedy/content-types/issues) or send a pull request so it ends up in the table for everyone.
+
+## Things that are not misses
+
+- `None` as the filename raises `TypeError`. That is a programming error, not an unknown extension.
+- An empty string, a bare name with no dot, and a URL with no file component all count as unknown and get the fallback.
+- `archive.tar.gz` is not a miss. It resolves on the last segment and returns `application/gzip`.
+
+
+### Reverse lookup
+
+The reverse functions turn a content type, or a raw `Content-Type` header, back into a file extension. This page covers what they accept, what they return on a miss, and how the canonical extension is chosen.
+
+## From a content type to an extension
+
+`guess_extension()` is the inverse of `get_content_type()`. Give it a content type and it returns the canonical extension with a leading dot, ready to append to a filename. `guess_all_extensions()` returns every extension known for that type, canonical first.
+
+```python
+import content_types
+
+content_types.guess_extension('application/pdf')  # '.pdf'
+content_types.guess_extension('image/jpeg')  # '.jpg'
+content_types.guess_all_extensions('image/jpeg')  # ['.jpg', '.jpeg', '.jpe']
+content_types.guess_extension('image/jpeg', with_dot=False)  # 'jpg'
+```
+
+The typical use is naming a download from an HTTP response.
+
+```python
+import httpx
+from pathlib import Path
+
+resp = httpx.get('https://example.com/download/item')
+ext = content_types.guess_extension(resp.headers['content-type'])
+if ext:
+    Path(f'downloaded{ext}').write_bytes(resp.content)
+```
+
+## What the lookup tolerates
+
+- Case does not matter. `IMAGE/JPEG` resolves like `image/jpeg`.
+- Parameters are ignored, so a raw `Content-Type` header value works. `text/html; charset=utf-8` resolves like `text/html`.
+- Common non-canonical and legacy spellings resolve to the type this library uses. `text/json`, `image/jpg`, `audio/mp3`, `text/xml`, `application/javascript`, `application/x-yaml`, `application/x-zip-compressed`, and `application/x-gzip` all work. The full alias list is in the source as `_CONTENT_TYPE_ALIASES`.
+
+## Unknown types
+
+An unknown content type is not an error. `guess_extension()` returns `None` and `guess_all_extensions()` returns `[]`. Empty, whitespace-only, and parameter-only input count as unknown. Passing `None` raises `TypeError`, matching `get_content_type()`.
+
+```python
+content_types.guess_extension('application/x-nope')  # None
+content_types.guess_all_extensions('application/x-nope')  # []
+```
+
+## Which extension is canonical
+
+When several extensions share a type, the first one listed in `EXTENSION_TO_CONTENT_TYPE` wins, with a few deliberate overrides so the modern spelling comes first: `text/html` gives `.html` not `.htm`, `image/tiff` gives `.tiff`, `video/mpeg` gives `.mpeg`, and `application/x-msdownload` gives `.exe`. `guess_extension(t)` is always equal to `guess_all_extensions(t)[0]`.
+
+The standard library `mimetypes` module can pick a different canonical extension and orders its lists differently, so do not expect the two to agree. See [Compared to mimetypes](compared-to-mimetypes.qmd).
+
+## Two groups to know about
+
+`text/plain` and `application/octet-stream` are the catch-all types, and each has many extensions. `guess_extension('text/plain')` returns `.txt` and `guess_extension('application/octet-stream')` returns `.bin`, which is sensible for both, but `guess_all_extensions()` on either returns a long list that includes config files, pickles, and object files. If you are naming a file from a header that says `application/octet-stream`, the extension is a guess at best.
+
+
+### Command line
+
+The package ships a `content-types` console script for one-off lookups from the shell. This page covers installing it, its flags, and its exit codes.
+
+## Install
+
+The package installs a `content-types` console script. For machine-wide use, install it as a tool.
+
+```bash
+uv tool install content-types
+# or
+pipx install content-types
+```
+
+Inside a project that already depends on the package, the script is on the virtualenv's path, so `uv run content-types ...` also works.
+
+## Use
+
+The script takes one argument, a filename or extension, and prints the content type. It does the forward lookup only; there is no reverse lookup on the command line.
+
+```bash
+content-types example.jpg
+# image/jpeg
+
+content-types .webp
+# image/webp
+
+content-types data.parquet
+# application/vnd.apache.parquet
+```
+
+The argument goes through `get_content_type()` with its defaults, so an unknown extension prints `application/octet-stream` and still exits with status 0. Extra arguments after the first are ignored.
+
+## Flags and exit codes
+
+| Invocation | Output | Exit code |
+| --- | --- | --- |
+| `content-types NAME` | the content type, or `application/octet-stream` for an unknown extension | 0 |
+| `content-types` | usage text on stdout | 1 |
+| `content-types -h` or `--help` | usage text | 0 |
+| `content-types --version` | the installed package version | 0 |
+
+There are no environment variables and no configuration file. The script is the function `content_types.cli()` wired up in `pyproject.toml`, so you can also run it as `python -m` style code by calling that function.
+
+
+### Compared to mimetypes
+
+This page explains how the lookup works under the hood, how its answers differ from the standard library `mimetypes` module, and when a byte-sniffing library is the better tool.
+
+## How the lookup works
+
+Everything is one dictionary, `EXTENSION_TO_CONTENT_TYPE`, with 364 bare lowercase extensions as keys. `get_content_type()` normalises its input to the last dot-separated segment, lowercases it, and reads the dictionary. The reverse functions invert the same dictionary the first time they are called and cache the result for the life of the process. Nothing is read from disk, no system `mime.types` file is consulted, and the answers are the same on every platform and every Python version.
+
+## Why not the standard library
+
+Python ships a `mimetypes` module and for a while it looked like the obvious choice. Two things made it a poor fit.
+
+First, coverage. The built-in table in `mimetypes` has 142 entries on Python 3.10 and grew to about 210 on Python 3.15, and the answers you get depend on which Python you run. Between 170 and 220 of this library's extensions are missing from it, depending on the version. Examples that are missing on every supported Python include `.tgz`, `.parquet`, `.ipynb`, `.rs`, `.go`, `.tsx`, `.psd`, and `.dwg`. Newer Pythons have added `.yaml`, `.toml`, `.webp`, `.flac`, `.epub`, and `.mkv`, so a program that worked on 3.15 can silently return `None` for those on 3.12.
+
+Second, correctness. `mimetypes` still returns `text/xml` for `.xml`, where [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types/Common_types) and current practice say `application/xml`. This library standardises on the modern type and treats the legacy spelling as an alias on reverse lookup. Other deliberate choices: `.js` is `text/javascript`, `.yaml` and `.yml` are `application/yaml` per RFC 9512, and `.md` is `text/markdown`.
+
+The API differs too. `get_content_type()` returns one string, not the `(type, encoding)` tuple that `mimetypes.guess_type()` returns, and it never returns `None` unless you ask for that with `fallback=None`. The reverse functions keep the standard library names, `guess_extension()` and `guess_all_extensions()`, but accept full header values with parameters, resolve legacy aliases, and can pick a different canonical extension, for example `.html` for `text/html`.
+
+To see the exact differences on your interpreter, run the comparison script from the repository.
+
+```bash
+uv run python samples/compare_to_builtin.py
+```
+
+## Why not python-magic
+
+`python-magic` and similar libraries identify a file by reading its leading bytes. That is more reliable when you have the bytes, and it is the right tool when the extension is missing or lying. This library exists for the other case: you know the name but not the contents, such as an object key in S3 or a URL you have not fetched. The two are complementary, and `fallback=None` is the hook for falling through to byte sniffing on a miss. See [Unknown extensions](unknown-extensions.qmd).
+
+## What is in the table
+
+With 364 extensions mapped, the table covers images including camera RAW formats, audio, video, archives and modern compression formats, office and OpenDocument files, source code for around thirty languages, data science formats such as Parquet, Arrow, HDF5, pickle, NumPy, R, Stata, SAS, and SPSS, configuration and infrastructure files, Adobe and CAD formats, game engine assets, scientific formats such as FITS, DICOM, and NIfTI, and subtitles. The [reference page](../reference/EXTENSION_TO_CONTENT_TYPE.qmd) shows every entry.
+
+
+### FAQ
+
+Short answers to the questions that come up most, with links to the pages that go deeper.
+
+## Does it read the file?
+
+No. Every function works from the name alone. The file does not need to exist and no bytes are read. If you need byte-level detection, use a sniffing library and fall back to it on a miss as shown in [Unknown extensions](unknown-extensions.qmd).
+
+## Why did I get `application/octet-stream`?
+
+Either the extension is not in the table, or it is one of the formats that genuinely map to that type, such as `.bin`, `.pkl`, or `.npy`. Pass `fallback=None` to distinguish the two: a real `application/octet-stream` entry still returns the string, while a miss returns `None`.
+
+## Is `.tar.gz` handled as a unit?
+
+No. The last segment wins, so `archive.tar.gz` returns `application/gzip`, which is the correct type for the compressed container. There is no special casing for double extensions.
+
+## Does it handle uppercase or mixed case?
+
+Yes. Extensions are lowercased before the lookup, and content types are lowercased in the reverse direction.
+
+## Does it handle URLs?
+
+Yes. Query strings and fragments are stripped before the lookup, so `https://cdn.example.com/a.mp3?v=3` returns `audio/mpeg`. A URL with no file component, such as `https://example.com/download`, is a miss.
+
+## Why do my `Path` and string results disagree for dotfiles?
+
+They should not. Both `Path('.env')` and the string `'.env'` return `text/plain`. Versions before the next release used `Path.suffix`, which is empty for a dotfile, so the `Path` form fell through to the fallback. That is fixed.
+
+## The type checker says `get_content_type()` returns `Optional[str]`
+
+It returns `str` unless you pass `fallback=None`. The function is overloaded so that the default call and a string `fallback` type as `str`, and only an explicit `fallback=None` types as `Optional[str]`. If your checker still shows the wider type, you are on a release before the next one.
+
+## Can I add or override an extension?
+
+Yes. Assign into `content_types.EXTENSION_TO_CONTENT_TYPE` with a bare lowercase key. Do it at startup and before the first reverse lookup, because the reverse map is built once and cached. For formats other people would expect, open an issue so the table is fixed for everyone.
+
+## Why does `guess_extension('text/html')` return `.html` and not `.htm`?
+
+Because `.html` is what people write today. The library keeps a short list of canonical overrides where the first-listed extension in the table is the less common spelling. The standard library makes different choices, so do not expect the two to agree on canonical extensions.
+
+## What about `text/yaml` or `application/x-yaml`?
+
+The forward direction returns `application/yaml` for `.yaml` and `.yml`, following RFC 9512. The reverse direction accepts the legacy spellings as aliases and returns `.yaml`.
+
+## Is it thread-safe?
+
+Yes for reads. The forward lookup is a dictionary read and the reverse map is built with `functools.cache`. If you mutate the table at import time or startup, do it before spawning threads.
+
+## How do I run the tests?
+
+```bash
+uv run --with pytest pytest
+```
+
+See the [README](https://github.com/mikeckennedy/content-types#development) for lint and docs commands.
+

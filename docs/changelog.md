@@ -102,7 +102,7 @@ This changelog is generated automatically from [GitHub Releases](https://github.
 
 *2025-01-31* · [GitHub](https://github.com/mikeckennedy/content-types/releases/tag/v0.2.2)
 
-Added [py.typed](https://github.com/mikeckennedy/content-types/blob/main/content_types/py.typed) file to suppress mypy typing warnings. Thanks [<span class="citation" cites="sanders41">@sanders41</span>](https://github.com/sanders41) Available on PyPI now.
+Added [py.typed](https://github.com/mikeckennedy/content-types/blob/main/content_types/py.typed) file to suppress mypy typing warnings. Thanks [<span class="citation" data-cites="sanders41">@sanders41</span>](https://github.com/sanders41) Available on PyPI now.
 
 
 # v0.2.1

@@ -1,13 +1,16 @@
 ## mp3
 
 
-str(object='') -\> str
+The content type for `.mp3` files: `audio/mpeg`.
 
 
-`mp3: str = get_content_type(`<span class="st">`".mp3")`  
+`mp3: str = get_content_type(`<span class="st">`".mp3")`\
 </span>
 
 
-str(bytes_or_buffer\[, encoding\[, errors\]\]) -\> str
+## Example
 
-Create a new string object from the given object. If encoding or errors is specified, then the object must expose a data buffer that will be decoded using the given encoding and error handler. Otherwise, returns the result of object.\_\_str\_\_() (if defined) or repr(object). encoding defaults to 'utf-8'. errors defaults to 'strict'.
+``` python
+>>> content_types.mp3
+"audio/mpeg"
+```

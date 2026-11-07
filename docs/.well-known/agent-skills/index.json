@@ -2,7 +2,7 @@
   "skills": [
     {
       "name": "content-types",
-      "description": "A library to map file extensions to content types and vice versa. Use when writing Python code that uses the content_types package.",
+      "description": "Maps a filename, bare extension, pathlib.Path, or URL to its MIME / content type by table lookup alone, never reading the file, and maps a content type or raw Content-Type header back to a file extension. Use when Python code needs a Content-Type header or S3 ContentType for a file it has not opened, names a download from a response header, gets application/octet-stream and must tell a miss from a real binary, chooses between treat_as_binary, fallback, and fallback=None, hits TypeError \"filename cannot be None\", would otherwise reach for the stdlib mimetypes module, or runs the content-types CLI.",
       "files": [
         "SKILL.md"
       ]

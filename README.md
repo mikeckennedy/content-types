@@ -18,10 +18,16 @@ to download it just to fully inspect the file.
 
 ## 📚 Documentation
 
-Full documentation is hosted at **[mkennedy.codes/docs/content-types](https://mkennedy.codes/docs/content-types/)**.
-There you'll find a searchable [API reference](https://mkennedy.codes/docs/content-types/reference/)
-for `get_content_type()`, the complete extension-to-type mapping, and the shortcut
-constants. The quick examples below cover the essentials.
+Full documentation is hosted at **[mkennedy.codes/docs/content-types](https://mkennedy.codes/docs/content-types/)**. The quick examples below cover the essentials; the docs go deeper:
+
+- [Getting started](https://mkennedy.codes/docs/content-types/user-guide/getting-started.html): install, first lookup, and every input shape the lookup accepts.
+- [Unknown extensions](https://mkennedy.codes/docs/content-types/user-guide/unknown-extensions.html): how to tell a miss from a real `application/octet-stream`, and the three ways to handle one.
+- [Reverse lookup](https://mkennedy.codes/docs/content-types/user-guide/reverse-lookup.html): from a content type or `Content-Type` header back to an extension.
+- [Command line](https://mkennedy.codes/docs/content-types/user-guide/cli.html): the `content-types` script, its flags, and exit codes.
+- [Compared to mimetypes](https://mkennedy.codes/docs/content-types/user-guide/compared-to-mimetypes.html): how the table differs from the standard library and why.
+- [FAQ](https://mkennedy.codes/docs/content-types/user-guide/faq.html) and the searchable [API reference](https://mkennedy.codes/docs/content-types/reference/).
+
+Coding agents can read [llms-full.txt](https://mkennedy.codes/docs/content-types/llms-full.txt) or install the [skill](https://mkennedy.codes/docs/content-types/skills.html).
 
 ## Extensive Format Support
 
@@ -45,15 +51,17 @@ With **360+ file extensions** mapped, content-types covers:
 
 ...and much more!
 
-Why not just use Python's built-in `mimetypes`? Or the excellent `python-magic` package? 
+Why not just use Python's built-in `mimetypes`? Or the excellent `python-magic` package?
 [See below](#more-correct-than-pythons-mimetypes).
 
 ## Installation
 
-Requires Python 3.10 or later.
+Requires Python 3.10 or later. There are no runtime dependencies.
 
 ```bash
-uv pip install content-types
+uv add content-types
+# or
+pip install content-types
 ```
 
 ## Usage
@@ -62,78 +70,77 @@ uv pip install content-types
 import content_types
 
 # Forward lookup: filename -> MIME type
-the_type = content_types.get_content_type("example.jpg")
-print(the_type)  # "image/jpeg"
+the_type = content_types.get_content_type('example.jpg')
+print(the_type)  # 'image/jpeg'
 
 # Works with any supported extension
-print(content_types.get_content_type("data.parquet"))  # "application/vnd.apache.parquet"
-print(content_types.get_content_type("notebook.ipynb"))  # "application/x-ipynb+json"
-print(content_types.get_content_type("photo.cr2"))  # "image/x-canon-cr2"
-print(content_types.get_content_type("model.blend"))  # "application/x-blender"
-print(content_types.get_content_type("contract.sol"))  # "text/x-solidity"
+print(content_types.get_content_type('data.parquet'))  # 'application/vnd.apache.parquet'
+print(content_types.get_content_type('notebook.ipynb'))  # 'application/x-ipynb+json'
+print(content_types.get_content_type('photo.cr2'))  # 'image/x-canon-cr2'
+print(content_types.get_content_type('model.blend'))  # 'application/x-blender'
+print(content_types.get_content_type('contract.sol'))  # 'text/x-solidity'
 
 # For very common files, you have shortcuts:
-print(f'Content-Type for webp is {content_types.webp}.') 
+print(f'Content-Type for webp is {content_types.webp}.')
 # Content-Type for webp is image/webp.
 
 # Data science shortcuts
-print(content_types.parquet)  # "application/vnd.apache.parquet"
-print(content_types.ipynb)    # "application/x-ipynb+json"
-print(content_types.pkl)      # "application/octet-stream"
-print(content_types.yaml)     # "application/yaml"
-print(content_types.toml)     # "application/toml"
-print(content_types.sqlite)   # "application/vnd.sqlite3"
+print(content_types.parquet)  # 'application/vnd.apache.parquet'
+print(content_types.ipynb)  # 'application/x-ipynb+json'
+print(content_types.pkl)  # 'application/octet-stream'
+print(content_types.yaml)  # 'application/yaml'
+print(content_types.toml)  # 'application/toml'
+print(content_types.sqlite)  # 'application/vnd.sqlite3'
 
 # Works with Path objects too
 from pathlib import Path
-path = Path("document.pdf")
-print(content_types.get_content_type(path))  # "application/pdf"
 
-# URLs work too — query strings and fragments are stripped before lookup
-url = "https://cdn.example.com/song.mp3?cache_id=678c2a"
-print(content_types.get_content_type(url))  # "audio/mpeg"
+path = Path('document.pdf')
+print(content_types.get_content_type(path))  # 'application/pdf'
+
+# URLs work too: query strings and fragments are stripped before lookup
+url = 'https://cdn.example.com/song.mp3?cache_id=678c2a'
+print(content_types.get_content_type(url))  # 'audio/mpeg'
 
 # Unknown extensions fall back to 'application/octet-stream' by default;
 # pass treat_as_binary=False to fall back to 'text/plain' instead.
-print(content_types.get_content_type("notes.unknownext"))  # "application/octet-stream"
-print(content_types.get_content_type("notes.unknownext", treat_as_binary=False))  # "text/plain"
+print(content_types.get_content_type('notes.unknownext'))  # 'application/octet-stream'
+print(content_types.get_content_type('notes.unknownext', treat_as_binary=False))  # 'text/plain'
 
 # Or supply your own fallback for unknown extensions; it takes precedence
 # over treat_as_binary. Known extensions still resolve normally.
-print(content_types.get_content_type("notes.unknownext", fallback="application/x-custom"))  # "application/x-custom"
+print(content_types.get_content_type('notes.unknownext', fallback='application/x-custom'))  # 'application/x-custom'
 
 # Pass fallback=None to get None back for unknowns (e.g. to branch on a miss).
-# Omitting fallback keeps the default 'application/octet-stream' — existing callers are unaffected.
-print(content_types.get_content_type("notes.unknownext", fallback=None))  # None
-print(content_types.get_content_type("photo.jpg", fallback=None))         # "image/jpeg" (known, unaffected)
+# Omitting fallback keeps the default 'application/octet-stream', so existing callers are unaffected.
+print(content_types.get_content_type('notes.unknownext', fallback=None))  # None
+print(content_types.get_content_type('photo.jpg', fallback=None))  # 'image/jpeg' (known, unaffected)
 
 # Reverse lookup: MIME type -> extension (the inverse of get_content_type)
-print(content_types.guess_extension("application/pdf"))   # ".pdf"
-print(content_types.guess_extension("image/jpeg"))        # ".jpg" (the canonical pick)
-print(content_types.guess_all_extensions("image/jpeg"))   # ['.jpg', '.jpeg', '.jpe']
+print(content_types.guess_extension('application/pdf'))  # '.pdf'
+print(content_types.guess_extension('image/jpeg'))  # '.jpg' (the canonical pick)
+print(content_types.guess_all_extensions('image/jpeg'))  # ['.jpg', '.jpeg', '.jpe']
 
 # Matching is case-insensitive, and parameters on a Content-Type header are ignored
-print(content_types.guess_extension("text/html; charset=utf-8"))  # ".html"
+print(content_types.guess_extension('text/html; charset=utf-8'))  # '.html'
 
 # Common non-canonical / legacy spellings resolve to the canonical type too
-print(content_types.guess_extension("text/json"))  # ".json"  (canonical: application/json)
-print(content_types.guess_extension("image/jpg"))  # ".jpg"   (canonical: image/jpeg)
+print(content_types.guess_extension('text/json'))  # '.json'  (canonical: application/json)
+print(content_types.guess_extension('image/jpg'))  # '.jpg'   (canonical: image/jpeg)
 
 # Pass with_dot=False for a bare extension; unknown types return None / []
-print(content_types.guess_extension("application/toml", with_dot=False))  # "toml"
-print(content_types.guess_extension("application/x-nope"))       # None
-print(content_types.guess_all_extensions("application/x-nope"))  # []
+print(content_types.guess_extension('application/toml', with_dot=False))  # 'toml'
+print(content_types.guess_extension('application/x-nope'))  # None
+print(content_types.guess_all_extensions('application/x-nope'))  # []
 ```
 
-The reverse lookup mirrors the standard library `mimetypes.guess_extension` /
-`guess_all_extensions`, but draws on this library's larger, more-correct table — so the
-canonical extension can differ (for example, it returns `.html` for `text/html`, not `.htm`).
-It is also forgiving of common non-canonical spellings: `text/json`, `image/jpg`,
-`application/javascript`, and `application/x-zip-compressed` all resolve to a sensible extension.
+The reverse lookup mirrors the standard library `mimetypes.guess_extension` / `guess_all_extensions`, but draws on this library's larger, more-correct table, so the canonical extension can differ (for example, it returns `.html` for `text/html`, not `.htm`). It is also forgiving of common non-canonical spellings: `text/json`, `image/jpg`, `application/javascript`, and `application/x-zip-compressed` all resolve to a sensible extension. See [Reverse lookup](https://mkennedy.codes/docs/content-types/user-guide/reverse-lookup.html) for the details.
+
+The type checker sees `str` for the default call and for a string `fallback`; only an explicit `fallback=None` widens the return type to `Optional[str]`. For the full story on misses, see [Unknown extensions](https://mkennedy.codes/docs/content-types/user-guide/unknown-extensions.html).
 
 ## CLI
 
-To use the library as a CLI tool, just install it with **uv** or **pipx**. 
+To use the library as a CLI tool, just install it with **uv** or **pipx**.
 
 ```bash
 uv tool install content-types
@@ -155,34 +162,27 @@ content-types photo.cr2
 # Outputs: image/x-canon-cr2
 ```
 
+The script does the forward lookup only. An unknown extension prints `application/octet-stream` and exits 0; no argument prints the usage text and exits 1; `-h`, `--help`, and `--version` do what you expect. See [Command line](https://mkennedy.codes/docs/content-types/user-guide/cli.html).
+
 ## More correct than Python's `mimetypes`
 
-When I first learned about Python's mimetypes module, I thought it was exactly what I need. However, 
-it doesn't have all the MIME types. And, it recommends deprecated, out-of-date answers for very obvious types.
+When I first learned about Python's mimetypes module, I thought it was exactly what I need. However, it doesn't have all the MIME types, and it recommends deprecated, out-of-date answers for very obvious types.
 
-For example, mimetypes has `.xml` as text/xml  where it should be `application/xml` 
-(see [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types/Common_types)).
+For example, mimetypes has `.xml` as `text/xml` where it should be `application/xml` (see [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types/Common_types)).
 
-And mimetypes is missing important types such as:
+Its coverage also depends on which Python you run. The built-in table has 142 entries on Python 3.10 and about 210 on Python 3.15, so an extension that resolves on one interpreter can come back `None` on another. Types missing from mimetypes on every supported Python include:
 
-- .m4v  -> video/mp4
-- .tgz  -> application/gzip
-- .flac -> audio/flac
-- .epub -> application/epub+zip
+- .tgz -> application/gzip
 - .parquet -> application/vnd.apache.parquet
 - .ipynb -> application/x-ipynb+json
-- .mkv -> video/x-matroska
-- .toml -> application/toml
-- .yaml -> application/yaml
 - .rs -> text/x-rust
 - .go -> text/x-go
 - .tsx -> text/tsx
 - .psd -> image/vnd.adobe.photoshop
 - .dwg -> application/acad
-- ... and 300+ more
+- ... and 170 to 220 more, depending on your Python version
 
-With this library, you get **360+ file extensions** properly mapped, compared to Python's `mimetypes` 
-which only has around 100 and includes outdated MIME types.
+Older Pythons are also missing everyday types such as `.webp`, `.yaml`, `.toml`, `.flac`, `.epub`, and `.mkv` that newer releases have since added. With this library, you get **360+ file extensions** properly mapped, with the same answers on every Python version. See [Compared to mimetypes](https://mkennedy.codes/docs/content-types/user-guide/compared-to-mimetypes.html) for how the lookup works and a script that prints the exact differences on your interpreter.
 
 ## Popular Format Examples
 
@@ -239,9 +239,7 @@ Here are some commonly used formats by category:
 
 ## Works when python-magic package doesn't
 
-Why not the excellent python-magic package? That one works by reading the header bytes of
-binary files which requires access to the file data. The whole goal of this project is
-to avoid accessing or needing the file data. They are for different use-cases.
+Why not the excellent python-magic package? That one works by reading the header bytes of binary files which requires access to the file data. The whole goal of this project is to avoid accessing or needing the file data. They are for different use-cases, and `fallback=None` is the hook for falling through to byte sniffing when the extension is unknown.
 
 ## Contributing
 
@@ -250,10 +248,10 @@ for more details on how to get involved.
 
 ### Development
 
-`pytest` and `ruff` aren't declared dependencies — `uv` provides them on the fly:
+`pytest` and `ruff` aren't declared dependencies; `uv` provides them on the fly:
 
 ```bash
-# Run the test suite (67 tests)
+# Run the test suite (75 tests)
 uv run --with pytest pytest
 
 # Lint and format (config in ruff.toml)
@@ -263,16 +261,14 @@ uvx ruff format .
 
 ### Building the docs
 
-The docs site is built with [Great Docs](https://github.com/posit-dev/great-docs) and
-published at [mkennedy.codes/docs/content-types](https://mkennedy.codes/docs/content-types/).
-Great Docs imports the package for API introspection, so the toolchain lives in the `dev`
-extra and needs an editable install:
+The docs site is built with [Great Docs](https://github.com/posit-dev/great-docs) and published at [mkennedy.codes/docs/content-types](https://mkennedy.codes/docs/content-types/). The user guide lives in `user_guide/`, the agent skill in `skills/content-types/SKILL.md`, and the landing page is this README. Great Docs imports the package for API introspection, so the toolchain lives in the `dev` extra and needs an editable install:
 
 ```bash
 # Install the docs toolchain into your virtualenv
 uv pip install -e ".[dev]"
 
-# Build the site (mirrors great-docs/_site/ into the committed docs/ folder)
+# Build the site (mirrors great-docs/_site/ into the committed docs/ folder;
+# fails if llms.txt, llms-full.txt, or skill.md did not get generated)
 python scripts/build_docs.py
 
 # Preview exactly as hosted, under the /docs/content-types subpath

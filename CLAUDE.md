@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `pytest` and `ruff` are **not** declared dependencies, so run them through `uv` which provides them on the fly:
 
 ```bash
-# Tests (35 tests)
+# Tests (75 tests)
 uv run --with pytest pytest
 
 # A single test by node id, or by keyword
@@ -35,11 +35,14 @@ uv run python samples/compare_to_builtin.py
 Everything lives in one module: [content_types/__init__.py](content_types/__init__.py). There is no internal package structure to learn — the design is intentionally flat.
 
 - **`EXTENSION_TO_CONTENT_TYPE`** — the single source of truth: a `dict[str, str]` of 364 entries. **Keys are extensions with no leading dot** (`'jpg'`, not `'.jpg'`); a test enforces this. Entries are grouped by category with comments.
-- **`get_content_type(filename_or_extension, treat_as_binary=True)`** — the only function. It accepts a `str` or `pathlib.Path`, strips URL query strings (`?...`) and fragments (`#...`), takes the **last** dot-segment as the extension (so `archive.tar.gz` → `gz`, not `tar.gz`), lowercases it, and looks it up. Unknown extensions fall back to `application/octet-stream` (binary) or, when `treat_as_binary=False`, `text/plain`. `None` raises.
+- **`get_content_type(filename_or_extension, treat_as_binary=True, fallback=_UNSET)`** — the forward lookup. It accepts a `str` or `pathlib.Path` (the final path component is used, so dotfiles work), strips URL query strings (`?...`) and fragments (`#...`), takes the **last** dot-segment as the extension (so `archive.tar.gz` → `gz`, not `tar.gz`), lowercases it, and looks it up. Unknown extensions fall back to `application/octet-stream` (binary) or, when `treat_as_binary=False`, `text/plain`; an explicit `fallback` (including `fallback=None`) wins over both. `None` input raises `TypeError`. Overloads keep the return type `str` unless `fallback=None` is passed.
+- **`guess_extension(content_type, with_dot=True)` / `guess_all_extensions(content_type, with_dot=True)`** — the reverse lookup, built lazily from the table via `_reverse_map()` (cached). `_CANONICAL_OVERRIDES` picks the modern spelling first and `_CONTENT_TYPE_ALIASES` accepts legacy MIME spellings. Unknown types return `None` / `[]`.
 - **Shortcut constants** (`webp`, `png`, `jpg`, `mp3`, `json`, `pdf`, `zip`, `xml`, `csv`, `md`, plus data-science ones `parquet`, `ipynb`, `pkl`, `yaml`, `toml`, `sqlite`) are module-level strings computed at import time by calling `get_content_type`.
-- **`cli()`** — wired as the `content-types` entry point in [pyproject.toml](pyproject.toml). Prints the looked-up type, or a usage message and `exit(1)` if given no argument.
+- **`cli()`** — wired as the `content-types` entry point in [pyproject.toml](pyproject.toml). Prints the looked-up type; a usage message and `exit(1)` if given no argument; `-h`/`--help` print usage and `--version` prints the version, both exit 0.
 
 **Version gotcha:** `__version__ = version('content-types')` reads from *installed* distribution metadata via `importlib.metadata`, so importing the package requires it to be installed (editable). `uv run ...` handles this automatically; a bare `python -c "import content_types"` against a clean checkout fails with `PackageNotFoundError`.
+
+**Docs layout:** the landing page is the README, the user guide is `user_guide/*.qmd` (numeric prefixes set the order and are stripped from URLs), and the agent skill is hand-written in `skills/content-types/SKILL.md` (absolute links only, since it is served from several paths). `python scripts/build_docs.py` rebuilds into the committed `docs/` folder and fails if `llms.txt`, `llms-full.txt`, or `skill.md` are missing.
 
 ## Conventions
 

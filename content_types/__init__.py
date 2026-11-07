@@ -1,8 +1,30 @@
+"""Map file extensions to MIME / content types, and back, by lookup only.
+
+Nothing here opens, reads, or sniffs a file. `get_content_type()` takes a filename, bare
+extension, `pathlib.Path`, or URL and returns the content type for its extension;
+`guess_extension()` and `guess_all_extensions()` go the other way, from a content type
+to its extension(s). The table behind both directions is `EXTENSION_TO_CONTENT_TYPE`, and a
+handful of shortcut constants (`content_types.json`, `content_types.pdf`, ...) hold the
+answers for very common formats.
+
+The package also installs a `content-types` console script that does the forward lookup
+from the command line. There are no environment variables and no configuration.
+
+Example:
+    ```python
+    >>> import content_types
+    >>> content_types.get_content_type('report.pdf')
+    'application/pdf'
+    >>> content_types.guess_extension('image/jpeg')
+    '.jpg'
+    ```
+"""
+
 import functools
 import sys
 from importlib.metadata import version
 from pathlib import Path
-from typing import Optional
+from typing import Optional, overload
 
 __version__ = version('content-types')
 
@@ -423,6 +445,22 @@ EXTENSION_TO_CONTENT_TYPE: dict[str, str] = {
     'sub': 'text/x-microdvd',
     'idx': 'application/octet-stream',
 }
+"""The extension -> content type table that every lookup reads from.
+
+Keys are bare, lowercase extensions with no leading dot (`'jpg'`, never `'.jpg'`). Values
+are the content type this library considers canonical for that extension. Read it
+directly when you want to test membership without a fallback getting in the way.
+
+Example:
+    ```python
+    >>> EXTENSION_TO_CONTENT_TYPE['jpg']
+    'image/jpeg'
+    >>> 'tar.gz' in EXTENSION_TO_CONTENT_TYPE
+    False
+    >>> len(EXTENSION_TO_CONTENT_TYPE) > 300
+    True
+    ```
+"""
 
 
 # Canonical-extension overrides for the few content types whose first-listed
@@ -622,8 +660,38 @@ class _Unset:
     default) and an explicit ``fallback=None`` (return ``None`` for unknowns).
     """
 
+    def __repr__(self) -> str:
+        # A stable repr keeps generated signatures (docs, llms-full.txt) free of memory addresses.
+        return '_UNSET'
+
 
 _UNSET = _Unset()
+
+
+# The overloads carry the real defaults (not `...`) so the generated reference shows them.
+@overload
+def get_content_type(
+    filename_or_extension: str | Path,
+    treat_as_binary: bool = True,
+    fallback: str | _Unset = _UNSET,
+) -> str: ...
+
+
+@overload
+def get_content_type(
+    filename_or_extension: str | Path,
+    treat_as_binary: bool = True,
+    *,
+    fallback: None,
+) -> Optional[str]: ...
+
+
+@overload
+def get_content_type(
+    filename_or_extension: str | Path,
+    treat_as_binary: bool,
+    fallback: None,
+) -> Optional[str]: ...
 
 
 def get_content_type(
@@ -680,7 +748,9 @@ def get_content_type(
         raise TypeError('filename cannot be None.')
 
     if isinstance(filename_or_extension, Path):
-        filename_or_extension = filename_or_extension.suffix
+        # Use the final path component, not .suffix: Path('.env').suffix is '' but the
+        # string '.env' is a known dotfile, and the two inputs should agree.
+        filename_or_extension = filename_or_extension.name
 
     # Strip query strings and fragments (for URLs)
     # e.g., "file.mp3?cache_id=123" => "file.mp3"
@@ -710,38 +780,184 @@ def get_content_type(
 
 
 webp: str = get_content_type('.webp')
+"""The content type for `.webp` files: `image/webp`.
+
+Example:
+    ```python
+    >>> content_types.webp
+    'image/webp'
+    ```
+"""
 png: str = get_content_type('.png')
+"""The content type for `.png` files: `image/png`.
+
+Example:
+    ```python
+    >>> content_types.png
+    'image/png'
+    ```
+"""
 jpg: str = get_content_type('.jpg')
+"""The content type for `.jpg` files: `image/jpeg`.
+
+Example:
+    ```python
+    >>> content_types.jpg
+    'image/jpeg'
+    ```
+"""
 mp3: str = get_content_type('.mp3')
+"""The content type for `.mp3` files: `audio/mpeg`.
+
+Example:
+    ```python
+    >>> content_types.mp3
+    'audio/mpeg'
+    ```
+"""
 json: str = get_content_type('.json')
+"""The content type for `.json` files: `application/json`.
+
+Example:
+    ```python
+    >>> content_types.json
+    'application/json'
+    ```
+"""
 pdf: str = get_content_type('.pdf')
+"""The content type for `.pdf` files: `application/pdf`.
+
+Example:
+    ```python
+    >>> content_types.pdf
+    'application/pdf'
+    ```
+"""
 zip: str = get_content_type('.zip')  # noqa == it's fine to overwrite zip() in this module only.
+"""The content type for `.zip` files: `application/zip`.
+
+Example:
+    ```python
+    >>> content_types.zip
+    'application/zip'
+    ```
+"""
 xml: str = get_content_type('.xml')
+"""The content type for `.xml` files: `application/xml`.
+
+Example:
+    ```python
+    >>> content_types.xml
+    'application/xml'
+    ```
+"""
 csv: str = get_content_type('.csv')
+"""The content type for `.csv` files: `text/csv`.
+
+Example:
+    ```python
+    >>> content_types.csv
+    'text/csv'
+    ```
+"""
 md: str = get_content_type('.md')
+"""The content type for `.md` files: `text/markdown`.
+
+Example:
+    ```python
+    >>> content_types.md
+    'text/markdown'
+    ```
+"""
 # Data Science
 parquet: str = get_content_type('.parquet')
+"""The content type for `.parquet` files: `application/vnd.apache.parquet`.
+
+Example:
+    ```python
+    >>> content_types.parquet
+    'application/vnd.apache.parquet'
+    ```
+"""
 ipynb: str = get_content_type('.ipynb')
+"""The content type for `.ipynb` files: `application/x-ipynb+json`.
+
+Example:
+    ```python
+    >>> content_types.ipynb
+    'application/x-ipynb+json'
+    ```
+"""
 pkl: str = get_content_type('.pkl')
+"""The content type for `.pkl` files: `application/octet-stream`.
+
+Example:
+    ```python
+    >>> content_types.pkl
+    'application/octet-stream'
+    ```
+"""
 yaml: str = get_content_type('.yaml')
+"""The content type for `.yaml` files: `application/yaml`.
+
+Example:
+    ```python
+    >>> content_types.yaml
+    'application/yaml'
+    ```
+"""
 toml: str = get_content_type('.toml')
+"""The content type for `.toml` files: `application/toml`.
+
+Example:
+    ```python
+    >>> content_types.toml
+    'application/toml'
+    ```
+"""
 sqlite: str = get_content_type('.sqlite')
+"""The content type for `.sqlite` files: `application/vnd.sqlite3`.
+
+Example:
+    ```python
+    >>> content_types.sqlite
+    'application/vnd.sqlite3'
+    ```
+"""
+
+
+_CLI_USAGE = 'Usage: content-types FILENAME_OR_EXTENSION\nExample: content-types .jpg'
 
 
 def cli() -> None:
     """Look up the MIME type for a filename or extension and print it to stdout.
 
     Installed as the `content-types` console script (e.g. via `uv tool install
-    content-types`). Exits with status 1 if no argument is supplied.
+    content-types`). Takes exactly one positional argument and does the forward lookup
+    only, with the same defaults as `get_content_type()`, so an unknown extension prints
+    `application/octet-stream`. Exits with status 1 and prints the usage text when no
+    argument is supplied. `-h` / `--help` print the usage text and `--version` prints the
+    package version; both exit with status 0.
 
     Example:
+        ```bash
         $ content-types my_file.jpg
         image/jpeg
+        $ content-types .webp
+        image/webp
+        ```
     """
-    if len(sys.argv) < 2:
-        print('Usage: content-types [FILENAME_OR_EXTENSION]\nExample: content-types .jpg')
+    args = sys.argv[1:]
+    if not args:
+        print(_CLI_USAGE)
         sys.exit(1)
 
-    filename = sys.argv[1]
-    mime_type = get_content_type(filename)
-    print(mime_type)
+    if args[0] in ('-h', '--help'):
+        print(_CLI_USAGE)
+        return
+
+    if args[0] == '--version':
+        print(__version__)
+        return
+
+    print(get_content_type(args[0]))

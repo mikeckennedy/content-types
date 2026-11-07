@@ -125,15 +125,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   <link rel="alternate" type="text/markdown" href="reverse-lookup.md">
   <link rel="canonical" href="https://mkennedy.codes/docs/content-types/user-guide/reverse-lookup.html">
-  <meta name="description" content="The reverse functions turn a content type, or a raw Content-Type header, back into a file extension. This page covers what they accept, what they...">
+  <meta name="description" content="So far the envelope has had a label and you wanted to know what was inside. Now flip it. A server has just told you what is inside, in the form of a...">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Reverse lookup – content-types | content-types">
-  <meta property="og:description" content="The reverse functions turn a content type, or a raw Content-Type header, back into a file extension. This page covers what they accept, what they...">
+  <meta property="og:description" content="So far the envelope has had a label and you wanted to know what was inside. Now flip it. A server has just told you what is inside, in the form of a...">
   <meta property="og:url" content="https://mkennedy.codes/docs/content-types/user-guide/reverse-lookup.html">
   <meta property="og:site_name" content="content-types">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Reverse lookup – content-types | content-types">
-  <meta name="twitter:description" content="The reverse functions turn a content type, or a raw Content-Type header, back into a file extension. This page covers what they accept, what they...">
+  <meta name="twitter:description" content="So far the envelope has had a label and you wanted to know what was inside. Now flip it. A server has just told you what is inside, in the form of a...">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
@@ -241,11 +241,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#from-a-content-type-to-an-extension" id="toc-from-a-content-type-to-an-extension" class="nav-link active" data-scroll-target="#from-a-content-type-to-an-extension">From a content type to an extension</a></li>
-  <li><a href="#what-the-lookup-tolerates" id="toc-what-the-lookup-tolerates" class="nav-link" data-scroll-target="#what-the-lookup-tolerates">What the lookup tolerates</a></li>
-  <li><a href="#unknown-types" id="toc-unknown-types" class="nav-link" data-scroll-target="#unknown-types">Unknown types</a></li>
-  <li><a href="#which-extension-is-canonical" id="toc-which-extension-is-canonical" class="nav-link" data-scroll-target="#which-extension-is-canonical">Which extension is canonical</a></li>
-  <li><a href="#two-groups-to-know-about" id="toc-two-groups-to-know-about" class="nav-link" data-scroll-target="#two-groups-to-know-about">Two groups to know about</a></li>
+  <li><a href="#from-a-type-to-an-extension" id="toc-from-a-type-to-an-extension" class="nav-link active" data-scroll-target="#from-a-type-to-an-extension">From a type to an extension</a></li>
+  <li><a href="#why-the-reverse-direction-is-the-hard-one" id="toc-why-the-reverse-direction-is-the-hard-one" class="nav-link" data-scroll-target="#why-the-reverse-direction-is-the-hard-one">Why the reverse direction is the hard one</a></li>
+  <li><a href="#it-reads-headers-as-servers-actually-write-them" id="toc-it-reads-headers-as-servers-actually-write-them" class="nav-link" data-scroll-target="#it-reads-headers-as-servers-actually-write-them">It reads headers as servers actually write them</a></li>
+  <li><a href="#when-it-does-not-know" id="toc-when-it-does-not-know" class="nav-link" data-scroll-target="#when-it-does-not-know">When it does not know</a></li>
+  <li><a href="#the-two-catch-all-types" id="toc-the-two-catch-all-types" class="nav-link" data-scroll-target="#the-two-catch-all-types">The two catch-all types</a></li>
   </ul>
 </nav>
     </div>
@@ -271,17 +271,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The reverse functions turn a content type, or a raw <code>Content-Type</code> header, back into a file extension. This page covers what they accept, what they return on a miss, and how the canonical extension is chosen.</p>
-<section id="from-a-content-type-to-an-extension" class="level1">
-<h1>From a content type to an extension</h1>
-<p><a href="../reference/guess_extension.html#content_types.guess_extension" class="gdls-link gdls-code">guess_extension()</a> is the inverse of <a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a>. Give it a content type and it returns the canonical extension with a leading dot, ready to append to a filename. <a href="../reference/guess_all_extensions.html#content_types.guess_all_extensions" class="gdls-link gdls-code">guess_all_extensions()</a> returns every extension known for that type, canonical first.</p>
+<p>So far the envelope has had a label and you wanted to know what was inside. Now flip it. A server has just told you what is inside, in the form of a <code>Content-Type</code> header, and you need to write a label. That is reverse lookup, and it is harder than it sounds.</p>
+<section id="from-a-type-to-an-extension" class="level1">
+<h1>From a type to an extension</h1>
+<p><a href="../reference/guess_extension.html#content_types.guess_extension" class="gdls-link gdls-code">guess_extension()</a> is the inverse of <a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a>. Give it a content type and it returns the canonical extension, with the dot, ready to append to a filename. <a href="../reference/guess_all_extensions.html#content_types.guess_all_extensions" class="gdls-link gdls-code">guess_all_extensions()</a> returns every extension known for that type, canonical first.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> content_types</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>content_types.guess_extension(<span class="st">'application/pdf'</span>)  <span class="co"># '.pdf'</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>content_types.guess_extension(<span class="st">'image/jpeg'</span>)  <span class="co"># '.jpg'</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>content_types.guess_all_extensions(<span class="st">'image/jpeg'</span>)  <span class="co"># ['.jpg', '.jpeg', '.jpe']</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>content_types.guess_extension(<span class="st">'image/jpeg'</span>, with_dot<span class="op">=</span><span class="va">False</span>)  <span class="co"># 'jpg'</span></span></code></pre></div>
-<p>The typical use is naming a download from an HTTP response.</p>
+<p>The classic use is naming a download when the URL gives you nothing to go on.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> httpx</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -290,28 +290,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> ext:</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    Path(<span class="ss">f'downloaded</span><span class="sc">{</span>ext<span class="sc">}</span><span class="ss">'</span>).write_bytes(resp.content)</span></code></pre></div>
 </section>
-<section id="what-the-lookup-tolerates" class="level1">
-<h1>What the lookup tolerates</h1>
+<section id="why-the-reverse-direction-is-the-hard-one" class="level1">
+<h1>Why the reverse direction is the hard one</h1>
+<p>The forward table is one-to-one. Each of its 364 extensions maps to exactly one type. Run it backwards and it is one-to-many: those 364 extensions collapse onto 223 types, and 57 of those types have more than one extension pointing at them. <code>image/jpeg</code> is claimed by <code>.jpg</code>, <code>.jpeg</code>, and <code>.jpe</code>. Which one do you write on the label? Someone has to pick, and the pick has to be stable.</p>
+<p>The rule is that the first extension listed for a type in <a href="../reference/EXTENSION_TO_CONTENT_TYPE.html#content_types.EXTENSION_TO_CONTENT_TYPE" class="gdls-link gdls-code">EXTENSION_TO_CONTENT_TYPE</a> wins, with a short list of deliberate overrides where the first-listed spelling is the one nobody uses any more: <code>text/html</code> gives <code>.html</code> not <code>.htm</code>, <code>image/tiff</code> gives <code>.tiff</code>, <code>video/mpeg</code> gives <code>.mpeg</code>, and <code>application/x-msdownload</code> gives <code>.exe</code> rather than <code>.dll</code>. Whatever the pick, <code>guess_extension(t)</code> is always equal to <code>guess_all_extensions(t)[0]</code>, and a test enforces it.</p>
+<p>The standard library makes its own picks and orders its lists differently, so do not expect the two to agree. <a href="../user-guide/compared-to-mimetypes.html">Compared to mimetypes</a> has the details.</p>
+</section>
+<section id="it-reads-headers-as-servers-actually-write-them" class="level1">
+<h1>It reads headers as servers actually write them</h1>
+<p>Real <code>Content-Type</code> headers are messy. They carry parameters, they vary in case, and a surprising number of servers send spellings that were never registered. The reverse lookup takes all of that in stride.</p>
 <ul>
-<li>Case does not matter. <code>IMAGE/JPEG</code> resolves like <code>image/jpeg</code>.</li>
-<li>Parameters are ignored, so a raw <code>Content-Type</code> header value works. <code>text/html; charset=utf-8</code> resolves like <code>text/html</code>.</li>
-<li>Common non-canonical and legacy spellings resolve to the type this library uses. <code>text/json</code>, <code>image/jpg</code>, <code>audio/mp3</code>, <code>text/xml</code>, <code>application/javascript</code>, <code>application/x-yaml</code>, <code>application/x-zip-compressed</code>, and <code>application/x-gzip</code> all work. The full alias list is in the source as <code>_CONTENT_TYPE_ALIASES</code>.</li>
+<li>Case is ignored. <code>IMAGE/JPEG</code> resolves like <code>image/jpeg</code>.</li>
+<li>Parameters are stripped, so you can pass the raw header value. <code>text/html; charset=utf-8</code> resolves like <code>text/html</code>.</li>
+<li>Legacy and mistaken spellings resolve to the type this library uses. <code>text/json</code>, <code>image/jpg</code>, <code>audio/mp3</code>, <code>text/xml</code>, <code>application/javascript</code>, <code>application/x-yaml</code>, <code>application/x-zip-compressed</code>, and <code>application/x-gzip</code> all work. The complete alias list lives in the source as <code>_CONTENT_TYPE_ALIASES</code>, and tests check that every alias points at a real type and never shadows one.</li>
 </ul>
 </section>
-<section id="unknown-types" class="level1">
-<h1>Unknown types</h1>
-<p>An unknown content type is not an error. <a href="../reference/guess_extension.html#content_types.guess_extension" class="gdls-link gdls-code">guess_extension()</a> returns <code>None</code> and <a href="../reference/guess_all_extensions.html#content_types.guess_all_extensions" class="gdls-link gdls-code">guess_all_extensions()</a> returns <code>[]</code>. Empty, whitespace-only, and parameter-only input count as unknown. Passing <code>None</code> raises <code>TypeError</code>, matching <a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a>.</p>
+<section id="when-it-does-not-know" class="level1">
+<h1>When it does not know</h1>
+<p>An unknown content type is not an error. <a href="../reference/guess_extension.html#content_types.guess_extension" class="gdls-link gdls-code">guess_extension()</a> returns <code>None</code> and <a href="../reference/guess_all_extensions.html#content_types.guess_all_extensions" class="gdls-link gdls-code">guess_all_extensions()</a> returns <code>[]</code>. Empty, whitespace-only, and parameter-only input all count as unknown. Passing <code>None</code> raises <code>TypeError</code>, matching the forward function.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>content_types.guess_extension(<span class="st">'application/x-nope'</span>)  <span class="co"># None</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>content_types.guess_all_extensions(<span class="st">'application/x-nope'</span>)  <span class="co"># []</span></span></code></pre></div>
+<p>The <code>or</code> idiom is your friend here: <code>guess_extension(header) or '.bin'</code> gives you a usable label every time.</p>
 </section>
-<section id="which-extension-is-canonical" class="level1">
-<h1>Which extension is canonical</h1>
-<p>When several extensions share a type, the first one listed in <a href="../reference/EXTENSION_TO_CONTENT_TYPE.html#content_types.EXTENSION_TO_CONTENT_TYPE" class="gdls-link gdls-code">EXTENSION_TO_CONTENT_TYPE</a> wins, with a few deliberate overrides so the modern spelling comes first: <code>text/html</code> gives <code>.html</code> not <code>.htm</code>, <code>image/tiff</code> gives <code>.tiff</code>, <code>video/mpeg</code> gives <code>.mpeg</code>, and <code>application/x-msdownload</code> gives <code>.exe</code>. <code>guess_extension(t)</code> is always equal to <code>guess_all_extensions(t)[0]</code>.</p>
-<p>The standard library <code>mimetypes</code> module can pick a different canonical extension and orders its lists differently, so do not expect the two to agree. See <a href="../user-guide/compared-to-mimetypes.html">Compared to mimetypes</a>.</p>
-</section>
-<section id="two-groups-to-know-about" class="level1">
-<h1>Two groups to know about</h1>
-<p><code>text/plain</code> and <code>application/octet-stream</code> are the catch-all types, and each has many extensions. <code>guess_extension('text/plain')</code> returns <code>.txt</code> and <code>guess_extension('application/octet-stream')</code> returns <code>.bin</code>, which is sensible for both, but <a href="../reference/guess_all_extensions.html#content_types.guess_all_extensions" class="gdls-link gdls-code">guess_all_extensions()</a> on either returns a long list that includes config files, pickles, and object files. If you are naming a file from a header that says <code>application/octet-stream</code>, the extension is a guess at best.</p>
+<section id="the-two-catch-all-types" class="level1">
+<h1>The two catch-all types</h1>
+<p><code>text/plain</code> and <code>application/octet-stream</code> are where extensions go when nothing more specific exists. <code>text/plain</code> has 32 extensions in the table and <code>application/octet-stream</code> has 24. Asked for the canonical pick, the library gives you <code>.txt</code> and <code>.bin</code>, which is as sensible as it gets. Asked for the full list, it gives you config files, pickles, object files, and database fragments all in one pile. If a server tells you <code>application/octet-stream</code>, the honest reading is that it does not know either, and any extension you write is a guess.</p>
 
 
 </section>

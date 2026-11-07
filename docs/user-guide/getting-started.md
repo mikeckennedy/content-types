@@ -1,18 +1,20 @@
 # Getting started
 
-content-types maps a filename to its MIME type by lookup alone. This page takes you from install to a first result and lists every input shape the lookup accepts.
+Imagine someone hands you a sealed envelope and asks what is inside. You are not allowed to open it. All you get is the label on the front. That is the job content-types does, and it turns out the label is usually enough.
 
 
-# The problem
+# The envelope problem
 
-You have a filename and you need its content type. Maybe you are setting the `Content-Type` header on an upload to S3, serving a static file, or deciding whether a download is an image or a spreadsheet. Often you do not have the bytes at hand, or you do not want to fetch them just to find out what they are.
+Here is how the problem shows up in real code. You have a bucket in S3 with a few hundred thousand objects. A customer's browser asks for one of them, and your job is to send back a `Content-Type` header so the browser knows whether to render an image, play audio, or offer a download. The honest way to find out is to fetch the object and look at its first few bytes. The honest way is also slow, costs money, and is silly when the key already says `invoice-2026-03.pdf`.
 
-content-types answers that question by lookup alone. It never opens, reads, or sniffs the file. It takes the extension, looks it up in a table of 364 entries, and returns the type. That makes it safe to call on remote object keys, URLs, and names of files that do not exist yet.
+The same situation shows up when you are uploading. S3 will happily store `report.pdf` as `binary/octet-stream` if you let it, and then every link to that file becomes a download instead of a tab. You want to set the type correctly at upload time, and again, you already know the filename.
+
+content-types answers the question from the label. It takes the extension, looks it up in a table of 364 entries, and returns the type. It never opens, reads, or sniffs anything, so it is safe to call on names of files that live on another machine, on URLs you have not fetched, and on files that do not exist yet.
 
 
 # Install
 
-Requires Python 3.10 or later. There are no runtime dependencies.
+Requires Python 3.10 or later. There are no runtime dependencies, so it adds nothing to your lock file but itself.
 
 ``` bash
 uv add content-types
@@ -21,7 +23,7 @@ pip install content-types
 ```
 
 
-# First lookup
+# The first lookup
 
 ``` python
 import content_types
@@ -30,12 +32,12 @@ content_types.get_content_type('report.pdf')
 # 'application/pdf'
 ```
 
-That is the whole core API. The import name is `content_types` with an underscore; the distribution name is `content-types` with a hyphen.
+That is the whole core API. One function, one string in, one string out. The import name is `content_types` with an underscore; the distribution and the command line tool are `content-types` with a hyphen. Python cannot import a hyphen, so the two spellings are a fact of life.
 
 
-# What you can pass in
+# It is not fussy about what you hand it
 
-[get_content_type()](../reference/get_content_type.md#content_types.get_content_type) accepts a filename, a path, a bare extension with or without a leading dot, a `pathlib.Path`, or a URL. Matching is case-insensitive.
+The function was written by someone who got tired of normalising filenames before every call, so it does the normalising for you. A full path, a bare extension with or without the dot, a `pathlib.Path`, or a URL all work, and case does not matter.
 
 ``` python
 from pathlib import Path
@@ -48,14 +50,21 @@ content_types.get_content_type(Path('/data/photo.jpg'))  # 'image/jpeg'
 content_types.get_content_type('https://cdn.example.com/a.mp3?v=3#t=10')  # 'audio/mpeg'
 ```
 
-For URLs, the query string and fragment are stripped before the lookup. For compound extensions the last segment wins, so `archive.tar.gz` resolves as `gz` and returns `application/gzip`. Dotfiles such as `.env` and `.gitignore` are in the table and resolve to `text/plain`.
+Three details are worth knowing up front, because each one has surprised someone.
 
-When the extension is not in the table you get `application/octet-stream` back. That is the right default for a header but not always what you want in your own code. [Unknown extensions](unknown-extensions.md) covers the options.
+- For URLs, the query string and the fragment are thrown away before the lookup. A cache-busting `?v=3` does not turn your MP3 into a mystery.
+- For compound extensions the last segment wins. `archive.tar.gz` resolves as `gz` and returns `application/gzip`, which is the right answer for the outer container. There is no special knowledge of `.tar.gz` as a unit.
+- Dotfiles such as `.env` and `.gitignore` are in the table and resolve to `text/plain`. They are extensions with no name in front, and the lookup treats them that way.
+
+
+# When the label is blank
+
+Sometimes the envelope says `Makefile`, or `notes.xyz`, or nothing at all. For those the function returns `application/octet-stream`, the universal "it is bytes, I cannot tell you more" type. That is the correct thing to put in a header, but it is not always what you want in your own logic, and it hides the fact that a lookup missed. The next page, [Unknown extensions](unknown-extensions.md), is about telling a miss from a hit and deciding what to do about it.
 
 
 # Shortcut constants
 
-For a handful of very common formats you do not need a lookup at all. The module exposes the answers as plain strings.
+For a handful of formats you reach for daily, the module hands you the answer as a plain string so you do not even write the call.
 
 ``` python
 content_types.json  # 'application/json'
@@ -63,14 +72,14 @@ content_types.pdf  # 'application/pdf'
 content_types.parquet  # 'application/vnd.apache.parquet'
 ```
 
-The full set is [webp](../reference/webp.md#content_types.webp), [png](../reference/png.md#content_types.png), [jpg](../reference/jpg.md#content_types.jpg), [mp3](../reference/mp3.md#content_types.mp3), [json](../reference/json.md#content_types.json), [pdf](../reference/pdf.md#content_types.pdf), [zip](../reference/zip.md#content_types.zip), [xml](../reference/xml.md#content_types.xml), [csv](../reference/csv.md#content_types.csv), [md](../reference/md.md#content_types.md), [parquet](../reference/parquet.md#content_types.parquet), [ipynb](../reference/ipynb.md#content_types.ipynb), [pkl](../reference/pkl.md#content_types.pkl), [yaml](../reference/yaml.md#content_types.yaml), [toml](../reference/toml.md#content_types.toml), and [sqlite](../reference/sqlite.md#content_types.sqlite). Prefer `import content_types` and attribute access over `from content_types import json`, because [json](../reference/json.md#content_types.json), [csv](../reference/csv.md#content_types.csv), and [zip](../reference/zip.md#content_types.zip) would shadow a standard library module or builtin.
+The full set is [webp](../reference/webp.md#content_types.webp), [png](../reference/png.md#content_types.png), [jpg](../reference/jpg.md#content_types.jpg), [mp3](../reference/mp3.md#content_types.mp3), [json](../reference/json.md#content_types.json), [pdf](../reference/pdf.md#content_types.pdf), [zip](../reference/zip.md#content_types.zip), [xml](../reference/xml.md#content_types.xml), [csv](../reference/csv.md#content_types.csv), [md](../reference/md.md#content_types.md), [parquet](../reference/parquet.md#content_types.parquet), [ipynb](../reference/ipynb.md#content_types.ipynb), [pkl](../reference/pkl.md#content_types.pkl), [yaml](../reference/yaml.md#content_types.yaml), [toml](../reference/toml.md#content_types.toml), and [sqlite](../reference/sqlite.md#content_types.sqlite). One caution: write `import content_types` and use attribute access. `from content_types import json` quietly shadows the standard library [json](../reference/json.md#content_types.json) module, and you will spend an unhappy afternoon wondering why `json.loads` is a string.
 
 
 # Where to go next
 
-- [Unknown extensions](unknown-extensions.md) explains what a miss looks like and the three ways to handle one.
-- [Reverse lookup](reverse-lookup.md) goes from a content type or `Content-Type` header back to an extension.
-- [Command line](cli.md) covers the `content-types` console script.
-- [Compared to mimetypes](compared-to-mimetypes.md) explains how the table differs from the standard library and why.
-- [FAQ](faq.md) answers the questions that come up most.
-- The [API reference](../reference/index.md) lists every public name.
+- [Unknown extensions](unknown-extensions.md) is the detective work: telling a miss from a hit and the three ways to handle one.
+- [Reverse lookup](reverse-lookup.md) runs the envelope backwards, from a content type or a `Content-Type` header to an extension.
+- [Command line](cli.md) covers the `content-types` tool for quick answers in a shell.
+- [Compared to mimetypes](compared-to-mimetypes.md) explains why the standard library was not enough and how the table differs.
+- [FAQ](faq.md) collects the questions people actually ask.
+- The [API reference](../reference/index.md) lists every public name with its signature.

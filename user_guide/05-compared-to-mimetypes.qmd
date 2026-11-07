@@ -2,23 +2,23 @@
 title: Compared to mimetypes
 ---
 
-This page explains how the lookup works under the hood, how its answers differ from the standard library `mimetypes` module, and when a byte-sniffing library is the better tool.
+Python already ships a `mimetypes` module, and the first question anyone sensible asks is why this library exists at all. The short answer is that `mimetypes` was tried first and came up short in two different ways. The longer answer is this page.
 
 ## How the lookup works
 
-Everything is one dictionary, `EXTENSION_TO_CONTENT_TYPE`, with 364 bare lowercase extensions as keys. `get_content_type()` normalises its input to the last dot-separated segment, lowercases it, and reads the dictionary. The reverse functions invert the same dictionary the first time they are called and cache the result for the life of the process. Nothing is read from disk, no system `mime.types` file is consulted, and the answers are the same on every platform and every Python version.
+There is no magic to describe, and that is the point. Everything is one dictionary, `EXTENSION_TO_CONTENT_TYPE`, with 364 bare lowercase extensions as keys. `get_content_type()` trims its input down to the last dot-separated segment, lowercases it, and reads the dictionary. The reverse functions invert that same dictionary the first time they are called and cache the result for the life of the process. Nothing is read from disk, no system `mime.types` file is consulted, and the answers are identical on every operating system and every Python version. Same input, same output, forever.
 
-## Why not the standard library
+## The two problems with the standard library
 
-Python ships a `mimetypes` module and for a while it looked like the obvious choice. Two things made it a poor fit.
+**It depends on which Python you are running.** The built-in table in `mimetypes` has 142 entries on Python 3.10. By Python 3.15 it has grown to about 210. That growth is good news, but it means the answer to "what type is `.yaml`" changes with your interpreter: on 3.15 the standard library knows, and on 3.12 it returns `None`. Between 170 and 220 of this library's extensions are missing from `mimetypes`, depending on the version. Some are missing on every supported Python: `.tgz`, `.parquet`, `.ipynb`, `.rs`, `.go`, `.tsx`, `.psd`, and `.dwg` among them. Others, such as `.yaml`, `.toml`, `.webp`, `.flac`, `.epub`, and `.mkv`, were added in recent releases, so code that works on a developer's laptop can fail quietly on an older production image.
 
-First, coverage. The built-in table in `mimetypes` has 142 entries on Python 3.10 and grew to about 210 on Python 3.15, and the answers you get depend on which Python you run. Between 170 and 220 of this library's extensions are missing from it, depending on the version. Examples that are missing on every supported Python include `.tgz`, `.parquet`, `.ipynb`, `.rs`, `.go`, `.tsx`, `.psd`, and `.dwg`. Newer Pythons have added `.yaml`, `.toml`, `.webp`, `.flac`, `.epub`, and `.mkv`, so a program that worked on 3.15 can silently return `None` for those on 3.12.
+**Some of its answers are out of date.** `mimetypes` still returns `text/xml` for `.xml`, where [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types/Common_types) and current practice say `application/xml`. This library standardises on the modern type and keeps the old spelling as an alias on reverse lookup, so you are never stranded by a server that sends the legacy form. The other deliberate choices follow the same logic: `.js` is `text/javascript`, `.yaml` and `.yml` are `application/yaml` per RFC 9512, and `.md` is `text/markdown`.
 
-Second, correctness. `mimetypes` still returns `text/xml` for `.xml`, where [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types/Common_types) and current practice say `application/xml`. This library standardises on the modern type and treats the legacy spelling as an alias on reverse lookup. Other deliberate choices: `.js` is `text/javascript`, `.yaml` and `.yml` are `application/yaml` per RFC 9512, and `.md` is `text/markdown`.
+## The API is not the same either
 
-The API differs too. `get_content_type()` returns one string, not the `(type, encoding)` tuple that `mimetypes.guess_type()` returns, and it never returns `None` unless you ask for that with `fallback=None`. The reverse functions keep the standard library names, `guess_extension()` and `guess_all_extensions()`, but accept full header values with parameters, resolve legacy aliases, and can pick a different canonical extension, for example `.html` for `text/html`.
+Do not guess this library's API from the standard library's. `get_content_type()` returns one string, not the `(type, encoding)` tuple that `mimetypes.guess_type()` returns, and it never hands you `None` unless you ask for that with `fallback=None`. The reverse functions keep the familiar names, `guess_extension()` and `guess_all_extensions()`, but they accept raw header values with parameters, resolve legacy aliases, and can choose a different canonical extension, for example `.html` for `text/html` where the standard library often says `.htm`.
 
-To see the exact differences on your interpreter, run the comparison script from the repository.
+If you want to see the exact differences on your own interpreter rather than take this page's word for it, the repository includes a script that prints them.
 
 ```bash
 uv run python samples/compare_to_builtin.py
@@ -26,8 +26,8 @@ uv run python samples/compare_to_builtin.py
 
 ## Why not python-magic
 
-`python-magic` and similar libraries identify a file by reading its leading bytes. That is more reliable when you have the bytes, and it is the right tool when the extension is missing or lying. This library exists for the other case: you know the name but not the contents, such as an object key in S3 or a URL you have not fetched. The two are complementary, and `fallback=None` is the hook for falling through to byte sniffing on a miss. See [Unknown extensions](unknown-extensions.qmd).
+`python-magic` and its relatives identify a file by reading its leading bytes. When you have the bytes, that is the more reliable method, and it is the only method that works when the extension is missing or lying. This library exists for the other case: you know the name but not the contents. An object key in S3, a URL you have not fetched, a filename in a form submission. The two are not rivals. `fallback=None` is the hook for handing a miss over to byte sniffing, as shown in [Unknown extensions](unknown-extensions.qmd).
 
 ## What is in the table
 
-With 364 extensions mapped, the table covers images including camera RAW formats, audio, video, archives and modern compression formats, office and OpenDocument files, source code for around thirty languages, data science formats such as Parquet, Arrow, HDF5, pickle, NumPy, R, Stata, SAS, and SPSS, configuration and infrastructure files, Adobe and CAD formats, game engine assets, scientific formats such as FITS, DICOM, and NIfTI, and subtitles. The [reference page](../reference/EXTENSION_TO_CONTENT_TYPE.qmd) shows every entry.
+The 364 entries cover more ground than you would expect from a MIME table. Images including a dozen camera RAW formats. Audio and video from MP3 to DSD to Matroska. Archives and the newer compression formats such as zstd and brotli. Office and OpenDocument files. Source code for around thirty languages. Data science formats such as Parquet, Arrow, HDF5, pickle, NumPy, R, Stata, SAS, and SPSS. Configuration and infrastructure files, Adobe and CAD formats, game engine assets, scientific formats such as FITS, DICOM, and NIfTI, and subtitle files. The [reference page](../reference/EXTENSION_TO_CONTENT_TYPE.qmd) lists every one.

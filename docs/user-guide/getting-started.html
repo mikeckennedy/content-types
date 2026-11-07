@@ -124,15 +124,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   <link rel="alternate" type="text/markdown" href="getting-started.md">
   <link rel="canonical" href="https://mkennedy.codes/docs/content-types/user-guide/getting-started.html">
-  <meta name="description" content="content-types maps a filename to its MIME type by lookup alone. This page takes you from install to a first result and lists every input shape the...">
+  <meta name="description" content="Imagine someone hands you a sealed envelope and asks what is inside. You are not allowed to open it. All you get is the label on the front. That is the...">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Getting started – content-types | content-types">
-  <meta property="og:description" content="content-types maps a filename to its MIME type by lookup alone. This page takes you from install to a first result and lists every input shape the...">
+  <meta property="og:description" content="Imagine someone hands you a sealed envelope and asks what is inside. You are not allowed to open it. All you get is the label on the front. That is the...">
   <meta property="og:url" content="https://mkennedy.codes/docs/content-types/user-guide/getting-started.html">
   <meta property="og:site_name" content="content-types">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Getting started – content-types | content-types">
-  <meta name="twitter:description" content="content-types maps a filename to its MIME type by lookup alone. This page takes you from install to a first result and lists every input shape the...">
+  <meta name="twitter:description" content="Imagine someone hands you a sealed envelope and asks what is inside. You are not allowed to open it. All you get is the label on the front. That is the...">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
@@ -240,10 +240,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#the-problem" id="toc-the-problem" class="nav-link active" data-scroll-target="#the-problem">The problem</a></li>
+  <li><a href="#the-envelope-problem" id="toc-the-envelope-problem" class="nav-link active" data-scroll-target="#the-envelope-problem">The envelope problem</a></li>
   <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Install</a></li>
-  <li><a href="#first-lookup" id="toc-first-lookup" class="nav-link" data-scroll-target="#first-lookup">First lookup</a></li>
-  <li><a href="#what-you-can-pass-in" id="toc-what-you-can-pass-in" class="nav-link" data-scroll-target="#what-you-can-pass-in">What you can pass in</a></li>
+  <li><a href="#the-first-lookup" id="toc-the-first-lookup" class="nav-link" data-scroll-target="#the-first-lookup">The first lookup</a></li>
+  <li><a href="#it-is-not-fussy-about-what-you-hand-it" id="toc-it-is-not-fussy-about-what-you-hand-it" class="nav-link" data-scroll-target="#it-is-not-fussy-about-what-you-hand-it">It is not fussy about what you hand it</a></li>
+  <li><a href="#when-the-label-is-blank" id="toc-when-the-label-is-blank" class="nav-link" data-scroll-target="#when-the-label-is-blank">When the label is blank</a></li>
   <li><a href="#shortcut-constants" id="toc-shortcut-constants" class="nav-link" data-scroll-target="#shortcut-constants">Shortcut constants</a></li>
   <li><a href="#where-to-go-next" id="toc-where-to-go-next" class="nav-link" data-scroll-target="#where-to-go-next">Where to go next</a></li>
   </ul>
@@ -271,30 +272,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>content-types maps a filename to its MIME type by lookup alone. This page takes you from install to a first result and lists every input shape the lookup accepts.</p>
-<section id="the-problem" class="level1">
-<h1>The problem</h1>
-<p>You have a filename and you need its content type. Maybe you are setting the <code>Content-Type</code> header on an upload to S3, serving a static file, or deciding whether a download is an image or a spreadsheet. Often you do not have the bytes at hand, or you do not want to fetch them just to find out what they are.</p>
-<p>content-types answers that question by lookup alone. It never opens, reads, or sniffs the file. It takes the extension, looks it up in a table of 364 entries, and returns the type. That makes it safe to call on remote object keys, URLs, and names of files that do not exist yet.</p>
+<p>Imagine someone hands you a sealed envelope and asks what is inside. You are not allowed to open it. All you get is the label on the front. That is the job content-types does, and it turns out the label is usually enough.</p>
+<section id="the-envelope-problem" class="level1">
+<h1>The envelope problem</h1>
+<p>Here is how the problem shows up in real code. You have a bucket in S3 with a few hundred thousand objects. A customer’s browser asks for one of them, and your job is to send back a <code>Content-Type</code> header so the browser knows whether to render an image, play audio, or offer a download. The honest way to find out is to fetch the object and look at its first few bytes. The honest way is also slow, costs money, and is silly when the key already says <code>invoice-2026-03.pdf</code>.</p>
+<p>The same situation shows up when you are uploading. S3 will happily store <code>report.pdf</code> as <code>binary/octet-stream</code> if you let it, and then every link to that file becomes a download instead of a tab. You want to set the type correctly at upload time, and again, you already know the filename.</p>
+<p>content-types answers the question from the label. It takes the extension, looks it up in a table of 364 entries, and returns the type. It never opens, reads, or sniffs anything, so it is safe to call on names of files that live on another machine, on URLs you have not fetched, and on files that do not exist yet.</p>
 </section>
 <section id="install" class="level1">
 <h1>Install</h1>
-<p>Requires Python 3.10 or later. There are no runtime dependencies.</p>
+<p>Requires Python 3.10 or later. There are no runtime dependencies, so it adds nothing to your lock file but itself.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add content-types</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install content-types</span></code></pre></div>
 </section>
-<section id="first-lookup" class="level1">
-<h1>First lookup</h1>
+<section id="the-first-lookup" class="level1">
+<h1>The first lookup</h1>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> content_types</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'report.pdf'</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 'application/pdf'</span></span></code></pre></div>
-<p>That is the whole core API. The import name is <code>content_types</code> with an underscore; the distribution name is <code>content-types</code> with a hyphen.</p>
+<p>That is the whole core API. One function, one string in, one string out. The import name is <code>content_types</code> with an underscore; the distribution and the command line tool are <code>content-types</code> with a hyphen. Python cannot import a hyphen, so the two spellings are a fact of life.</p>
 </section>
-<section id="what-you-can-pass-in" class="level1">
-<h1>What you can pass in</h1>
-<p><a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> accepts a filename, a path, a bare extension with or without a leading dot, a <code>pathlib.Path</code>, or a URL. Matching is case-insensitive.</p>
+<section id="it-is-not-fussy-about-what-you-hand-it" class="level1">
+<h1>It is not fussy about what you hand it</h1>
+<p>The function was written by someone who got tired of normalising filenames before every call, so it does the normalising for you. A full path, a bare extension with or without the dot, a <code>pathlib.Path</code>, or a URL all work, and case does not matter.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'photo.JPG'</span>)  <span class="co"># 'image/jpeg'</span></span>
@@ -303,26 +305,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'.jpg'</span>)  <span class="co"># 'image/jpeg'</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(Path(<span class="st">'/data/photo.jpg'</span>))  <span class="co"># 'image/jpeg'</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'https://cdn.example.com/a.mp3?v=3#t=10'</span>)  <span class="co"># 'audio/mpeg'</span></span></code></pre></div>
-<p>For URLs, the query string and fragment are stripped before the lookup. For compound extensions the last segment wins, so <code>archive.tar.gz</code> resolves as <code>gz</code> and returns <code>application/gzip</code>. Dotfiles such as <code>.env</code> and <code>.gitignore</code> are in the table and resolve to <code>text/plain</code>.</p>
-<p>When the extension is not in the table you get <code>application/octet-stream</code> back. That is the right default for a header but not always what you want in your own code. <a href="../user-guide/unknown-extensions.html">Unknown extensions</a> covers the options.</p>
+<p>Three details are worth knowing up front, because each one has surprised someone.</p>
+<ul>
+<li>For URLs, the query string and the fragment are thrown away before the lookup. A cache-busting <code>?v=3</code> does not turn your MP3 into a mystery.</li>
+<li>For compound extensions the last segment wins. <code>archive.tar.gz</code> resolves as <code>gz</code> and returns <code>application/gzip</code>, which is the right answer for the outer container. There is no special knowledge of <code>.tar.gz</code> as a unit.</li>
+<li>Dotfiles such as <code>.env</code> and <code>.gitignore</code> are in the table and resolve to <code>text/plain</code>. They are extensions with no name in front, and the lookup treats them that way.</li>
+</ul>
+</section>
+<section id="when-the-label-is-blank" class="level1">
+<h1>When the label is blank</h1>
+<p>Sometimes the envelope says <code>Makefile</code>, or <code>notes.xyz</code>, or nothing at all. For those the function returns <code>application/octet-stream</code>, the universal “it is bytes, I cannot tell you more” type. That is the correct thing to put in a header, but it is not always what you want in your own logic, and it hides the fact that a lookup missed. The next page, <a href="../user-guide/unknown-extensions.html">Unknown extensions</a>, is about telling a miss from a hit and deciding what to do about it.</p>
 </section>
 <section id="shortcut-constants" class="level1">
 <h1>Shortcut constants</h1>
-<p>For a handful of very common formats you do not need a lookup at all. The module exposes the answers as plain strings.</p>
+<p>For a handful of formats you reach for daily, the module hands you the answer as a plain string so you do not even write the call.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>content_types.json  <span class="co"># 'application/json'</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>content_types.pdf  <span class="co"># 'application/pdf'</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>content_types.parquet  <span class="co"># 'application/vnd.apache.parquet'</span></span></code></pre></div>
-<p>The full set is <a href="../reference/webp.html#content_types.webp" class="gdls-link gdls-code">webp</a>, <a href="../reference/png.html#content_types.png" class="gdls-link gdls-code">png</a>, <a href="../reference/jpg.html#content_types.jpg" class="gdls-link gdls-code">jpg</a>, <a href="../reference/mp3.html#content_types.mp3" class="gdls-link gdls-code">mp3</a>, <a href="../reference/json.html#content_types.json" class="gdls-link gdls-code">json</a>, <a href="../reference/pdf.html#content_types.pdf" class="gdls-link gdls-code">pdf</a>, <a href="../reference/zip.html#content_types.zip" class="gdls-link gdls-code">zip</a>, <a href="../reference/xml.html#content_types.xml" class="gdls-link gdls-code">xml</a>, <a href="../reference/csv.html#content_types.csv" class="gdls-link gdls-code">csv</a>, <a href="../reference/md.html#content_types.md" class="gdls-link gdls-code">md</a>, <a href="../reference/parquet.html#content_types.parquet" class="gdls-link gdls-code">parquet</a>, <a href="../reference/ipynb.html#content_types.ipynb" class="gdls-link gdls-code">ipynb</a>, <a href="../reference/pkl.html#content_types.pkl" class="gdls-link gdls-code">pkl</a>, <a href="../reference/yaml.html#content_types.yaml" class="gdls-link gdls-code">yaml</a>, <a href="../reference/toml.html#content_types.toml" class="gdls-link gdls-code">toml</a>, and <a href="../reference/sqlite.html#content_types.sqlite" class="gdls-link gdls-code">sqlite</a>. Prefer <code>import content_types</code> and attribute access over <code>from content_types import json</code>, because <a href="../reference/json.html#content_types.json" class="gdls-link gdls-code">json</a>, <a href="../reference/csv.html#content_types.csv" class="gdls-link gdls-code">csv</a>, and <a href="../reference/zip.html#content_types.zip" class="gdls-link gdls-code">zip</a> would shadow a standard library module or builtin.</p>
+<p>The full set is <a href="../reference/webp.html#content_types.webp" class="gdls-link gdls-code">webp</a>, <a href="../reference/png.html#content_types.png" class="gdls-link gdls-code">png</a>, <a href="../reference/jpg.html#content_types.jpg" class="gdls-link gdls-code">jpg</a>, <a href="../reference/mp3.html#content_types.mp3" class="gdls-link gdls-code">mp3</a>, <a href="../reference/json.html#content_types.json" class="gdls-link gdls-code">json</a>, <a href="../reference/pdf.html#content_types.pdf" class="gdls-link gdls-code">pdf</a>, <a href="../reference/zip.html#content_types.zip" class="gdls-link gdls-code">zip</a>, <a href="../reference/xml.html#content_types.xml" class="gdls-link gdls-code">xml</a>, <a href="../reference/csv.html#content_types.csv" class="gdls-link gdls-code">csv</a>, <a href="../reference/md.html#content_types.md" class="gdls-link gdls-code">md</a>, <a href="../reference/parquet.html#content_types.parquet" class="gdls-link gdls-code">parquet</a>, <a href="../reference/ipynb.html#content_types.ipynb" class="gdls-link gdls-code">ipynb</a>, <a href="../reference/pkl.html#content_types.pkl" class="gdls-link gdls-code">pkl</a>, <a href="../reference/yaml.html#content_types.yaml" class="gdls-link gdls-code">yaml</a>, <a href="../reference/toml.html#content_types.toml" class="gdls-link gdls-code">toml</a>, and <a href="../reference/sqlite.html#content_types.sqlite" class="gdls-link gdls-code">sqlite</a>. One caution: write <code>import content_types</code> and use attribute access. <code>from content_types import json</code> quietly shadows the standard library <a href="../reference/json.html#content_types.json" class="gdls-link gdls-code">json</a> module, and you will spend an unhappy afternoon wondering why <code>json.loads</code> is a string.</p>
 </section>
 <section id="where-to-go-next" class="level1">
 <h1>Where to go next</h1>
 <ul>
-<li><a href="../user-guide/unknown-extensions.html">Unknown extensions</a> explains what a miss looks like and the three ways to handle one.</li>
-<li><a href="../user-guide/reverse-lookup.html">Reverse lookup</a> goes from a content type or <code>Content-Type</code> header back to an extension.</li>
-<li><a href="../user-guide/cli.html">Command line</a> covers the <code>content-types</code> console script.</li>
-<li><a href="../user-guide/compared-to-mimetypes.html">Compared to mimetypes</a> explains how the table differs from the standard library and why.</li>
-<li><a href="../user-guide/faq.html">FAQ</a> answers the questions that come up most.</li>
-<li>The <a href="../reference/index.html">API reference</a> lists every public name.</li>
+<li><a href="../user-guide/unknown-extensions.html">Unknown extensions</a> is the detective work: telling a miss from a hit and the three ways to handle one.</li>
+<li><a href="../user-guide/reverse-lookup.html">Reverse lookup</a> runs the envelope backwards, from a content type or a <code>Content-Type</code> header to an extension.</li>
+<li><a href="../user-guide/cli.html">Command line</a> covers the <code>content-types</code> tool for quick answers in a shell.</li>
+<li><a href="../user-guide/compared-to-mimetypes.html">Compared to mimetypes</a> explains why the standard library was not enough and how the table differs.</li>
+<li><a href="../user-guide/faq.html">FAQ</a> collects the questions people actually ask.</li>
+<li>The <a href="../reference/index.html">API reference</a> lists every public name with its signature.</li>
 </ul>
 
 

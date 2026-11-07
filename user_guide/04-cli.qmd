@@ -2,11 +2,11 @@
 title: Command line
 ---
 
-The package ships a `content-types` console script for one-off lookups from the shell. This page covers installing it, its flags, and its exit codes.
+Sometimes the question is not in your code at all. You are staring at a bucket listing, or a log line, or a colleague's message, and you want to know what `report.parq` is going to be served as without opening a REPL. The package ships a small console script for exactly that moment.
 
 ## Install
 
-The package installs a `content-types` console script. For machine-wide use, install it as a tool.
+Install it as a tool so it is on your path everywhere.
 
 ```bash
 uv tool install content-types
@@ -14,11 +14,11 @@ uv tool install content-types
 pipx install content-types
 ```
 
-Inside a project that already depends on the package, the script is on the virtualenv's path, so `uv run content-types ...` also works.
+Inside a project that already depends on the package the script is on the virtualenv's path, so `uv run content-types ...` works there without a separate install.
 
 ## Use
 
-The script takes one argument, a filename or extension, and prints the content type. It does the forward lookup only; there is no reverse lookup on the command line.
+One argument in, one line out.
 
 ```bash
 content-types example.jpg
@@ -31,9 +31,11 @@ content-types data.parquet
 # application/vnd.apache.parquet
 ```
 
-The argument goes through `get_content_type()` with its defaults, so an unknown extension prints `application/octet-stream` and still exits with status 0. Extra arguments after the first are ignored.
+The argument goes straight through `get_content_type()` with its defaults, so the tool inherits the library's manners: case does not matter, a bare extension works with or without the dot, and an unknown extension prints `application/octet-stream` and exits 0. It does the forward lookup only. For the reverse direction, open Python.
 
 ## Flags and exit codes
+
+The script is deliberately tiny, so this table is the whole contract.
 
 | Invocation | Output | Exit code |
 | --- | --- | --- |
@@ -42,4 +44,4 @@ The argument goes through `get_content_type()` with its defaults, so an unknown 
 | `content-types -h` or `--help` | usage text | 0 |
 | `content-types --version` | the installed package version | 0 |
 
-There are no environment variables and no configuration file. The script is the function `content_types.cli()` wired up in `pyproject.toml`, so you can also run it as `python -m` style code by calling that function.
+Extra arguments after the first are ignored. There are no environment variables and no configuration file to discover. Under the hood the script is the function `content_types.cli()` wired up in `pyproject.toml`, which means you can call it yourself if you ever want the same behaviour from inside another tool.

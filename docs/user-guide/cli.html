@@ -125,15 +125,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   <link rel="alternate" type="text/markdown" href="cli.md">
   <link rel="canonical" href="https://mkennedy.codes/docs/content-types/user-guide/cli.html">
-  <meta name="description" content="The package ships a content-types console script for one-off lookups from the shell. This page covers installing it, its flags, and its exit codes.">
+  <meta name="description" content="Sometimes the question is not in your code at all. You are staring at a bucket listing, or a log line, or a colleague’s message, and you want to know...">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Command line – content-types | content-types">
-  <meta property="og:description" content="The package ships a content-types console script for one-off lookups from the shell. This page covers installing it, its flags, and its exit codes.">
+  <meta property="og:description" content="Sometimes the question is not in your code at all. You are staring at a bucket listing, or a log line, or a colleague’s message, and you want to know...">
   <meta property="og:url" content="https://mkennedy.codes/docs/content-types/user-guide/cli.html">
   <meta property="og:site_name" content="content-types">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Command line – content-types | content-types">
-  <meta name="twitter:description" content="The package ships a content-types console script for one-off lookups from the shell. This page covers installing it, its flags, and its exit codes.">
+  <meta name="twitter:description" content="Sometimes the question is not in your code at all. You are staring at a bucket listing, or a log line, or a colleague’s message, and you want to know...">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
@@ -269,18 +269,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The package ships a <code>content-types</code> console script for one-off lookups from the shell. This page covers installing it, its flags, and its exit codes.</p>
+<p>Sometimes the question is not in your code at all. You are staring at a bucket listing, or a log line, or a colleague’s message, and you want to know what <code>report.parq</code> is going to be served as without opening a REPL. The package ships a small console script for exactly that moment.</p>
 <section id="install" class="level1">
 <h1>Install</h1>
-<p>The package installs a <code>content-types</code> console script. For machine-wide use, install it as a tool.</p>
+<p>Install it as a tool so it is on your path everywhere.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install content-types</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pipx</span> install content-types</span></code></pre></div>
-<p>Inside a project that already depends on the package, the script is on the virtualenv’s path, so <code>uv run content-types ...</code> also works.</p>
+<p>Inside a project that already depends on the package the script is on the virtualenv’s path, so <code>uv run content-types ...</code> works there without a separate install.</p>
 </section>
 <section id="use" class="level1">
 <h1>Use</h1>
-<p>The script takes one argument, a filename or extension, and prints the content type. It does the forward lookup only; there is no reverse lookup on the command line.</p>
+<p>One argument in, one line out.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> example.jpg</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># image/jpeg</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -289,10 +289,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">content-types</span> data.parquet</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># application/vnd.apache.parquet</span></span></code></pre></div>
-<p>The argument goes through <a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> with its defaults, so an unknown extension prints <code>application/octet-stream</code> and still exits with status 0. Extra arguments after the first are ignored.</p>
+<p>The argument goes straight through <a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> with its defaults, so the tool inherits the library’s manners: case does not matter, a bare extension works with or without the dot, and an unknown extension prints <code>application/octet-stream</code> and exits 0. It does the forward lookup only. For the reverse direction, open Python.</p>
 </section>
 <section id="flags-and-exit-codes" class="level1">
 <h1>Flags and exit codes</h1>
+<p>The script is deliberately tiny, so this table is the whole contract.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -324,7 +325,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>There are no environment variables and no configuration file. The script is the function <code>content_types.cli()</code> wired up in <code>pyproject.toml</code>, so you can also run it as <code>python -m</code> style code by calling that function.</p>
+<p>Extra arguments after the first are ignored. There are no environment variables and no configuration file to discover. Under the hood the script is the function <code>content_types.cli()</code> wired up in <code>pyproject.toml</code>, which means you can call it yourself if you ever want the same behaviour from inside another tool.</p>
 
 
 </section>

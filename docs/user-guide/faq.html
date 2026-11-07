@@ -124,15 +124,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   <link rel="alternate" type="text/markdown" href="faq.md">
   <link rel="canonical" href="https://mkennedy.codes/docs/content-types/user-guide/faq.html">
-  <meta name="description" content="Short answers to the questions that come up most, with links to the pages that go deeper.">
+  <meta name="description" content="The questions that actually get asked, with short answers and a pointer to the page that goes deeper.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="FAQ – content-types | content-types">
-  <meta property="og:description" content="Short answers to the questions that come up most, with links to the pages that go deeper.">
+  <meta property="og:description" content="The questions that actually get asked, with short answers and a pointer to the page that goes deeper.">
   <meta property="og:url" content="https://mkennedy.codes/docs/content-types/user-guide/faq.html">
   <meta property="og:site_name" content="content-types">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="FAQ – content-types | content-types">
-  <meta name="twitter:description" content="Short answers to the questions that come up most, with links to the pages that go deeper.">
+  <meta name="twitter:description" content="The questions that actually get asked, with short answers and a pointer to the page that goes deeper.">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
@@ -243,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#does-it-read-the-file" id="toc-does-it-read-the-file" class="nav-link active" data-scroll-target="#does-it-read-the-file">Does it read the file?</a></li>
   <li><a href="#why-did-i-get-applicationoctet-stream" id="toc-why-did-i-get-applicationoctet-stream" class="nav-link" data-scroll-target="#why-did-i-get-applicationoctet-stream">Why did I get <code>application/octet-stream</code>?</a></li>
   <li><a href="#is-.tar.gz-handled-as-a-unit" id="toc-is-.tar.gz-handled-as-a-unit" class="nav-link" data-scroll-target="#is-.tar.gz-handled-as-a-unit">Is <code>.tar.gz</code> handled as a unit?</a></li>
-  <li><a href="#does-it-handle-uppercase-or-mixed-case" id="toc-does-it-handle-uppercase-or-mixed-case" class="nav-link" data-scroll-target="#does-it-handle-uppercase-or-mixed-case">Does it handle uppercase or mixed case?</a></li>
+  <li><a href="#does-it-care-about-case" id="toc-does-it-care-about-case" class="nav-link" data-scroll-target="#does-it-care-about-case">Does it care about case?</a></li>
   <li><a href="#does-it-handle-urls" id="toc-does-it-handle-urls" class="nav-link" data-scroll-target="#does-it-handle-urls">Does it handle URLs?</a></li>
   <li><a href="#why-do-my-path-and-string-results-disagree-for-dotfiles" id="toc-why-do-my-path-and-string-results-disagree-for-dotfiles" class="nav-link" data-scroll-target="#why-do-my-path-and-string-results-disagree-for-dotfiles">Why do my <code>Path</code> and string results disagree for dotfiles?</a></li>
   <li><a href="#the-type-checker-says-get_content_type-returns-optionalstr" id="toc-the-type-checker-says-get_content_type-returns-optionalstr" class="nav-link" data-scroll-target="#the-type-checker-says-get_content_type-returns-optionalstr">The type checker says <a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> returns <code>Optional[str]</code></a></li>
@@ -277,22 +277,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Short answers to the questions that come up most, with links to the pages that go deeper.</p>
+<p>The questions that actually get asked, with short answers and a pointer to the page that goes deeper.</p>
 <section id="does-it-read-the-file" class="level1">
 <h1>Does it read the file?</h1>
-<p>No.&nbsp;Every function works from the name alone. The file does not need to exist and no bytes are read. If you need byte-level detection, use a sniffing library and fall back to it on a miss as shown in <a href="../user-guide/unknown-extensions.html">Unknown extensions</a>.</p>
+<p>No, never. Every function works from the name alone. The file does not have to exist, and nothing is opened. If you need byte-level detection, use a sniffing library and fall through to it on a miss as shown in <a href="../user-guide/unknown-extensions.html">Unknown extensions</a>.</p>
 </section>
 <section id="why-did-i-get-applicationoctet-stream" class="level1">
 <h1>Why did I get <code>application/octet-stream</code>?</h1>
-<p>Either the extension is not in the table, or it is one of the formats that genuinely map to that type, such as <code>.bin</code>, <code>.pkl</code>, or <code>.npy</code>. Pass <code>fallback=None</code> to distinguish the two: a real <code>application/octet-stream</code> entry still returns the string, while a miss returns <code>None</code>.</p>
+<p>One of two reasons. Either the extension is not in the table, or it is one of the formats that honestly map to that type, such as <code>.bin</code>, <code>.pkl</code>, or <code>.npy</code>. To tell them apart, pass <code>fallback=None</code>: a real entry still returns the string, and a miss returns <code>None</code>.</p>
 </section>
 <section id="is-.tar.gz-handled-as-a-unit" class="level1">
 <h1>Is <code>.tar.gz</code> handled as a unit?</h1>
-<p>No.&nbsp;The last segment wins, so <code>archive.tar.gz</code> returns <code>application/gzip</code>, which is the correct type for the compressed container. There is no special casing for double extensions.</p>
+<p>No.&nbsp;The last segment wins, so <code>archive.tar.gz</code> returns <code>application/gzip</code>, which is the correct type for the compressed container you are actually holding. There is no special casing for double extensions.</p>
 </section>
-<section id="does-it-handle-uppercase-or-mixed-case" class="level1">
-<h1>Does it handle uppercase or mixed case?</h1>
-<p>Yes. Extensions are lowercased before the lookup, and content types are lowercased in the reverse direction.</p>
+<section id="does-it-care-about-case" class="level1">
+<h1>Does it care about case?</h1>
+<p>No.&nbsp;Extensions are lowercased before the lookup, and content types are lowercased in the reverse direction. <code>PHOTO.JPG</code> and <code>IMAGE/JPEG</code> both work.</p>
 </section>
 <section id="does-it-handle-urls" class="level1">
 <h1>Does it handle URLs?</h1>
@@ -300,19 +300,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="why-do-my-path-and-string-results-disagree-for-dotfiles" class="level1">
 <h1>Why do my <code>Path</code> and string results disagree for dotfiles?</h1>
-<p>They should not. Both <code>Path('.env')</code> and the string <code>'.env'</code> return <code>text/plain</code>. Versions before the next release used <code>Path.suffix</code>, which is empty for a dotfile, so the <code>Path</code> form fell through to the fallback. That is fixed.</p>
+<p>They should not. Both <code>Path('.env')</code> and the string <code>'.env'</code> return <code>text/plain</code>. Releases before the next one used <code>Path.suffix</code>, which is empty for a dotfile, so the <code>Path</code> form quietly fell through to the fallback. That is fixed.</p>
 </section>
 <section id="the-type-checker-says-get_content_type-returns-optionalstr" class="level1">
 <h1>The type checker says <a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> returns <code>Optional[str]</code></h1>
-<p>It returns <code>str</code> unless you pass <code>fallback=None</code>. The function is overloaded so that the default call and a string <code>fallback</code> type as <code>str</code>, and only an explicit <code>fallback=None</code> types as <code>Optional[str]</code>. If your checker still shows the wider type, you are on a release before the next one.</p>
+<p>It returns <code>str</code> unless you pass <code>fallback=None</code>. The function is overloaded so that the default call and a string <code>fallback</code> type as <code>str</code>, and only an explicit <code>fallback=None</code> types as <code>Optional[str]</code>. If your checker still shows the wider type everywhere, you are on a release before the next one.</p>
 </section>
 <section id="can-i-add-or-override-an-extension" class="level1">
 <h1>Can I add or override an extension?</h1>
-<p>Yes. Assign into <a href="../reference/EXTENSION_TO_CONTENT_TYPE.html#content_types.EXTENSION_TO_CONTENT_TYPE" class="gdls-link gdls-code">content_types.EXTENSION_TO_CONTENT_TYPE</a> with a bare lowercase key. Do it at startup and before the first reverse lookup, because the reverse map is built once and cached. For formats other people would expect, open an issue so the table is fixed for everyone.</p>
+<p>Yes. Assign into <a href="../reference/EXTENSION_TO_CONTENT_TYPE.html#content_types.EXTENSION_TO_CONTENT_TYPE" class="gdls-link gdls-code">content_types.EXTENSION_TO_CONTENT_TYPE</a> with a bare lowercase key. Do it at startup and before the first reverse lookup, because the reverse map is built once and cached. For formats other people would expect to work, open an issue so the table is fixed for everyone.</p>
 </section>
 <section id="why-does-guess_extensiontexthtml-return-.html-and-not-.htm" class="level1">
 <h1>Why does <code>guess_extension('text/html')</code> return <code>.html</code> and not <code>.htm</code>?</h1>
-<p>Because <code>.html</code> is what people write today. The library keeps a short list of canonical overrides where the first-listed extension in the table is the less common spelling. The standard library makes different choices, so do not expect the two to agree on canonical extensions.</p>
+<p>Because <code>.html</code> is what people write today, and <code>.htm</code> is a leftover from eight-character filenames. The library keeps a short list of canonical overrides for cases like this. The standard library makes different choices, so do not expect the two to agree.</p>
 </section>
 <section id="what-about-textyaml-or-applicationx-yaml" class="level1">
 <h1>What about <code>text/yaml</code> or <code>application/x-yaml</code>?</h1>
@@ -320,7 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="is-it-thread-safe" class="level1">
 <h1>Is it thread-safe?</h1>
-<p>Yes for reads. The forward lookup is a dictionary read and the reverse map is built with <code>functools.cache</code>. If you mutate the table at import time or startup, do it before spawning threads.</p>
+<p>Yes for reads, which is all most programs do. The forward lookup is a dictionary read and the reverse map is built with <code>functools.cache</code>. If you mutate the table, do it at startup before spawning threads.</p>
 </section>
 <section id="how-do-i-run-the-tests" class="level1">
 <h1>How do I run the tests?</h1>

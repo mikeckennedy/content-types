@@ -125,15 +125,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   <link rel="alternate" type="text/markdown" href="unknown-extensions.md">
   <link rel="canonical" href="https://mkennedy.codes/docs/content-types/user-guide/unknown-extensions.html">
-  <meta name="description" content="A lookup that misses still returns a string by default. This page explains how to recognise a miss, the three ways to handle one, and how to extend the...">
+  <meta name="description" content="Every lookup returns something. That is convenient right up to the moment you need to know whether the answer was a confident match or a shrug. This...">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Unknown extensions – content-types | content-types">
-  <meta property="og:description" content="A lookup that misses still returns a string by default. This page explains how to recognise a miss, the three ways to handle one, and how to extend the...">
+  <meta property="og:description" content="Every lookup returns something. That is convenient right up to the moment you need to know whether the answer was a confident match or a shrug. This...">
   <meta property="og:url" content="https://mkennedy.codes/docs/content-types/user-guide/unknown-extensions.html">
   <meta property="og:site_name" content="content-types">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Unknown extensions – content-types | content-types">
-  <meta name="twitter:description" content="A lookup that misses still returns a string by default. This page explains how to recognise a miss, the three ways to handle one, and how to extend the...">
+  <meta name="twitter:description" content="Every lookup returns something. That is convenient right up to the moment you need to know whether the answer was a confident match or a shrug. This...">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
@@ -241,11 +241,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#how-to-read-the-result" id="toc-how-to-read-the-result" class="nav-link active" data-scroll-target="#how-to-read-the-result">How to read the result</a></li>
+  <li><a href="#the-shrug-looks-like-an-answer" id="toc-the-shrug-looks-like-an-answer" class="nav-link active" data-scroll-target="#the-shrug-looks-like-an-answer">The shrug looks like an answer</a></li>
   <li><a href="#three-ways-to-handle-a-miss" id="toc-three-ways-to-handle-a-miss" class="nav-link" data-scroll-target="#three-ways-to-handle-a-miss">Three ways to handle a miss</a></li>
-  <li><a href="#checking-the-table-directly" id="toc-checking-the-table-directly" class="nav-link" data-scroll-target="#checking-the-table-directly">Checking the table directly</a></li>
-  <li><a href="#adding-your-own-extensions" id="toc-adding-your-own-extensions" class="nav-link" data-scroll-target="#adding-your-own-extensions">Adding your own extensions</a></li>
-  <li><a href="#things-that-are-not-misses" id="toc-things-that-are-not-misses" class="nav-link" data-scroll-target="#things-that-are-not-misses">Things that are not misses</a></li>
+  <li><a href="#ask-the-table-directly" id="toc-ask-the-table-directly" class="nav-link" data-scroll-target="#ask-the-table-directly">Ask the table directly</a></li>
+  <li><a href="#teaching-it-a-new-word" id="toc-teaching-it-a-new-word" class="nav-link" data-scroll-target="#teaching-it-a-new-word">Teaching it a new word</a></li>
+  <li><a href="#things-that-look-like-misses-but-are-not" id="toc-things-that-look-like-misses-but-are-not" class="nav-link" data-scroll-target="#things-that-look-like-misses-but-are-not">Things that look like misses but are not</a></li>
   </ul>
 </nav>
     </div>
@@ -271,51 +271,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>A lookup that misses still returns a string by default. This page explains how to recognise a miss, the three ways to handle one, and how to extend the table.</p>
-<section id="how-to-read-the-result" class="level1">
-<h1>How to read the result</h1>
-<p><a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> always returns a string unless you ask it not to. For a known extension the string is the content type. For an unknown extension it is a fallback, and by default that fallback is <code>application/octet-stream</code>.</p>
+<p>Every lookup returns something. That is convenient right up to the moment you need to know whether the answer was a confident match or a shrug. This page is about telling the two apart, and about what to do once you can.</p>
+<section id="the-shrug-looks-like-an-answer" class="level1">
+<h1>The shrug looks like an answer</h1>
+<p><a href="../reference/get_content_type.html#content_types.get_content_type" class="gdls-link gdls-code">get_content_type()</a> returns a string unless you ask it not to. For a known extension the string is the content type. For an unknown one it is a fallback, and the default fallback is <code>application/octet-stream</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> content_types</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'data.parquet'</span>)  <span class="co"># 'application/vnd.apache.parquet'</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'notes.xyz'</span>)  <span class="co"># 'application/octet-stream'</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'Makefile'</span>)  <span class="co"># 'application/octet-stream'</span></span></code></pre></div>
-<p><code>application/octet-stream</code> is the correct generic type for “some bytes” and it is what S3 and most web servers use when they do not know better. The catch is that a few real extensions also map to it on purpose, among them <code>.bin</code>, <code>.pkl</code>, <code>.npy</code>, <code>.so</code>, and <code>.exe</code> style binaries, so you cannot tell a miss from a hit by looking at the return value alone.</p>
+<p><code>application/octet-stream</code> is a perfectly good header. It is what S3 and most web servers send when they do not know better, and browsers respond by offering a download, which is the safe move for mystery bytes. The trouble is that it is also a real answer. A handful of formats genuinely map to it, on purpose, because there is no better registered type: <code>.bin</code>, <code>.pkl</code>, <code>.npy</code>, <code>.so</code>, <code>.o</code>, and a few more. So when you see <code>application/octet-stream</code> come back, you cannot tell from the string alone whether the table recognised the extension or gave up.</p>
+<p>Think of it as a detective who, when stumped, writes “unknown substance” on the report. Useful, as long as you remember that some substances really are labelled “unknown substance”.</p>
 </section>
 <section id="three-ways-to-handle-a-miss" class="level1">
 <h1>Three ways to handle a miss</h1>
-<p><strong>Ask for <code>text/plain</code> instead.</strong> If the files you handle are mostly text, <code>treat_as_binary=False</code> changes the default fallback.</p>
+<p><strong>Change the shrug.</strong> If the files you deal with are mostly text, tell the lookup to shrug in the other direction. <code>treat_as_binary=False</code> swaps the default fallback for <code>text/plain</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'notes.xyz'</span>, treat_as_binary<span class="op">=</span><span class="va">False</span>)  <span class="co"># 'text/plain'</span></span></code></pre></div>
-<p><strong>Supply your own fallback.</strong> Pass any string as <code>fallback</code> and it is returned for every unknown extension. It takes precedence over <code>treat_as_binary</code>. Known extensions are unaffected.</p>
+<p><strong>Write your own shrug.</strong> Pass any string as <code>fallback</code> and that is what comes back for every unknown extension. It outranks <code>treat_as_binary</code>. Known extensions are untouched.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'notes.xyz'</span>, fallback<span class="op">=</span><span class="st">'application/x-acme'</span>)  <span class="co"># 'application/x-acme'</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'photo.jpg'</span>, fallback<span class="op">=</span><span class="st">'application/x-acme'</span>)  <span class="co"># 'image/jpeg'</span></span></code></pre></div>
-<p><strong>Branch on the miss.</strong> Pass <code>fallback=None</code> to get <code>None</code> back for unknowns, then decide what to do yourself. This is the one to use when a miss should change program flow, for example to sniff the bytes with another tool or to reject the upload.</p>
+<p><strong>Refuse to shrug.</strong> Pass <code>fallback=None</code> and a miss comes back as <code>None</code>. Now you can branch. This is the mode to use when a miss should change what the program does next, for example to hand the file to a byte-sniffing library, to reject the upload, or to log it for a human.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>content_type <span class="op">=</span> content_types.get_content_type(name, fallback<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> content_type <span class="kw">is</span> <span class="va">None</span>:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    content_type <span class="op">=</span> sniff_with_python_magic(path)</span></code></pre></div>
-<p>Omitting <code>fallback</code> and passing <code>fallback=None</code> are different. Omitting it keeps the historical default. The parameter defaults to a private sentinel so the two cases can be told apart.</p>
+<p>One subtlety that bites people who skim: leaving <code>fallback</code> out and passing <code>fallback=None</code> are different things. Leaving it out keeps the historical default. The parameter’s real default is a private sentinel, precisely so that an explicit <code>None</code> can mean “give me <code>None</code>” without changing behaviour for every caller who never passes the argument. Your type checker knows this too. The plain call types as <code>str</code>, and only <code>fallback=None</code> widens it to <code>Optional[str]</code>.</p>
 </section>
-<section id="checking-the-table-directly" class="level1">
-<h1>Checking the table directly</h1>
-<p>If you only need a yes or no, read the table. Keys are bare lowercase extensions with no leading dot.</p>
+<section id="ask-the-table-directly" class="level1">
+<h1>Ask the table directly</h1>
+<p>If you only want a yes or a no, skip the function and ask the table. Keys are bare lowercase extensions with no leading dot.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ext <span class="op">=</span> <span class="st">'parquet'</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ext <span class="kw">in</span> content_types.EXTENSION_TO_CONTENT_TYPE  <span class="co"># True</span></span></code></pre></div>
 </section>
-<section id="adding-your-own-extensions" class="level1">
-<h1>Adding your own extensions</h1>
-<p>The table is a plain <code>dict</code> and the lookup reads it on every call, so a process-local addition takes effect immediately. Keys must be lowercase and have no leading dot.</p>
+<section id="teaching-it-a-new-word" class="level1">
+<h1>Teaching it a new word</h1>
+<p>The table is a plain <code>dict</code>, and the forward lookup reads it fresh on every call, so an addition takes effect immediately. Keys must be lowercase and have no leading dot.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>content_types.EXTENSION_TO_CONTENT_TYPE[<span class="st">'acme'</span>] <span class="op">=</span> <span class="st">'application/x-acme'</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>content_types.get_content_type(<span class="st">'report.acme'</span>)  <span class="co"># 'application/x-acme'</span></span></code></pre></div>
-<p>Do this at startup, not per request, and keep in mind that the reverse lookup caches its view of the table on first use. If you need <a href="../reference/guess_extension.html#content_types.guess_extension" class="gdls-link gdls-code">guess_extension()</a> to see your additions, add them before the first reverse call.</p>
-<p>If the extension is a real, widely used format that other people would expect to work, please <a href="https://github.com/mikeckennedy/content-types/issues">open an issue</a> or send a pull request so it ends up in the table for everyone.</p>
+<p>Do this once at startup, not inside a request handler. And do it before the first reverse lookup, because <a href="../reference/guess_extension.html#content_types.guess_extension" class="gdls-link gdls-code">guess_extension()</a> builds its inverted view of the table on first use and caches it for the life of the process. Additions made after that are visible to the forward lookup but invisible to the reverse one.</p>
+<p>If the extension is a real, widely used format that other people would reasonably expect to work, do not keep the fix to yourself. <a href="https://github.com/mikeckennedy/content-types/issues">Open an issue</a> or send a pull request and it ends up in the table for everyone.</p>
 </section>
-<section id="things-that-are-not-misses" class="level1">
-<h1>Things that are not misses</h1>
+<section id="things-that-look-like-misses-but-are-not" class="level1">
+<h1>Things that look like misses but are not</h1>
 <ul>
-<li><code>None</code> as the filename raises <code>TypeError</code>. That is a programming error, not an unknown extension.</li>
-<li>An empty string, a bare name with no dot, and a URL with no file component all count as unknown and get the fallback.</li>
-<li><code>archive.tar.gz</code> is not a miss. It resolves on the last segment and returns <code>application/gzip</code>.</li>
+<li><code>None</code> as the filename raises <code>TypeError</code>. That is a bug in the caller, not an unknown extension, and the library refuses to paper over it.</li>
+<li><code>archive.tar.gz</code> returns <code>application/gzip</code>. That is a hit on the last segment, and it is the correct type for the compressed container.</li>
 </ul>
+<p>And things that are misses, in case you were wondering: an empty string, a name with no dot anywhere, and a URL with no file component such as <code>https://example.com/download</code>. All three get the fallback.</p>
 
 
 </section>
